@@ -130,7 +130,7 @@ function setFavicon() {
                                 viewBox="64 64 896 896" focusable="false" data-icon="upload" width="1em"
                                 height="1em" fill="currentColor" aria-hidden="true"><path
                                 d="M400 317.7h73.9V656c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V317.7H624c6.7 0 10.4-7.7 6.3-12.9L518.3 163a8 8 0 00-12.6 0l-112 141.7c-4.1 5.3-.4 13 6.3 13zM878 626h-60c-4.4 0-8 3.6-8 8v154H214V634c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v198c0 17.7 14.3 32 32 32h684c17.7 0 32-14.3 32-32V634c0-4.4-3.6-8-8-8z"></path></svg></span><span>{{
-                                    faviconFile?.size || props.src ? this.$root.translate('Change') : this.$root.translate('Upload')
+                                    faviconFile?.size || props.src ? $root.translate('Change') : $root.translate('Upload')
                                 }}</span></button></span></div><div
                                 class="ant-upload-list ant-upload-list-text"></div></span></div>
                             <div v-if="faviconFile?.size || props.src"
@@ -150,13 +150,13 @@ function setFavicon() {
         <a-modal
             class="animate__animated tabs-modal"
             :class="showFaviconModal ? 'animate__zoomIn' : 'animate__zoomOut'"
-            :ok-text="this.$root.translate('OK')"
-            :cancel-text="this.$root.translate('Cancel')"
+            :ok-text="$root.translate('OK')"
+            :cancel-text="$root.translate('Cancel')"
             v-model:visible="showFaviconModal"
             @ok="setFavicon"
             :wrap-style="{ overflow: 'hidden' }">
             <template #title>
-                {{ this.$root.translate('Select area') }}
+                {{ $root.translate('Select area') }}
             </template>
             <vue-cropper
                 ref="favCropper"

@@ -92,7 +92,7 @@ function destroyPage() {
         @change="emit('update:modelValue', false)"
         :wrap-style="{ overflow: 'hidden' }">
         <template #title>
-            <div>{{ this.$root.translate('Update Page') }}</div>
+            <div>{{ $root.translate('Update Page') }}</div>
         </template>
         <template #footer>
             <div class="d-flex">
@@ -105,7 +105,7 @@ function destroyPage() {
                                 viewBox="64 64 896 896" focusable="false" data-icon="more" width="1em" height="1em"
                                 fill="currentColor" aria-hidden="true"><path
                                 d="M456 231a56 56 0 10112 0 56 56 0 10-112 0zm0 280a56 56 0 10112 0 56 56 0 10-112 0zm0 280a56 56 0 10112 0 56 56 0 10-112 0z"></path></svg></span><span>{{
-                                    this.$root.translate('Actions')
+                                    $root.translate('Actions')
                                 }}</span>
                             </button>
                         </div>
@@ -121,14 +121,14 @@ function destroyPage() {
                                       viewBox="64 64 896 896" focusable="false" data-icon="delete" width="1em"
                                       height="1em" fill="currentColor" aria-hidden="true"><path
                                       d="M360 184h-8c4.4 0 8-3.6 8-8v8h304v-8c0 4.4 3.6 8 8 8h-8v72h72v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80h72v-72zm504 72H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zM731.3 840H292.7l-24.2-512h487l-24.2 512z"></path></svg></span><span
-                                    class="ant-dropdown-menu-title-content">{{ this.$root.translate('Delete') }}</span>
+                                    class="ant-dropdown-menu-title-content">{{ $root.translate('Delete') }}</span>
                                 </div>
                             </a-menu-item>
                         </a-menu>
                     </template>
                 </a-dropdown>
                 <a-button key="submit" class="ms-auto" type="primary" @click="submit">{{
-                        this.$root.translate('Save')
+                        $root.translate('Save')
                     }}
                 </a-button>
             </div>
@@ -136,17 +136,17 @@ function destroyPage() {
         <a-tabs v-model:activeKey="activeTab">
             <a-tab-pane key="1">
                 <template #tab><span class="ant-typography" :class="{'ant-typography-danger': form?.errors?.name || form?.errors?.link}">
-                    {{this.$root.translate('Settings')}}
+                    {{$root.translate('Settings')}}
                 </span></template>
                 <tapy-input
                     v-model="form.name"
                     :with-required-mark="true"
                     :error="form?.errors?.name"
-                    :label="this.$root.translate('Page name')"
-                    :placeholder="this.$root.translate('My page')">
+                    :label="$root.translate('Page name')"
+                    :placeholder="$root.translate('My page')">
                     <template #afterLabel>
                         <a-tooltip>
-                            <template #title>{{ this.$root.translate('Visible only to yourself') }}</template>
+                            <template #title>{{ $root.translate('Visible only to yourself') }}</template>
                             <question-circle-outlined class="anticon anticon-question-circle ant-form-item-tooltip"/>
                         </a-tooltip>
                     </template>
@@ -157,11 +157,11 @@ function destroyPage() {
                     :with-required-mark="true"
                     :select-value="`${prettyUrl}/`"
                     :select-position="1"
-                    :label="this.$root.translate('Page link')"
-                    :info='this.$root.translate("Only letters, digits and \".-_\" symbols")'
-                    :placeholder="this.$root.translate('xxxxxx')"/>
+                    :label="$root.translate('Page link')"
+                    :info='$root.translate("Only letters, digits and \".-_\" symbols")'
+                    :placeholder="$root.translate('xxxxxx')"/>
             </a-tab-pane>
-            <a-tab-pane key="2" :tab="this.$root.translate('Tracking')">
+            <a-tab-pane key="2" :tab="$root.translate('Tracking')">
                 <div style="display: flex; padding-bottom: 20px;">
                     <div class="Hint ant-alert"><span role="img" aria-label="info-circle"
                                                       class="anticon anticon-info-circle"><svg viewBox="64 64 896 896"
@@ -175,7 +175,7 @@ function destroyPage() {
                         <div class="ant-alert-content">
                             <div class="ant-alert-message">
                                 {{
-                                    this.$root.translate('Tracking will allow you to measure the effectiveness of your advertising campaigns, as well as do retargeting to users who have already visited your Tapy page.')
+                                    $root.translate('Tracking will allow you to measure the effectiveness of your advertising campaigns, as well as do retargeting to users who have already visited your Tapy page.')
                                 }}
                             </div>
                         </div>
@@ -183,22 +183,22 @@ function destroyPage() {
                 </div>
                 <tapy-input
                     v-model="form.facebook_pixel_id"
-                    :label="this.$root.translate('Facebook Pixel ID')"
+                    :label="$root.translate('Facebook Pixel ID')"
                     placeholder="585358156020126"/>
                 <tapy-input
                     v-model="form.google_analytics_tracking_id"
-                    :label="this.$root.translate('Google Analytics Tracking ID')"
+                    :label="$root.translate('Google Analytics Tracking ID')"
                     placeholder="G-GQ34KMV74F"/>
                 <tapy-input
                     v-model="form.yandex_metrika_id"
-                    :label="this.$root.translate('Yandex Metrika ID')"
+                    :label="$root.translate('Yandex Metrika ID')"
                     placeholder="86096584"/>
                 <tapy-input
                     v-model="form.tiktok_pixel_id"
-                    :label="this.$root.translate('TikTok Pixel ID')"
+                    :label="$root.translate('TikTok Pixel ID')"
                     placeholder="C6KEQS44L0UCTH07LRR1"/>
             </a-tab-pane>
-            <a-tab-pane key="3" :tab="this.$root.translate('SEO')">
+            <a-tab-pane key="3" :tab="$root.translate('SEO')">
                 <div style="display: flex; padding-bottom: 20px;">
                     <div class="Hint ant-alert"><span role="img" aria-label="info-circle"
                                                       class="anticon anticon-info-circle"><svg viewBox="64 64 896 896"
@@ -212,7 +212,7 @@ function destroyPage() {
                         <div class="ant-alert-content">
                             <div class="ant-alert-message">
                                 {{
-                                    this.$root.translate('Choose the title, description and favicon to appear on search engines and social posts')
+                                    $root.translate('Choose the title, description and favicon to appear on search engines and social posts')
                                 }}
                             </div>
                         </div>
@@ -220,20 +220,20 @@ function destroyPage() {
                 </div>
                 <tapy-input
                     v-model="form.title"
-                    :label="this.$root.translate('Page title')"/>
+                    :label="$root.translate('Page title')"/>
                 <tapy-textarea
                     v-model="form.description"
                     :with-placeholder="false"
-                    :name="this.$root.translate('Page description')"/>
+                    :name="$root.translate('Page description')"/>
                 <single-image-uploader
                     @onUpload="onUploadFavicon"
                     @onRemove="removeFavicon"
                     v-model="faviconModel"
                     :src="props.page?.page_seo?.favicon">
                     <template #label>
-                        <label for="reset-password_seo_favicon" class="" title="Favicon">{{ this.$root.translate('Favicon') }}
+                        <label for="reset-password_seo_favicon" class="" title="Favicon">{{ $root.translate('Favicon') }}
                             <a-tooltip>
-                                <template #title>{{ this.$root.translate('500x500px for best fits') }}</template>
+                                <template #title>{{ $root.translate('500x500px for best fits') }}</template>
                                 <question-circle-outlined class="anticon anticon-question-circle ant-form-item-tooltip"/>
                             </a-tooltip>
                         </label>

@@ -35,7 +35,7 @@ function addElement(alias) {
         @change="emit('update:modelValue', false)"
         :wrap-style="{ overflow: 'hidden' }">
         <template #title>
-            {{ this.$root.translate('Choose block') }}
+            {{ $root.translate('Choose block') }}
         </template>
         <div class="ant-row ant-row-stretch" style="margin-left: -8px; margin-right: -8px; row-gap: 16px;">
             <div @click="addElement('profile')"
@@ -56,7 +56,7 @@ function addElement(alias) {
                                   fill="#8791AB"></path>
                         </svg>
                     </div>
-                    <div class="BlockSelectorModal-title">{{ this.$root.translate('Profile') }}</div>
+                    <div class="BlockSelectorModal-title">{{ $root.translate('Profile') }}</div>
                 </div>
             </div>
             <div @click="addElement('link')"
@@ -74,7 +74,7 @@ function addElement(alias) {
                                 stroke="#8791AB" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"></path>
                         </svg>
                     </div>
-                    <div class="BlockSelectorModal-title">{{ this.$root.translate('Link') }}</div>
+                    <div class="BlockSelectorModal-title">{{ $root.translate('Link') }}</div>
                 </div>
             </div>
             <div class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
@@ -113,7 +113,7 @@ function addElement(alias) {
                                 fill="#8791AB"></path>
                         </svg>
                     </div>
-                    <div class="BlockSelectorModal-title">{{ this.$root.translate('Header') }}</div>
+                    <div class="BlockSelectorModal-title">{{ $root.translate('Header') }}</div>
                 </div>
             </div>
             <div @click="addElement('text')"
@@ -130,7 +130,7 @@ function addElement(alias) {
                                 fill="#8791AB"></path>
                         </svg>
                     </div>
-                    <div class="BlockSelectorModal-title">{{ this.$root.translate('Text') }}</div>
+                    <div class="BlockSelectorModal-title">{{ $root.translate('Text') }}</div>
                 </div>
             </div>
             <div @click="addElement('faq')" class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
@@ -151,7 +151,7 @@ function addElement(alias) {
                             </defs>
                         </svg>
                     </div>
-                    <div class="BlockSelectorModal-title">{{ this.$root.translate('FAQ') }}</div>
+                    <div class="BlockSelectorModal-title">{{ $root.translate('FAQ') }}</div>
                 </div>
             </div>
             <div class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"

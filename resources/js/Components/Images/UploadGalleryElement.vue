@@ -46,7 +46,7 @@ const emit = defineEmits(['remove'])
             class="animate__animated"
             :class="showPreview ? 'animate__zoomIn' : 'animate__zoomOut'"
             v-model:visible="showPreview"
-            :title="this.$root.translate('Image preview')"
+            :title="$root.translate('Image preview')"
             :footer="false"
             :wrap-style="{ overflow: 'hidden' }">
             <div>

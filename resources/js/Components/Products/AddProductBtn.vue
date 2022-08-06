@@ -14,7 +14,7 @@ function addProduct() {
     <button type="button" @click="addProduct"
             class="d-flex align-items-center ant-btn ant-btn-primary">
         <plus-outlined/>
-        <span>{{ this.$root.translate('Add product') }}</span>
+        <span>{{ $root.translate('Add product') }}</span>
     </button>
     <product-modal v-model="showModal"/>
 </template>

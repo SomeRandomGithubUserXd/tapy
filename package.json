@@ -24,6 +24,7 @@
         "animate.css": "^4.1.1",
         "ant-design-vue": "^3.2.10",
         "collect.js": "^4.34.3",
+        "rollup": "^2.77.2",
         "swiper": "^8.3.2",
         "underscore": "^1.13.4",
         "vue-cropperjs": "^5.0.0",

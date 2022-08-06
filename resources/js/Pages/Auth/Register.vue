@@ -26,9 +26,9 @@ function submit() {
                     <div style="display: block; margin: 12px;">
                         <form @submit.prevent="submit" id="sign-up" class="ant-form ant-form-horizontal">
                             <tapy-input
-                                :placeholder="this.$root.translate('Your email')"
+                                :placeholder="$root.translate('Your email')"
                                 type="email"
-                                :error="this.$root.translate(form?.errors?.email)"
+                                :error="$root.translate(form?.errors?.email)"
                                 v-model="form.email">
                                 <span role="img" aria-label="mail" class="anticon anticon-mail form-icon">
                                     <svg viewBox="64 64 896 896" focusable="false" data-icon="mail" width="1em"
@@ -39,10 +39,10 @@ function submit() {
                                 </span>
                             </tapy-input>
                             <tapy-input
-                                :placeholder="this.$root.translate('Your password')"
+                                :placeholder="$root.translate('Your password')"
                                 type="password"
                                 :can-show-password="true"
-                                :error="this.$root.translate(form?.errors?.password)"
+                                :error="$root.translate(form?.errors?.password)"
                                 v-model="form.password">
                                 <span role="img" aria-label="lock"
                                       class="anticon anticon-lock form-icon"><svg
@@ -55,7 +55,7 @@ function submit() {
                                     <div class="ant-form-item-control-input">
                                         <div class="ant-form-item-control-input-content">
                                             <button type="submit" class="ant-btn ant-btn-primary SignUpForm-button">
-                                                <span>{{ this.$root.translate('Sign Up') }}</span>
+                                                <span>{{ $root.translate('Sign Up') }}</span>
                                             </button>
                                         </div>
                                     </div>
@@ -64,8 +64,8 @@ function submit() {
                         </form>
                     </div>
                     <div style="display: block; text-align: center;">
-                        {{ this.$root.translate('Already have an account?') }}
-                        <Link :href="route('login')">{{ this.$root.translate('Login') }}</Link>
+                        {{ $root.translate('Already have an account?') }}
+                        <Link :href="route('login')">{{ $root.translate('Login') }}</Link>
                     </div>
                 </div>
             </div>

@@ -17,7 +17,7 @@ function editProduct(product) {
 
 <template>
     <Authenticated>
-        <template #header>{{ this.$root.translate('Products') }}</template>
+        <template #header>{{ $root.translate('Products') }}</template>
         <div class="Content">
             <div class="Content-inner" style="max-width: 900px;">
                 <div v-if="!$page.props.products.length" class="ant-empty">
@@ -47,7 +47,7 @@ function editProduct(product) {
                             </g>
                         </svg>
                     </div>
-                    <div class="ant-empty-description">{{ this.$root.translate('Add your first product') }}</div>
+                    <div class="ant-empty-description">{{ $root.translate('Add your first product') }}</div>
                     <div class="ant-empty-footer d-flex justify-content-center">
                         <add-product-btn/>
                     </div>
@@ -105,8 +105,8 @@ function editProduct(product) {
             </div>
         </div>
         <product-modal v-model="showEditModal" :product="editingProduct" :mode="1"
-                       :remove-text="this.$root.translate('Are you sure?')"
-                       :ok-text="this.$root.translate('Yes')"
-                       :cancel-text="this.$root.translate('Cancel')"/>
+                       :remove-text="$root.translate('Are you sure?')"
+                       :ok-text="$root.translate('Yes')"
+                       :cancel-text="$root.translate('Cancel')"/>
     </Authenticated>
 </template>

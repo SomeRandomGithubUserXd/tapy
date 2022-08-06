@@ -44,7 +44,7 @@ const menuItems = reactive([
                             aria-disabled="false" data-menu-id="rc-menu-uuid-54004-3-pages">
                             <component :is="item.icon"/>
                             <span class="ant-menu-title-content"><Link :href="item.href">{{
-                                    this.$root.translate(item.name)
+                                    $root.translate(item.name)
                                 }}</Link></span>
                         </li>
                     </ul>
@@ -53,7 +53,7 @@ const menuItems = reactive([
                 <div class="AppLayout-sider-footer">
                     <div
                         style="display: flex; border: 1px solid rgb(43, 37, 42); color: rgba(255, 255, 255, 0.65); border-radius: 10px; padding: 12px; margin-bottom: 36px; flex-direction: column;">
-                        {{ this.$root.translate('Subscribe to stay tuned to the news and contribute to the development of') }} {{ this.$root.translate(this.$root.appName)}}
+                        {{ $root.translate('Subscribe to stay tuned to the news and contribute to the development of') }} {{ $root.translate($root.appName)}}
                         <div style="display: flex; margin-top: 12px;"><a href="https://www.instagram.com/tapy.me/"
                                                                          target="_blank" rel="noreferrer">
                             <logo-instagram
@@ -72,9 +72,9 @@ const menuItems = reactive([
                     <locale-dropdown
                         theme="SwitchLanguageDropdown-button"
                         placement="topLeft"
-                        @switchLocale="this.$root.switchLocale"
-                        :current-locale-obj="this.$root.currentLocale._misc.name"
-                        :locales-available="this.$root.getLocalesAvailable()"/>
+                        @switchLocale="$root.switchLocale"
+                        :current-locale-obj="$root.currentLocale._misc.name"
+                        :locales-available="$root.getLocalesAvailable()"/>
                 </div>
             </div>
         </aside>

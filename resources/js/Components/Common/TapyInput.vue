@@ -96,7 +96,7 @@ const emit = defineEmits(['update:modelValue', 'update:selectValue'])
                     :title="props.label || props.placeholder">{{
                         props.label || props.placeholder
                     }}
-                    <span v-if="props.withOptionalMark" class="Optional">({{ this.$root.translate('Optional') }})</span>
+                    <span v-if="props.withOptionalMark" class="Optional">({{ $root.translate('Optional') }})</span>
                     <slot name="afterLabel"/>
                 </label>
             </div>
@@ -107,7 +107,7 @@ const emit = defineEmits(['update:modelValue', 'update:selectValue'])
                         <span v-if="!!props.selectValue && !props.selectOptions.length && selectPosition" class="ant-input-group-addon">
                             <span style="padding-right: 22px;">{{ props.selectValue }}</span>
                         </span>
-                        <span v-if="!!this.$slots['default']" class="ant-input-prefix">
+                        <span v-if="!!$slots['default']" class="ant-input-prefix">
                             <slot/>
                         </span>
                         <input

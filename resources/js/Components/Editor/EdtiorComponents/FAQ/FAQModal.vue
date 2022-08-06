@@ -63,13 +63,13 @@ watch(faqsModel.value, value => {}, {deep: true})
         @change="emit('update:modelValue', false)"
         :wrap-style="{ overflow: 'hidden' }">
         <template #title>
-            {{ this.$root.translate('FAQ') }}
+            {{ $root.translate('FAQ') }}
         </template>
         <f-a-q-crud-modal v-model="showCrudModal" @addFaq="addFaq"/>
         <a-tabs style="padding: 0 26px">
             <a-tab-pane key="1">
                 <template #tab><span class="ant-typography">
-                    {{ this.$root.translate('Settings') }}
+                    {{ $root.translate('Settings') }}
                 </span></template>
                 <div class="ant-row ant-form-item" style="row-gap: 0px;">
                     <div class="ant-col ant-form-item-control">
@@ -110,7 +110,7 @@ watch(faqsModel.value, value => {}, {deep: true})
                                     fill="currentColor" aria-hidden="true"><path
                                     d="M482 152h60q8 0 8 8v704q0 8-8 8h-60q-8 0-8-8V160q0-8 8-8z"></path><path
                                     d="M176 474h672q8 0 8 8v60q0 8-8 8H176q-8 0-8-8v-60q0-8 8-8z"></path></svg></span><span>{{
-                                        this.$root.translate('Add question')
+                                        $root.translate('Add question')
                                     }}</span>
                                 </button>
                             </div>

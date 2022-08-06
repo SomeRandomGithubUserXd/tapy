@@ -9,8 +9,8 @@ const landingUrl = import.meta.env.VITE_LANDING_URL
         <a class="LoginLayout-logo" :href="landingUrl"><img src="/logo.svg" alt=""></a>
         <slot/>
         <locale-dropdown
-            @switchLocale="this.$root.switchLocale"
-            :current-locale-obj="this.$root.currentLocale._misc.name"
-            :locales-available="this.$root.getLocalesAvailable()"/>
+            @switchLocale="$root.switchLocale"
+            :current-locale-obj="$root.currentLocale._misc.name"
+            :locales-available="$root.getLocalesAvailable()"/>
     </div>
 </template>

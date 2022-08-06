@@ -109,7 +109,7 @@ function destroyProduct() {
         @ok="submit"
         :wrap-style="{ overflow: 'hidden' }">
         <template #title>
-            <div>{{ this.$root.translate('New product') }}</div>
+            <div>{{ $root.translate('New product') }}</div>
         </template>
         <form id="product" class="ant-form ant-form-vertical">
             <div class="ant-row ant-form-item" style="row-gap: 0px;">
@@ -117,53 +117,53 @@ function destroyProduct() {
                     <label
                         class="ant-form-item-required"
                         title="Photos">
-                        {{ this.$root.translate('Photos') }}
+                        {{ $root.translate('Photos') }}
                     </label>
                 </div>
                 <upload-gallery
-                    :error="this.$root.translate(form?.errors?.photos)"
+                    :error="$root.translate(form?.errors?.photos)"
                     v-model="form.photos"
-                    :remove-text="this.$root.translate('Are you sure?')"
-                    :ok-text="this.$root.translate('Yes')"
-                    :cancel-text="this.$root.translate('Cancel')"/>
+                    :remove-text="$root.translate('Are you sure?')"
+                    :ok-text="$root.translate('Yes')"
+                    :cancel-text="$root.translate('Cancel')"/>
             </div>
             <tapy-input
                 :with-label="true"
                 :with-required-mark="true"
-                :placeholder="this.$root.translate('Name')"
-                :error="this.$root.translate(form?.errors?.name)"
+                :placeholder="$root.translate('Name')"
+                :error="$root.translate(form?.errors?.name)"
                 v-model="form.name"/>
             <tapy-textarea
-                :name="this.$root.translate('Description')"
-                :error="this.$root.translate(form?.errors?.description)"
+                :name="$root.translate('Description')"
+                :error="$root.translate(form?.errors?.description)"
                 v-model="form.description"/>
             <tapy-input
                 :with-label="true"
-                :placeholder="this.$root.translate('Price')"
+                :placeholder="$root.translate('Price')"
                 v-model="form.price"
-                :error="this.$root.translate(form?.errors?.price)"
+                :error="$root.translate(form?.errors?.price)"
                 v-model:select-value="form.currency"
                 :select-options="currencies"/>
             <tapy-input
                 :with-label="true"
-                :error="this.$root.translate(form?.errors?.old_price)"
-                :placeholder="this.$root.translate('Old price')"
+                :error="$root.translate(form?.errors?.old_price)"
+                :placeholder="$root.translate('Old price')"
                 v-model="form.old_price"
                 :select-value="form.currency"/>
             <div class="ant-card ant-card-bordered">
                 <div class="ant-card-body">
                     <div class="d-flex align-items-center">
                         <a-switch v-model:checked="action_btn"/>
-                        <span class="ms-2">{{ this.$root.translate('Action button') }}</span>
+                        <span class="ms-2">{{ $root.translate('Action button') }}</span>
                     </div>
                     <div class="d-flex flex-column" v-if="form.action_btn">
-                        <tapy-select :error="this.$root.translate(form?.errors?.btn_label)"
-                                     v-model="form.btn_label" :label="this.$root.translate('Button label')"/>
+                        <tapy-select :error="$root.translate(form?.errors?.btn_label)"
+                                     v-model="form.btn_label" :label="$root.translate('Button label')"/>
                         <tapy-input
-                            :error="this.$root.translate(form?.errors?.btn_link)"
+                            :error="$root.translate(form?.errors?.btn_link)"
                             :with-required-mark="true"
                             :with-label="true"
-                            :label="this.$root.translate('Link')"
+                            :label="$root.translate('Link')"
                             placeholder="https://google.com"
                             v-model="form.btn_link"/>
                     </div>
@@ -181,7 +181,7 @@ function destroyProduct() {
                                 viewBox="64 64 896 896" focusable="false" data-icon="more" width="1em" height="1em"
                                 fill="currentColor" aria-hidden="true"><path
                                 d="M456 231a56 56 0 10112 0 56 56 0 10-112 0zm0 280a56 56 0 10112 0 56 56 0 10-112 0zm0 280a56 56 0 10112 0 56 56 0 10-112 0z"></path></svg></span><span>{{
-                                    this.$root.translate('Actions')
+                                    $root.translate('Actions')
                                 }}</span>
                             </button>
                         </div>
@@ -196,13 +196,13 @@ function destroyProduct() {
                                       viewBox="64 64 896 896" focusable="false" data-icon="delete" width="1em"
                                       height="1em" fill="currentColor" aria-hidden="true"><path
                                       d="M360 184h-8c4.4 0 8-3.6 8-8v8h304v-8c0 4.4 3.6 8 8 8h-8v72h72v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80h72v-72zm504 72H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zM731.3 840H292.7l-24.2-512h487l-24.2 512z"></path></svg></span><span
-                                  class="ant-dropdown-menu-title-content">{{ this.$root.translate('Delete') }}</span>
+                                  class="ant-dropdown-menu-title-content">{{ $root.translate('Delete') }}</span>
                               </div>
                             </a-menu-item>
                         </a-menu>
                     </template>
                 </a-dropdown>
-                <a-button key="submit" class="ms-auto" type="primary" @click="submit">{{ props.mode ? this.$root.translate('Save') : this.$root.translate('Add') }}</a-button>
+                <a-button key="submit" class="ms-auto" type="primary" @click="submit">{{ props.mode ? $root.translate('Save') : $root.translate('Add') }}</a-button>
             </div>
         </template>
     </a-modal>

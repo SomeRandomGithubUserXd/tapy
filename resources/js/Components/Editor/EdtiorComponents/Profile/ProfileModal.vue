@@ -68,7 +68,7 @@ function removePic() {
         @change="emit('update:modelValue', false)"
         :wrap-style="{ overflow: 'hidden' }">
         <template #title>
-            {{ this.$root.translate('Profile') }}
+            {{ $root.translate('Profile') }}
         </template>
         <template #footer>
             <edit-modal-footer @needsClosing="emit('update:modelValue', false)" @onOK="submit" :element-id="props.elementId" :mode="1" :with-copy-action="true"/>
@@ -86,7 +86,7 @@ function removePic() {
             <a-tabs style="padding: 0 26px">
                 <a-tab-pane key="1">
                     <template #tab><span class="ant-typography" :class="{'ant-typography-danger': !!editableData?.errors.length}">
-                    {{this.$root.translate('Settings')}}
+                    {{$root.translate('Settings')}}
                 </span></template>
                     <single-image-uploader
                         :rounded-preview="true"
@@ -95,19 +95,19 @@ function removePic() {
                         v-model="picModel"
                         :src="picSrc">
                         <template #label>
-                            <label>{{ this.$root.translate('Avatar') }}</label>
+                            <label>{{ $root.translate('Avatar') }}</label>
                         </template>
                     </single-image-uploader>
                     <tapy-input
                         v-model="editableData.username"
-                        :label="this.$root.translate('Title')"/>
+                        :label="$root.translate('Title')"/>
                     <tapy-input
                         v-model="editableData.caption"
                         :with-optional-mark="true"
-                        :label="this.$root.translate('Caption')"/>
+                        :label="$root.translate('Caption')"/>
                     <a-radio-group size="small" v-model:value="editableData.position" style="margin-bottom: 20px;">
-                        <a-radio-button value="left">{{ this.$root.translate('Left') }}</a-radio-button>
-                        <a-radio-button value="center">{{ this.$root.translate('Center') }}</a-radio-button>
+                        <a-radio-button value="left">{{ $root.translate('Left') }}</a-radio-button>
+                        <a-radio-button value="center">{{ $root.translate('Center') }}</a-radio-button>
                     </a-radio-group>
                 </a-tab-pane>
             </a-tabs>

@@ -49,7 +49,7 @@ function submit() {
         @change="emit('update:modelValue', false)"
         :wrap-style="{ overflow: 'hidden' }">
         <template #title>
-            {{ this.$root.translate('Link') }}
+            {{ $root.translate('Link') }}
         </template>
         <template #footer>
             <edit-modal-footer @needsClosing="emit('update:modelValue', false)" @onOK="submit"
@@ -71,27 +71,27 @@ function submit() {
                 <a-tab-pane key="1">
                     <template #tab><span class="ant-typography"
                                          :class="{'ant-typography-danger': !!editableData?.errors.length}">
-                    {{ this.$root.translate('Settings') }}
+                    {{ $root.translate('Settings') }}
                 </span></template>
                     <tapy-input
                         :with-required-mark="true"
                         v-model="editableData.href"
-                        :label="this.$root.translate('Link')"/>
+                        :label="$root.translate('Link')"/>
                     <tapy-input
                         v-model="editableData.text"
                         :with-optional-mark="true"
-                        :label="this.$root.translate('Button text')"/>
+                        :label="$root.translate('Button text')"/>
                     <tapy-input
                         v-model="editableData.caption"
                         :with-optional-mark="true"
-                        :label="this.$root.translate('Button caption')"/>
+                        :label="$root.translate('Button caption')"/>
                     <a-radio-group size="small" v-model:value="editableData.position" style="margin-bottom: 20px;">
-                        <a-radio-button value="left">{{ this.$root.translate('Left') }}</a-radio-button>
-                        <a-radio-button value="center">{{ this.$root.translate('Center') }}</a-radio-button>
+                        <a-radio-button value="left">{{ $root.translate('Left') }}</a-radio-button>
+                        <a-radio-button value="center">{{ $root.translate('Center') }}</a-radio-button>
                     </a-radio-group>
                     <div class="d-flex align-items-center" style="margin-bottom: 15px">
                         <a-switch v-model:checked="editableData.hide_icon"/>
-                        <span class="ms-2">{{ this.$root.translate('Hide icon') }}</span>
+                        <span class="ms-2">{{ $root.translate('Hide icon') }}</span>
                     </div>
                 </a-tab-pane>
             </a-tabs>

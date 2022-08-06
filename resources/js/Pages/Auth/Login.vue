@@ -21,16 +21,16 @@ function submit() {
                 <div class="ant-card-body">
                     <div style="display: block; margin: 12px;">
                         <form @submit.prevent="submit" class="ant-form ant-form-horizontal">
-                            <tapy-input :placeholder="this.$root.translate('Your email')" v-model="form.email"
-                                        type="email" :error="this.$root.translate(form?.errors?.email)">
+                            <tapy-input :placeholder="$root.translate('Your email')" v-model="form.email"
+                                        type="email" :error="$root.translate(form?.errors?.email)">
                                 <span
                                     role="img" aria-label="mail" class="anticon anticon-mail form-icon"><svg
                                     viewBox="64 64 896 896" focusable="false" data-icon="mail" width="1em"
                                     height="1em" fill="currentColor" aria-hidden="true"><path
                                     d="M928 160H96c-17.7 0-32 14.3-32 32v640c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V192c0-17.7-14.3-32-32-32zm-40 110.8V792H136V270.8l-27.6-21.5 39.3-50.5 42.8 33.3h643.1l42.8-33.3 39.3 50.5-27.7 21.5zM833.6 232L512 482 190.4 232l-42.8-33.3-39.3 50.5 27.6 21.5 341.6 265.6a55.99 55.99 0 0068.7 0L888 270.8l27.6-21.5-39.3-50.5-42.7 33.2z"></path></svg></span>
                             </tapy-input>
-                            <tapy-input :placeholder="this.$root.translate('Your password')" v-model="form.password"
-                                        type="password" :error="this.$root.translate(form?.errors?.password)">
+                            <tapy-input :placeholder="$root.translate('Your password')" v-model="form.password"
+                                        type="password" :error="$root.translate(form?.errors?.password)">
                                 <span
                                     role="img" aria-label="lock" class="anticon anticon-lock form-icon"><svg
                                     viewBox="64 64 896 896" focusable="false" data-icon="lock" width="1em"
@@ -42,7 +42,7 @@ function submit() {
                                     <div class="ant-form-item-control-input">
                                         <div class="ant-form-item-control-input-content">
                                             <button type="submit" class="ant-btn ant-btn-primary LoginForm-button">
-                                                <span>{{ this.$root.translate('Log in') }}</span></button>
+                                                <span>{{ $root.translate('Log in') }}</span></button>
                                         </div>
                                     </div>
                                 </div>
@@ -51,10 +51,10 @@ function submit() {
                     </div>
                     <div style="display: block; text-align: center;">
                         <div style="display: block; margin-bottom: 8px;">
-                            {{ this.$root.translate("Don't have an account?") }}
-                            <Link :href="route('sign-up')">{{ this.$root.translate("Sign Up") }}</Link>
+                            {{ $root.translate("Don't have an account?") }}
+                            <Link :href="route('sign-up')">{{ $root.translate("Sign Up") }}</Link>
                         </div>
-                        <Link :href="route('password.request')">{{ this.$root.translate('Forgot password?') }}</Link>
+                        <Link :href="route('password.request')">{{ $root.translate('Forgot password?') }}</Link>
                     </div>
                 </div>
             </div>

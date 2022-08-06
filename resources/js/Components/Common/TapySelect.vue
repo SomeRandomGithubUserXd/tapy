@@ -23,14 +23,14 @@ const emit = defineEmits(['update:modelValue'])
             <div class="ant-form-item-control-input">
                 <div class="ant-form-item-control-input-content">
                     <a-select :value="props.modelValue" @change="emit('update:modelValue', $event)">
-                        <a-select-option :value="this.$root.translate('Buy')">
-                            {{ this.$root.translate('Buy') }}
+                        <a-select-option :value="$root.translate('Buy')">
+                            {{ $root.translate('Buy') }}
                         </a-select-option>
-                        <a-select-option :value="this.$root.translate('Order')">
-                            {{ this.$root.translate('Order') }}
+                        <a-select-option :value="$root.translate('Order')">
+                            {{ $root.translate('Order') }}
                         </a-select-option>
-                        <a-select-option :value="this.$root.translate('More')">
-                            {{ this.$root.translate('More') }}
+                        <a-select-option :value="$root.translate('More')">
+                            {{ $root.translate('More') }}
                         </a-select-option>
                     </a-select>
                 </div>

@@ -14,7 +14,7 @@ function createPage() {
 
 <template>
     <Authenticated>
-        <template #header>{{ this.$root.translate('Pages') }}</template>
+        <template #header>{{ $root.translate('Pages') }}</template>
         <div class="Content">
             <div class="Content-inner" style="max-width: 900px;">
                 <div v-if="!$page.props.pages.length" class="ant-empty">
@@ -44,7 +44,7 @@ function createPage() {
                             </g>
                         </svg>
                     </div>
-                    <div class="ant-empty-description">{{ this.$root.translate('Create your first page') }}</div>
+                    <div class="ant-empty-description">{{ $root.translate('Create your first page') }}</div>
                     <div class="ant-empty-footer d-flex justify-content-center">
                         <create-page-button @createPage="createPage"/>
                     </div>
@@ -52,9 +52,9 @@ function createPage() {
                 <div class="d-flex flex-column" v-else>
                     <div style="display: flex; margin-bottom: 24px;">
                         <create-page-button
-                            :create-text="this.$root.translate('Create a new page?')"
-                            :ok-text="this.$root.translate('Create')"
-                            :cancel-text="this.$root.translate('Cancel')"
+                            :create-text="$root.translate('Create a new page?')"
+                            :ok-text="$root.translate('Create')"
+                            :cancel-text="$root.translate('Cancel')"
                             :with-confirmation="true"
                             @createPage="createPage"/>
                     </div>

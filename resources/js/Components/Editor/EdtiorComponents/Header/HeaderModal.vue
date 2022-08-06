@@ -48,7 +48,7 @@ function submit() {
         @change="emit('update:modelValue', false)"
         :wrap-style="{ overflow: 'hidden' }">
         <template #title>
-            {{ this.$root.translate('Header') }}
+            {{ $root.translate('Header') }}
         </template>
         <template #footer>
             <edit-modal-footer @needsClosing="emit('update:modelValue', false)" @onOK="submit"
@@ -59,17 +59,17 @@ function submit() {
                 <a-tab-pane key="1">
                     <template #tab><span class="ant-typography"
                                          :class="{'ant-typography-danger': !!editableData?.errors.length}">
-                    {{ this.$root.translate('Settings') }}
+                    {{ $root.translate('Settings') }}
                 </span></template>
                     <div class="ant-row ant-form-item d-flex flex-column" style="row-gap: 0px;">
                         <div class="ant-col ant-form-item-label me-auto"><label for="params_heading"
                                                                                 class="ant-form-item-required"
-                                                                                title="Заголовок">{{ this.$root.translate('Header') }}</label>
+                                                                                title="Заголовок">{{ $root.translate('Header') }}</label>
                         </div>
                         <div class="ant-col ant-form-item-control">
                             <div class="ant-form-item-control-input">
                                 <div class="ant-form-item-control-input-content">   <textarea
-                                    :placeholder="this.$root.translate('Enter header here')" rows="4"
+                                    :placeholder="$root.translate('Enter header here')" rows="4"
                                     id="params_heading"
                                     class="ant-input"
                                     style="font-weight: bold"
@@ -164,7 +164,7 @@ function submit() {
                     <div class="ant-row ant-form-item d-flex flex-column" style="row-gap: 0px;">
                         <div class="ant-col ant-form-item-label me-auto"><label for="params_size" class=""
                                                                                 title="Font size">{{
-                                this.$root.translate('Font size')
+                                $root.translate('Font size')
                             }}</label></div>
                         <div class="ant-col ant-form-item-control">
                             <div class="ant-form-item-control-input">

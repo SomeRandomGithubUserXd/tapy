@@ -51,6 +51,6 @@ function btnClick() {
     <button type="button" @click="btnClick"
             class="d-flex align-items-center ant-btn ant-btn-primary">
         <plus-outlined/>
-        <span>{{ this.$root.translate('Create page') }}</span>
+        <span>{{ $root.translate('Create page') }}</span>
     </button>
 </template>
