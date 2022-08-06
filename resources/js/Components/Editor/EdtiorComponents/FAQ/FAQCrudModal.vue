@@ -14,9 +14,10 @@ let faq = ref({
 })
 
 const submit = () => {
-    console.log(faq.value)
-    emit('addFaq', faq.value)
-    faq.value.question = faq.value.answer = ''
+    if(faq.value.question && faq.value.answer) {
+        emit('addFaq', faq.value)
+        faq.value.question = faq.value.answer = ''
+    }
 }
 </script>
 
@@ -30,6 +31,9 @@ const submit = () => {
         :wrap-style="{ overflow: 'hidden' }">
         <template #title>
             {{ $root.translate('Editing') }}
+        </template>
+        <template #footer>
+            <button type="button" @click="submit" form="item-form" class="ant-btn ant-btn-primary"><span>{{ $root.translate('Add') }}</span></button>
         </template>
         <form id="item-form" class="ant-form ant-form-vertical"><input type="hidden" id="item-form_id"
                                                                        class="ant-input"

@@ -106,6 +106,12 @@
         "QR code": "QR код",
         "Download QR code": "Скачать QR код",
         "Text": "Текст",
-        "Font size": "Размер шрифта"
+        "Font size": "Размер шрифта",
+        "Add question": "Добавить вопрос",
+        "Question": "Вопрос",
+        "Answer": "Ответ",
+        "Editing": "Редактирование",
+        "Copy to page...": "Скопировать на страницу...",
+        "Apply": "Применить"
     }
 ]

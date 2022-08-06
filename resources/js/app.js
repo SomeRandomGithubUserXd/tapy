@@ -22,7 +22,7 @@ const localeMixin = {
     },
     data() {
         return {
-            websiteLocale: 'en',
+            websiteLocale: 'ru',
             appName: appName
         }
     },

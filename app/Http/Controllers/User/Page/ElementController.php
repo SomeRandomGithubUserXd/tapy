@@ -76,7 +76,9 @@ class ElementController extends Controller
 
     public function copy(PageElement $pageElement, Request $request)
     {
-        dd($request->toArray());
+        $page = Page::firstWhere(['uuid' => $request->pageId]);
+        abort_if($page->user_id !== auth()->id(), 401);
+        $page->pageElements()->create($pageElement->toArray());
         return redirect()->back();
     }
 
