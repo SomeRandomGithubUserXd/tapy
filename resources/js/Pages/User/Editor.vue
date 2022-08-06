@@ -1,0 +1,338 @@
+<script setup>
+import Authenticated from "@/Layouts/Authenticated.vue";
+import SettingsModal from "@/Components/Editor/SettingsModal.vue";
+import {computed, getCurrentInstance, ref, watch} from "vue";
+import SlideUpDown from 'vue3-slide-up-down'
+import {Swiper, SwiperSlide, useSwiper} from 'swiper/vue';
+import 'swiper/css';
+import ThemeBlock from "@/Components/Editor/ThemeBlock.vue";
+import {Inertia} from "@inertiajs/inertia";
+import Profile from "@/Components/Editor/EdtiorComponents/Profile/Profile.vue";
+import LinkComponent from "@/Components/Editor/EdtiorComponents/Link/LinkComponent.vue";
+import HeaderComponent from "@/Components/Editor/EdtiorComponents/Header/HeaderComponent.vue";
+import {message} from "ant-design-vue";
+import draggable from 'vuedraggable'
+import AddBlockModal from "@/Components/Editor/AddBlockModal.vue";
+import {components} from "@/Helpers/EditorHelper";
+import ShareModal from "@/Components/Editor/ShareModal.vue";
+
+const self = getCurrentInstance()
+
+function addLink() {
+    Inertia.post(route('pages.page_elements.create', props.page.uuid), {
+        alias: 'link'
+    }, {
+        onSuccess: () => {
+            message.success(
+                self.parent.ctx.translate('Saved'), 2
+            );
+        }
+    })
+}
+
+let editor = ref([]);
+
+const props = defineProps({
+    page: Object,
+    themes: Array,
+})
+
+let settingsModal = ref(false)
+
+let themeSwiper = ref(null)
+
+let currentThemeKey = ref(0)
+
+const themeSwiperReady = (val) => {
+    // console.log(val)
+};
+
+const onSlideChange = (val) => {
+    currentThemeKey.value = val.activeIndex
+};
+
+let showThemePicker = ref(false)
+
+function triggerThemePicker() {
+    showThemePicker.value = !showThemePicker.value
+}
+
+const saveTheme = () => {
+    Inertia.put(route('pages.update.theme', props.page.uuid), {theme_key: currentThemeKey.value}, {
+        onSuccess: () => {
+            showThemePicker.value = false
+            message.success(
+                self.parent.ctx.translate('Saved'), 2
+            );
+        },
+        onError: (err) => console.log(err)
+    });
+}
+
+const themeStyles = computed({
+    get() {
+        if (showThemePicker.value) {
+            return props.themes[currentThemeKey.value]
+        }
+        return props.page.theme[0];
+    },
+    set() {
+    }
+})
+
+let drag = ref(false)
+
+const dragOptions = computed({
+    get() {
+        return {
+            animation: 200,
+            group: "description",
+            disabled: false,
+            ghostClass: "ghost"
+        };
+    },
+    set() {
+    }
+})
+
+const elements = ref(props.page.page_elements)
+
+const reorderElements = () => {
+    axios.post(route('pages.page_elements.reorder', props.page.uuid), {
+        objects: elements.value
+    }).then(value => {
+        message.success(
+            self.parent.ctx.translate('Saved'), 2
+        );
+    })
+}
+
+let showAddBlockModal = ref(false)
+let showShareModal = ref(false)
+
+watch(props, value => {
+    elements.value = value.page.page_elements
+}, {deep: true})
+
+
+const showSettingsThroughShare = () => {
+    showShareModal.value = false
+    settingsModal.value = true
+}
+
+</script>
+
+<template>
+    <Authenticated>
+        <template #header>{{ this.$root.translate('Editor') }}</template>
+        <settings-modal v-model="settingsModal"
+                        :page="$page.props.page"
+                        :remove-text="this.$root.translate('Are you sure?')"
+                        :ok-text="this.$root.translate('Yes')"
+                        :cancel-text="this.$root.translate('Cancel')"/>
+        <add-block-modal v-model="showAddBlockModal" :page-uuid="$page.props.page.uuid"/>
+        <share-modal :qr-code="props.page.qr_code" :page-link="props.page.link" @showSettings="showSettingsThroughShare" v-model="showShareModal"/>
+        <div class="Content EditorPage-content">
+            <div class="Content-inner" style="max-width: 900px;">
+                <div style="display: block; margin-bottom: 20px;">
+                    <div class="ant-row" style="row-gap: 0px;">
+                        <div class="ant-col ant-col-12">
+                            <div class="ant-space ant-space-horizontal ant-space-align-center" style="gap: 8px;">
+                                <div class="ant-space-item" style="">
+                                    <button type="button" class="ant-btn ant-btn-icon-only"
+                                            @click="settingsModal = true"
+                                            ant-click-animating-without-extra-node="false"><span role="img"
+                                                                                                 aria-label="setting"
+                                                                                                 class="anticon anticon-setting"><svg
+                                        viewBox="64 64 896 896" focusable="false" data-icon="setting" width="1em"
+                                        height="1em" fill="currentColor" aria-hidden="true"><path
+                                        d="M924.8 625.7l-65.5-56c3.1-19 4.7-38.4 4.7-57.8s-1.6-38.8-4.7-57.8l65.5-56a32.03 32.03 0 009.3-35.2l-.9-2.6a443.74 443.74 0 00-79.7-137.9l-1.8-2.1a32.12 32.12 0 00-35.1-9.5l-81.3 28.9c-30-24.6-63.5-44-99.7-57.6l-15.7-85a32.05 32.05 0 00-25.8-25.7l-2.7-.5c-52.1-9.4-106.9-9.4-159 0l-2.7.5a32.05 32.05 0 00-25.8 25.7l-15.8 85.4a351.86 351.86 0 00-99 57.4l-81.9-29.1a32 32 0 00-35.1 9.5l-1.8 2.1a446.02 446.02 0 00-79.7 137.9l-.9 2.6c-4.5 12.5-.8 26.5 9.3 35.2l66.3 56.6c-3.1 18.8-4.6 38-4.6 57.1 0 19.2 1.5 38.4 4.6 57.1L99 625.5a32.03 32.03 0 00-9.3 35.2l.9 2.6c18.1 50.4 44.9 96.9 79.7 137.9l1.8 2.1a32.12 32.12 0 0035.1 9.5l81.9-29.1c29.8 24.5 63.1 43.9 99 57.4l15.8 85.4a32.05 32.05 0 0025.8 25.7l2.7.5a449.4 449.4 0 00159 0l2.7-.5a32.05 32.05 0 0025.8-25.7l15.7-85a350 350 0 0099.7-57.6l81.3 28.9a32 32 0 0035.1-9.5l1.8-2.1c34.8-41.1 61.6-87.5 79.7-137.9l.9-2.6c4.5-12.3.8-26.3-9.3-35zM788.3 465.9c2.5 15.1 3.8 30.6 3.8 46.1s-1.3 31-3.8 46.1l-6.6 40.1 74.7 63.9a370.03 370.03 0 01-42.6 73.6L721 702.8l-31.4 25.8c-23.9 19.6-50.5 35-79.3 45.8l-38.1 14.3-17.9 97a377.5 377.5 0 01-85 0l-17.9-97.2-37.8-14.5c-28.5-10.8-55-26.2-78.7-45.7l-31.4-25.9-93.4 33.2c-17-22.9-31.2-47.6-42.6-73.6l75.5-64.5-6.5-40c-2.4-14.9-3.7-30.3-3.7-45.5 0-15.3 1.2-30.6 3.7-45.5l6.5-40-75.5-64.5c11.3-26.1 25.6-50.7 42.6-73.6l93.4 33.2 31.4-25.9c23.7-19.5 50.2-34.9 78.7-45.7l37.9-14.3 17.9-97.2c28.1-3.2 56.8-3.2 85 0l17.9 97 38.1 14.3c28.7 10.8 55.4 26.2 79.3 45.8l31.4 25.8 92.8-32.9c17 22.9 31.2 47.6 42.6 73.6L781.8 426l6.5 39.9zM512 326c-97.2 0-176 78.8-176 176s78.8 176 176 176 176-78.8 176-176-78.8-176-176-176zm79.2 255.2A111.6 111.6 0 01512 614c-29.9 0-58-11.7-79.2-32.8A111.6 111.6 0 01400 502c0-29.9 11.7-58 32.8-79.2C454 401.6 482.1 390 512 390c29.9 0 58 11.6 79.2 32.8A111.6 111.6 0 01624 502c0 29.9-11.7 58-32.8 79.2z"></path></svg></span>
+                                    </button>
+                                </div>
+                                <div class="ant-space-item" style="">
+                                    <button type="button" class="ant-btn ant-btn-icon-only"><span role="img"
+                                                                                                  aria-label="line-chart"
+                                                                                                  class="anticon anticon-line-chart"><svg
+                                        viewBox="64 64 896 896" focusable="false" data-icon="line-chart" width="1em"
+                                        height="1em" fill="currentColor" aria-hidden="true"><path
+                                        d="M888 792H200V168c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v688c0 4.4 3.6 8 8 8h752c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM305.8 637.7c3.1 3.1 8.1 3.1 11.3 0l138.3-137.6L583 628.5c3.1 3.1 8.2 3.1 11.3 0l275.4-275.3c3.1-3.1 3.1-8.2 0-11.3l-39.6-39.6a8.03 8.03 0 00-11.3 0l-230 229.9L461.4 404a8.03 8.03 0 00-11.3 0L266.3 586.7a8.03 8.03 0 000 11.3l39.5 39.7z"></path></svg></span>
+                                    </button>
+                                </div>
+                                <div class="ant-space-item">
+                                    <button @click="triggerThemePicker" type="button"
+                                            class="ant-btn ant-btn-icon-only EditorPage-theme-button"><span
+                                        role="img" aria-label="bg-colors" class="anticon anticon-bg-colors"><svg
+                                        viewBox="64 64 896 896" focusable="false" data-icon="bg-colors" width="1em"
+                                        height="1em" fill="currentColor" aria-hidden="true"><path
+                                        d="M766.4 744.3c43.7 0 79.4-36.2 79.4-80.5 0-53.5-79.4-140.8-79.4-140.8S687 610.3 687 663.8c0 44.3 35.7 80.5 79.4 80.5zm-377.1-44.1c7.1 7.1 18.6 7.1 25.6 0l256.1-256c7.1-7.1 7.1-18.6 0-25.6l-256-256c-.6-.6-1.3-1.2-2-1.7l-78.2-78.2a9.11 9.11 0 00-12.8 0l-48 48a9.11 9.11 0 000 12.8l67.2 67.2-207.8 207.9c-7.1 7.1-7.1 18.6 0 25.6l255.9 256zm12.9-448.6l178.9 178.9H223.4l178.8-178.9zM904 816H120c-4.4 0-8 3.6-8 8v80c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-80c0-4.4-3.6-8-8-8z"></path></svg></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ant-col ant-col-12">
+                            <div @click="showShareModal = true" style="display: flex; justify-content: flex-end;">
+                                <button type="button" class="ant-btn ant-btn-primary"><span role="img"
+                                                                                            aria-label="share-alt"
+                                                                                            class="anticon anticon-share-alt"><svg
+                                    style="margin-top: -6px"
+                                    viewBox="64 64 896 896" focusable="false" data-icon="share-alt" width="1em"
+                                    height="1em"
+                                    fill="currentColor" aria-hidden="true"><path
+                                    d="M752 664c-28.5 0-54.8 10-75.4 26.7L469.4 540.8a160.68 160.68 0 000-57.6l207.2-149.9C697.2 350 723.5 360 752 360c66.2 0 120-53.8 120-120s-53.8-120-120-120-120 53.8-120 120c0 11.6 1.6 22.7 4.7 33.3L439.9 415.8C410.7 377.1 364.3 352 312 352c-88.4 0-160 71.6-160 160s71.6 160 160 160c52.3 0 98.7-25.1 127.9-63.8l196.8 142.5c-3.1 10.6-4.7 21.8-4.7 33.3 0 66.2 53.8 120 120 120s120-53.8 120-120-53.8-120-120-120zm0-476c28.7 0 52 23.3 52 52s-23.3 52-52 52-52-23.3-52-52 23.3-52 52-52zM312 600c-48.5 0-88-39.5-88-88s39.5-88 88-88 88 39.5 88 88-39.5 88-88 88zm440 236c-28.7 0-52-23.3-52-52s23.3-52 52-52 52 23.3 52 52-23.3 52-52 52z"></path></svg></span><span>{{ this.$root.translate('Share') }}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <slide-up-down v-model="showThemePicker" :duration="200">
+                    <div class="ant-collapse ant-collapse-icon-position-left ant-collapse-ghost ThemePicker">
+                        <div class="ant-collapse-item ant-collapse-item-active">
+                            <div class="ant-collapse-header" role="button" tabindex="0" aria-expanded="true"><span
+                                role="img" aria-label="right" class="anticon anticon-right ant-collapse-arrow"><svg
+                                viewBox="64 64 896 896" focusable="false" data-icon="right" width="1em" height="1em"
+                                fill="currentColor" aria-hidden="true" style="transform: rotate(90deg);"><path
+                                d="M765.7 486.8L314.9 134.7A7.97 7.97 0 00302 141v77.3c0 4.9 2.3 9.6 6.1 12.6l360 281.1-360 281.1c-3.9 3-6.1 7.7-6.1 12.6V883c0 6.7 7.7 10.4 12.9 6.3l450.8-352.1a31.96 31.96 0 000-50.4z"></path></svg></span>
+                            </div>
+                            <div class="ant-collapse-content ant-collapse-content-active" style="">
+                                <div class="ant-collapse-content-box">
+                                    <div class="ThemePicker-wrapper">
+                                        <button @click="triggerThemePicker" class="ThemePicker-close"><span role="img"
+                                                                                                            aria-label="close"
+                                                                                                            class="anticon anticon-close"><svg
+                                            viewBox="64 64 896 896" focusable="false" data-icon="close" width="1em"
+                                            height="1em" fill="currentColor" aria-hidden="true"><path
+                                            d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"></path></svg></span>
+                                        </button>
+                                        <swiper
+                                            ref="themeSwiper"
+                                            :slides-per-view="8"
+                                            :spaceBetween="50"
+                                            :centeredSlides="true"
+                                            :slide-to-clicked-slide="true"
+                                            @swiper="themeSwiperReady"
+                                            @slideChange="onSlideChange">
+                                            <swiper-slide v-for="theme in $page.props.themes"
+                                                          class="d-flex justify-content-center cursor-drag">
+                                                <theme-block :theme="theme"/>
+                                            </swiper-slide>
+                                        </swiper>
+                                        <div style="display: flex; justify-content: center; padding-top: 10px;">
+                                            <div class="ant-space ant-space-horizontal ant-space-align-center"
+                                                 style="gap: 8px;">
+                                                <div class="ant-space-item">
+                                                    <button
+                                                        @click="saveTheme"
+                                                        :disabled="currentThemeKey === $page.props?.page?.theme[0]?.key"
+                                                        type="button"
+                                                        class="ant-btn ant-btn-primary ant-btn-sm">
+                                                        <span>{{
+                                                                currentThemeKey === $page.props?.page?.theme[0]?.key ? this.$root.translate('Current') : this.$root.translate('Save')
+                                                            }}</span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </slide-up-down>
+                <div class="BlocksWrapper preview mobile" :style="themeStyles.containerStyle">
+                    <div class="BlocksWrapper-inner" :style="themeStyles.blockStyle">
+                        <draggable
+                            @change="reorderElements"
+                            v-model="elements"
+                            tag="ul"
+                            item-key="order_column"
+                            handle=".handle"
+                            v-bind="dragOptions"
+                            :component-data="{tag: 'ul',type: 'transition',name: !drag ? 'flip-list' : null,class: 'ul-flip-list'}"
+                            @start="drag = true"
+                            @end="drag = false"
+                        >
+                            <template #item="{element}">
+                                <li class="list-group-item"
+                                    style="position: relative; transition: null 0s ease 0s, visibility 0s ease 0s; z-index: 1; opacity: 1;margin-bottom: 10px;">
+                                    <div class="EditorBlockListItem">
+                                        <div class="EditorBlockListItem-handler handle"><span role="img"
+                                                                                              aria-label="menu"
+                                                                                              class="anticon anticon-menu"><svg
+                                            viewBox="64 64 896 896"
+                                            focusable="false"
+                                            data-icon="menu"
+                                            width="1em"
+                                            height="1em"
+                                            fill="currentColor"
+                                            aria-hidden="true"><path
+                                            d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path></svg></span>
+                                        </div>
+                                        <component
+                                            :element-id="element.id"
+                                            :data="element.props"
+                                            :theme="themeStyles"
+                                            :is="components[element.component_alias]"/>
+                                    </div>
+                                </li>
+                            </template>
+                        </draggable>
+                        <div style="display: flex; margin: 20px;">
+                            <button type="button"
+                                    @click="addLink"
+                                    class="ant-btn ant-btn-primary ant-btn-round ant-btn-lg ant-btn-block"
+                                    style="overflow: hidden;"><span>{{ this.$root.translate('Add link')}}</span></button>
+                            <button type="button"
+                                    @click="showAddBlockModal = true"
+                                    class="ant-btn ant-btn-primary ant-btn-circle ant-btn-lg ant-btn-icon-only"
+                                    style="margin-left: 8px;"><span role="img" aria-label="appstore"
+                                                                    class="anticon anticon-appstore"><svg
+                                viewBox="64 64 896 896" focusable="false" data-icon="appstore" width="1em"
+                                height="1em"
+                                fill="currentColor" aria-hidden="true"><path
+                                d="M464 144H160c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V160c0-8.8-7.2-16-16-16zm-52 268H212V212h200v200zm452-268H560c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V160c0-8.8-7.2-16-16-16zm-52 268H612V212h200v200zM464 544H160c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V560c0-8.8-7.2-16-16-16zm-52 268H212V612h200v200zm452-268H560c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V560c0-8.8-7.2-16-16-16zm-52 268H612V612h200v200z"></path></svg></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Authenticated>
+</template>
+
+<style>
+.ul-flip-list {
+    padding: 0;
+}
+
+.button {
+    margin-top: 35px;
+}
+
+.flip-list-move {
+    transition: transform 0.5s;
+}
+
+.no-move {
+    transition: transform 0s;
+}
+
+.ghost {
+    /*opacity: 0.5;*/
+    /*background: #c8ebfb;*/
+}
+
+.list-group {
+    min-height: 20px;
+}
+
+.list-group-item {
+    color: inherit !important;
+    padding: 0 !important;
+    border: 0 !important;
+    cursor: move;
+    background: transparent;
+}
+
+.list-group-item i {
+    cursor: pointer;
+}
+</style>

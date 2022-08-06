@@ -1,0 +1,66 @@
+<script setup>
+import {ref} from "vue";
+
+const props = defineProps({
+    faq: Object,
+    modelValue: Boolean
+})
+
+const emit = defineEmits(['update:modelValue', 'addFaq'])
+
+let faq = ref({
+    question: '',
+    answer: ''
+})
+
+const submit = () => {
+    console.log(faq.value)
+    emit('addFaq', faq.value)
+    faq.value.question = faq.value.answer = ''
+}
+</script>
+
+<template>
+    <a-modal
+        class="animate__animated"
+        :class="modelValue ? 'animate__zoomIn' : 'animate__zoomOut'"
+        :visible="modelValue"
+        @ok="submit"
+        @change="emit('update:modelValue', false)"
+        :wrap-style="{ overflow: 'hidden' }">
+        <template #title>
+            {{ this.$root.translate('Editing') }}
+        </template>
+        <form id="item-form" class="ant-form ant-form-vertical"><input type="hidden" id="item-form_id"
+                                                                       class="ant-input"
+                                                                       value="ac1209f7-47bd-478f-a466-1bd95b1786fe">
+            <div class="ant-row ant-form-item" style="row-gap: 0px;">
+                <div class="ant-col ant-form-item-label"><label for="item-form_question"
+                                                                class="ant-form-item-required"
+                                                                title="Вопрос">{{ this.$root.translate('Question') }}</label></div>
+                <div class="ant-col ant-form-item-control">
+                    <div class="ant-form-item-control-input">
+                        <div class="ant-form-item-control-input-content"><input :placeholder="this.$root.translate('Question')" type="text"
+                                                                                id="item-form_question"
+                                                                                class="ant-input"
+                                                                                v-model="faq.question"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="ant-row ant-form-item" style="row-gap: 0px;">
+                <div class="ant-col ant-form-item-label"><label for="item-form_answer"
+                                                                class="ant-form-item-required"
+                                                                title="Ответ">{{ this.$root.translate('Answer') }}</label></div>
+                <div class="ant-col ant-form-item-control">
+                    <div class="ant-form-item-control-input">
+                        <div class="ant-form-item-control-input-content"><textarea :placeholder="this.$root.translate('Answer')" rows="4"
+                                                                                   v-model="faq.answer"
+                                                                                   id="item-form_answer"
+                                                                                   class="ant-input"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </a-modal>
+</template>
