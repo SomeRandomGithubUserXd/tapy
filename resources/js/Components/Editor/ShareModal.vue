@@ -68,7 +68,7 @@ const downloadQrCode = () => {
         :class="modelValue ? 'animate__zoomIn' : 'animate__zoomOut'"
         :visible="modelValue"
         @change="emit('update:modelValue', false)"
-        :wrap-style="{ overflow: 'hidden' }">
+        >
         <template #title>
             {{ $root.translate('Share page') }}
         </template>

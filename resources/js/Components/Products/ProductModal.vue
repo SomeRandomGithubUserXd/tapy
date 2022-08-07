@@ -107,7 +107,7 @@ function destroyProduct() {
         :visible="modelValue"
         @change="emit('update:modelValue', false)"
         @ok="submit"
-        :wrap-style="{ overflow: 'hidden' }">
+        >
         <template #title>
             <div>{{ $root.translate('New product') }}</div>
         </template>

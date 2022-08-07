@@ -48,7 +48,7 @@ const emit = defineEmits(['remove'])
             v-model:visible="showPreview"
             :title="$root.translate('Image preview')"
             :footer="false"
-            :wrap-style="{ overflow: 'hidden' }">
+            >
             <div>
                 <div class="ImagePreviewModal-wrapper">
                     <img class="ImagePreviewModal-image" :src="props.element.preview" alt=""/>

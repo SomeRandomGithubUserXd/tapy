@@ -47,7 +47,7 @@ function submit() {
         :visible="modelValue"
         @ok="submit"
         @change="emit('update:modelValue', false)"
-        :wrap-style="{ overflow: 'hidden' }">
+        >
         <template #title>
             {{ $root.translate('Link') }}
         </template>

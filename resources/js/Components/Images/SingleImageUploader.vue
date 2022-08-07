@@ -154,7 +154,7 @@ function setFavicon() {
             :cancel-text="$root.translate('Cancel')"
             v-model:visible="showFaviconModal"
             @ok="setFavicon"
-            :wrap-style="{ overflow: 'hidden' }">
+            >
             <template #title>
                 {{ $root.translate('Select area') }}
             </template>

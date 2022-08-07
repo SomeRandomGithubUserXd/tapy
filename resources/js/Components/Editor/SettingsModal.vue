@@ -90,7 +90,7 @@ function destroyPage() {
         :class="modelValue ? 'animate__zoomIn' : 'animate__zoomOut'"
         :visible="modelValue"
         @change="emit('update:modelValue', false)"
-        :wrap-style="{ overflow: 'hidden' }">
+        >
         <template #title>
             <div>{{ $root.translate('Update Page') }}</div>
         </template>
