@@ -3,10 +3,11 @@ import LogoWhite from "@/Components/Misc/LogoWhite.vue";
 import LogoInstagram from "@/Components/Misc/LogoInstagram.vue";
 import LogoTelegram from "@/Components/Misc/LogoTelegram.vue";
 import LocaleDropdown from "@/Components/LocaleDropdown.vue";
-import {getCurrentInstance, reactive} from "vue";
+import {computed, getCurrentInstance, reactive, ref} from "vue";
 import {ShoppingCartOutlined, FileTextOutlined} from '@ant-design/icons-vue';
 import {Link} from "@inertiajs/inertia-vue3";
 import {message} from "ant-design-vue";
+import {MenuOutlined} from "@ant-design/icons-vue";
 
 const self = getCurrentInstance()
 
@@ -21,14 +22,41 @@ const menuItems = reactive([
         name: 'Products',
         icon: ShoppingCartOutlined,
         href: route('products.index'),
-        selected:  route().current('products.index'),
+        selected: route().current('products.index'),
     }
 ])
+
+let isMobile = computed({
+    get() {
+        return !window.matchMedia("(min-width: 768px)").matches
+    }, set() {
+    }
+})
+
+let showSidebar = ref(false)
+
+let sidebarStyle = computed({
+    get() {
+        if(!isMobile) return 'display: block'
+        if(isMobile.value && !showSidebar.value) {
+            return 'd-none'
+        }
+        if(isMobile.value && showSidebar.value) {
+            return 'animate__slideInLeft'
+        }
+    }, set() {
+    }
+})
+
+function showMenu() {
+    showSidebar.value = true
+}
 </script>
 
 <template>
     <section class="ant-layout ant-layout-has-sider AppLayout">
-        <aside class="ant-layout-sider ant-layout-sider-dark"
+        <aside class="ant-layout-sider ant-layout-sider-dark animate__animated"
+               :class="sidebarStyle"
                style="flex: 0 0 220px; max-width: 220px; min-width: 220px; width: 220px;">
             <div class="ant-layout-sider-children">
                 <div>
@@ -53,7 +81,9 @@ const menuItems = reactive([
                 <div class="AppLayout-sider-footer">
                     <div
                         style="display: flex; border: 1px solid rgb(43, 37, 42); color: rgba(255, 255, 255, 0.65); border-radius: 10px; padding: 12px; margin-bottom: 36px; flex-direction: column;">
-                        {{ $root.translate('Subscribe to stay tuned to the news and contribute to the development of') }} {{ $root.translate($root.appName)}}
+                        {{
+                            $root.translate('Subscribe to stay tuned to the news and contribute to the development of')
+                        }} {{ $root.translate($root.appName) }}
                         <div style="display: flex; margin-top: 12px;"><a href="https://www.instagram.com/tapy.me/"
                                                                          target="_blank" rel="noreferrer">
                             <logo-instagram
@@ -81,8 +111,21 @@ const menuItems = reactive([
         <section class="ant-layout AppLayout-inner">
             <header class="ant-layout-header AppLayout-header">
                 <div class="AppLayout-header-content">
-                    <div class="AppLayout-title" style="display: block; margin-left: 24px; font-size: 20px;">
-                        <slot name="header"/>
+                    <div class="AppLayout-title"
+                         style="display: flex; align-items: center; margin-left: 24px; font-size: 20px;">
+                        <div v-if="isMobile" @click="showMenu" style="height: 1em;display: flex;margin-left: -25px">
+                            <span role="img" aria-label="bars" class="anticon anticon-bars"><svg viewBox="0 0 1024 1024"
+                                                                                                 focusable="false"
+                                                                                                 data-icon="bars"
+                                                                                                 width="1em"
+                                                                                                 height="1em"
+                                                                                                 fill="currentColor"
+                                                                                                 aria-hidden="true"><path
+                                d="M912 192H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM104 228a56 56 0 10112 0 56 56 0 10-112 0zm0 284a56 56 0 10112 0 56 56 0 10-112 0zm0 284a56 56 0 10112 0 56 56 0 10-112 0z"></path></svg></span>
+                        </div>
+                        <div style="margin-left: 10px">
+                            <slot name="header"/>
+                        </div>
                     </div>
                 </div>
                 <div class="AppLayout-header-content">
@@ -113,7 +156,7 @@ const menuItems = reactive([
                     </div>
                 </div>
             </header>
-            <main class="ant-layout-content AppLayout-content" style="margin: 24px; min-height: auto;">
+            <main @click="showSidebar = false" class="ant-layout-content AppLayout-content" style="margin: 24px; min-height: auto;">
                 <slot/>
             </main>
         </section>
