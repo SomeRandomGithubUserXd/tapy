@@ -1,13 +1,27 @@
 <script setup>
 import Authenticated from "@/Layouts/Authenticated.vue";
 import {QuestionCircleOutlined, PlusOutlined} from "@ant-design/icons-vue";
-import {ref} from "vue";
+import {getCurrentInstance, ref} from "vue";
 import AddProductBtn from "@/Components/Products/AddProductBtn.vue";
 import ProductModal from "@/Components/Products/ProductModal.vue";
+import {message} from "ant-design-vue";
 
 let showEditModal = ref(false)
 
 let editingProduct = ref({})
+
+const self = getCurrentInstance()
+
+const showAlertIfNoProducts = () => {
+    const params = new URLSearchParams(location.search)
+    if(params.has('add_product_notification')) {
+        message.error(
+            self.parent.ctx.translate('Add at least one product'), 3
+        );
+    }
+}
+
+showAlertIfNoProducts()
 
 function editProduct(product) {
     editingProduct.value = product

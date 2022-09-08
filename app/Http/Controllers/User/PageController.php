@@ -27,7 +27,8 @@ class PageController extends Controller
     {
         return inertia('User/Editor', [
             'page' => $page,
-            'themes' => Theme::orderBy('key')->get()
+            'themes' => Theme::orderBy('key')->get(),
+            'user_products' => auth()->user()->products
         ]);
     }
 

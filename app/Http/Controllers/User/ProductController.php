@@ -4,7 +4,10 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Products\ProductRequest;
+use App\Models\Page\PageElement;
 use App\Models\Product;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -22,7 +25,7 @@ class ProductController extends Controller
         foreach ($request->photos as $photo) {
             $product
                 ->addMediaFromBase64($photo['file'])
-                ->usingFileName(\Str::random(12).'.jpg')
+                ->usingFileName(\Str::random(12) . '.jpg')
                 ->setOrder($i)
                 ->toMediaCollection(Product::$photosMediaCollection);
             $i++;
@@ -41,7 +44,7 @@ class ProductController extends Controller
         foreach ($request->photos as $photo) {
             $product
                 ->addMediaFromBase64($photo['file'])
-                ->usingFileName(\Str::random(12).'.jpg')
+                ->usingFileName(\Str::random(12) . '.jpg')
                 ->setOrder($i)
                 ->toMediaCollection(Product::$photosMediaCollection);
             $i++;
@@ -54,5 +57,14 @@ class ProductController extends Controller
         abort_if(auth()->id() !== $product->user_id, 401);
         $product->delete();
         return redirect()->back();
+    }
+
+    public function getForPage(Request $request)
+    {
+        $data = PageElement::find($request->element_id)->props;
+        $user = User::find($data['user_id']);
+        return $user->products()
+            ->whereIn('id', $data['product_ids'])
+            ->get();
     }
 }

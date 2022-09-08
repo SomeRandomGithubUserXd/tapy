@@ -175,7 +175,7 @@ function destroyPage() {
                         <div class="ant-alert-content">
                             <div class="ant-alert-message">
                                 {{
-                                    $root.translate('Tracking will allow you to measure the effectiveness of your advertising campaigns, as well as do retargeting to users who have already visited your Tapy page.')
+                                    $root.translate('Tracking will allow you to measure the effectiveness of your advertising campaigns, as well as do retargeting to users who have already visited your QCD page.')
                                 }}
                             </div>
                         </div>

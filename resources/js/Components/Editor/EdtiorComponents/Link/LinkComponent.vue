@@ -37,7 +37,7 @@ let showEditModal = ref(false)
 
 <template>
     <div :class="!props.isEditable ? '' : 'EditorBlockListItem-block'" @click="tryEditModal">
-        <link-modal :theme="theme" @dataChanged="handleChange" v-if="recursive" v-model="showEditModal" :data="data"
+        <link-modal :theme="theme" v-if="recursive" v-model="showEditModal" :data="data"
                     :element-id="props.elementId"/>
         <div class="Block preview mobile first">
             <a class="Link" :class="data.position === 'center' ? 'icon-label-center' : 'icon-label-left'"

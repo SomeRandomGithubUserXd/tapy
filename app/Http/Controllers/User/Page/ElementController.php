@@ -19,7 +19,7 @@ class ElementController extends Controller
                     ->orderByDesc('order_column')
                     ->first()
                     ->order_column + 1;
-        } catch (\Exception $exception) {
+        } catch (\Exception) {
             $order = 0;
         }
         $page

@@ -4,8 +4,13 @@ namespace App\Services;
 
 class ElementService
 {
-    public static function getAliasProps()
+    public static function getAliasProps(): array
     {
+        $initProductIds = [];
+        $product = auth()->user()->products()->first();
+        if($product) {
+            $initProductIds = [$product->id];
+        }
         return [
             'profile' => [
                 'picture' => asset('placeholders/logo.svg'),
@@ -19,6 +24,16 @@ class ElementService
                 'caption' => '',
                 'position' => 'center',
                 'hide_icon' => false
+            ],
+            'social_buttons' => [
+                'buttons' => [
+                    [
+                        'alias' => 'phone',
+                        'value' => '+1234567890',
+                    ]
+                ],
+                'view' => 'circle',
+                'use_theme_colors' => false
             ],
             'header' => [
                 'text' => 'Header',
@@ -42,6 +57,11 @@ class ElementService
                         'order' => 0
                     ]
                 ]
+            ],
+            'products' => [
+                'product_ids' => $initProductIds,
+                'user_id' => auth()->id(),
+                'view' => 'grid'
             ],
         ];
     }

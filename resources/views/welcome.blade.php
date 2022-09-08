@@ -31,7 +31,7 @@
 <nav class="navbar navbar-expand-md navbar-light">
     <div class="container">
         <a class="navbar-brand d-flex" href="/">
-            <img class="logo" height="26px" src="{{asset('logo.svg')}}" alt="">
+            <img class="logo" height="100px" src="{{asset('logo.svg')}}" alt="">
         </a>
         <div class="d-flex align-items-center">
             <ul class="navbar-nav d-flex d-md-none flex-row align-items-center">
@@ -54,7 +54,7 @@
 
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
             <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasNavbarLabel"><img class="logo d-flex" height="24px"
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel"><img class="logo d-flex" height="90px"
                                                                            src="{{asset('logo.svg')}}" alt="">
                 </h5>
                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
@@ -69,7 +69,7 @@
                         <a class="nav-link" href="{{route('login')}}">Войти</a>
                     </li>
                     <li class="nav-item d-md-none">
-                        <a class="nav-link text-primary" href="{{route('sign-up')}}">Регистрация</a>
+                        <a class="nav-link text-primary" href="{{route('login')}}">Регистрация</a>
                     </li>
                 </ul>
             </div>
@@ -88,7 +88,7 @@
                 <div class="d-grid gap-2 d-lg-flex justify-content-lg-start justify-content-center mb-5">
                     <div class="magnetic">
                         <span>
-                            <a href="{{route('sign-up')}}" class="btn btn-primary btn-lg px-4">Создать страницу</a>
+                            <a href="{{route('login')}}" class="btn btn-primary btn-lg px-4">Создать страницу</a>
                         </span>
                     </div>
                 </div>
@@ -217,7 +217,7 @@
             <div class="col pb-5 pb-md-0">
                 <div class="d-flex flex-column align-items-center justify-content-center mw-100 mx-auto"
                      style="width: 300px; height: 300px">
-                    <img class="position-absolute" src="{{asset('Images/logo_small.svg')}}" alt="">
+                    <img class="position-absolute" width="75px" src="{{asset('Images/logo_small.svg')}}" alt="">
                     <div class="spin-networks">
                         <div class="spin-network" style="--deg: 0deg">
                             <img src="{{asset('fonts/instagram.svg')}}" alt="">
@@ -255,7 +255,7 @@
         </div>
 
         <div class="d-flex pt-7 flex-column align-items-center justify-content-center py-5">
-            <a href="{{route('sign-up')}}" class="btn btn-outline-primary btn-lg">Начать бесплатно</a>
+            <a href="{{route('login')}}" class="btn btn-outline-primary btn-lg">Начать бесплатно</a>
         </div>
     </div>
 
@@ -290,7 +290,7 @@
             </div>
         </div>
         <div class="d-flex pt-7 flex-column align-items-center justify-content-center py-5">
-            <a href="{{route('sign-up')}}" class="btn btn-outline-primary btn-lg">Создать страницу</a>
+            <a href="{{route('login')}}" class="btn btn-outline-primary btn-lg">Создать страницу</a>
         </div>
     </div>
 
@@ -364,7 +364,7 @@
                 </div>
             </a>
 
-            <a class="community-item community-item-plus" href="{{route('sign-up')}}">
+            <a class="community-item community-item-plus" href="{{route('login')}}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg"
                      viewBox="0 0 16 16" style="width: 32px; height: 32px">
                     <path fill-rule="evenodd"
@@ -374,7 +374,7 @@
         </div>
         <div class="container">
             <div class="d-flex pt-7 flex-column align-items-center justify-content-center py-5">
-                <a href="{{route('sign-up')}}" class="btn btn-outline-primary btn-lg">Присоединиться</a>
+                <a href="{{route('login')}}" class="btn btn-outline-primary btn-lg">Присоединиться</a>
             </div>
         </div>
     </div>
@@ -384,19 +384,16 @@
     <div class="row mb-7">
         <div class="col-sm-12 col-lg-4 col-xl-6 mb-5 mb-lg-0">
             <a href="/" class="d-flex align-items-center mb-3 link-dark text-decoration-none">
-                <img height="30px" src="{{asset('logo.svg')}}" alt="">
+                <img height="100px" src="{{asset('logo.svg')}}" alt="">
             </a>
-            <div class="text-muted d-flex align-items-center mb-4">
-                Made with ❤️ in Minsk
-            </div>
             <div class="row g-2">
                 <div class="col-auto">
-                    <a href="https://t.me/tapyme" target="_blank">
+                    <a href="https://t.me/qcdmet">
                         <img height="32px" src="{{asset('fonts/telegram.svg')}}" alt="" class="rounded-circle">
                     </a>
                 </div>
                 <div class="col-auto">
-                    <a href="https://www.instagram.com/tapy.me/" target="_blank">
+                    <a href="https://instagram.com/qcd_barnaul?igshid=YmMyMTA2M2Y=" target="_blank">
                         <img height="32px" src="{{asset('fonts/instagram.svg')}}" alt=""
                              class="rounded-circle">
                     </a>
@@ -406,9 +403,10 @@
 
         <div class="col-sm-6 col-lg-4 col-xl-3 mb-4 mb-sm-0">
             <ul class="nav flex-column">
-                <li class="nav-item mb-2"><a href="mailto:info@tapy.me"
-                                             class="nav-link p-0 text-muted d-flex align-items-center gap-2">
-                        Обратная связь </a>
+                <li class="nav-item mb-2">
+                    <a href="mailto:info@tapy.me" class="nav-link p-0 text-muted d-flex align-items-center gap-2">
+                        Обратная связь
+                    </a>
                 </li>
             </ul>
         </div>
@@ -424,7 +422,7 @@
     </div>
 
     <div class="d-flex justify-content-between align-items-center">
-        <span>© {{ date('Y') }} Tapy.me</span>
+        <span>© {{ date('Y') }} QCD</span>
         <ul class="nav col-md-4 justify-content-end">
             <li class="nav-item"><a href="/?lang=en" class="nav-link px-2 text-muted">English</a></li>
             <li class="nav-item"><a href="/?lang=ru" class="nav-link px-2 text-muted">Русский</a></li>

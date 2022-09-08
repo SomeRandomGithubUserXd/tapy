@@ -5,7 +5,8 @@ import {getCurrentInstance} from "vue";
 
 const props = defineProps({
     pageUuid: String,
-    modelValue: null
+    modelValue: null,
+    userProducts: Array
 })
 
 const self = getCurrentInstance()
@@ -24,6 +25,18 @@ function addElement(alias) {
         }
     })
 }
+
+const addProduct = () => {
+    if(props.userProducts.length) {
+        addElement('products')
+    } else {
+        Inertia.visit(route('products.index'), {
+            data: {
+                add_product_notification: true
+            }
+        })
+    }
+}
 </script>
 
 <template>
@@ -33,7 +46,7 @@ function addElement(alias) {
         :class="modelValue ? 'animate__zoomIn' : 'animate__zoomOut'"
         :visible="modelValue"
         @change="emit('update:modelValue', false)"
-        >
+    >
         <template #title>
             {{ $root.translate('Choose block') }}
         </template>
@@ -77,7 +90,8 @@ function addElement(alias) {
                     <div class="BlockSelectorModal-title">{{ $root.translate('Link') }}</div>
                 </div>
             </div>
-            <div class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
+            <div @click="addElement('social_buttons')"
+                 class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
                  style="padding-left: 8px; padding-right: 8px;">
                 <div class="BlockSelectorModal-block">
                     <div class="BlockSelectorModal-plan"></div>
@@ -96,7 +110,7 @@ function addElement(alias) {
                             <path d="M11.1 15.35L10.4 13.95L20.7 8.8L21.45 10.2L11.1 15.35Z" fill="#8791AB"></path>
                         </svg>
                     </div>
-                    <div class="BlockSelectorModal-title">Социальные кнопки</div>
+                    <div class="BlockSelectorModal-title">{{ $root.translate('Social buttons') }}</div>
                 </div>
             </div>
             <div class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
@@ -133,7 +147,8 @@ function addElement(alias) {
                     <div class="BlockSelectorModal-title">{{ $root.translate('Text') }}</div>
                 </div>
             </div>
-            <div @click="addElement('faq')" class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
+            <div @click="addElement('faq')"
+                 class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
                  style="padding-left: 8px; padding-right: 8px;">
                 <div class="BlockSelectorModal-block">
                     <div class="BlockSelectorModal-plan"></div>
@@ -154,8 +169,10 @@ function addElement(alias) {
                     <div class="BlockSelectorModal-title">{{ $root.translate('FAQ') }}</div>
                 </div>
             </div>
-            <div class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
-                 style="padding-left: 8px; padding-right: 8px;">
+            <div
+                @click="addProduct"
+                class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
+                style="padding-left: 8px; padding-right: 8px;">
                 <div class="BlockSelectorModal-block">
                     <div class="BlockSelectorModal-plan"></div>
                     <div class="BlockSelectorModal-icon">
@@ -178,7 +195,7 @@ function addElement(alias) {
                             </defs>
                         </svg>
                     </div>
-                    <div class="BlockSelectorModal-title">Товары</div>
+                    <div class="BlockSelectorModal-title">{{ $root.translate('Products') }}</div>
                 </div>
             </div>
             <div class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"

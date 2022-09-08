@@ -35,6 +35,7 @@ let editor = ref([]);
 const props = defineProps({
     page: Object,
     themes: Array,
+    user_products: Array,
 })
 
 let settingsModal = ref(false)
@@ -130,7 +131,7 @@ const showSettingsThroughShare = () => {
                         :remove-text="$root.translate('Are you sure?')"
                         :ok-text="$root.translate('Yes')"
                         :cancel-text="$root.translate('Cancel')"/>
-        <add-block-modal v-model="showAddBlockModal" :page-uuid="$page.props.page.uuid"/>
+        <add-block-modal :user-products="props.user_products" v-model="showAddBlockModal" :page-uuid="$page.props.page.uuid"/>
         <share-modal :qr-code="props.page.qr_code" :page-link="props.page.link" @showSettings="showSettingsThroughShare" v-model="showShareModal"/>
         <div class="Content EditorPage-content">
             <div class="Content-inner" style="max-width: 900px;">
@@ -244,7 +245,6 @@ const showSettingsThroughShare = () => {
                             v-model="elements"
                             tag="ul"
                             item-key="order_column"
-                            handle=".handle"
                             v-bind="dragOptions"
                             :component-data="{tag: 'ul',type: 'transition',name: !drag ? 'flip-list' : null,class: 'ul-flip-list'}"
                             @start="drag = true"
@@ -254,18 +254,6 @@ const showSettingsThroughShare = () => {
                                 <li class="list-group-item"
                                     style="position: relative; transition: null 0s ease 0s, visibility 0s ease 0s; z-index: 1; opacity: 1;margin-bottom: 10px;">
                                     <div class="EditorBlockListItem">
-                                        <div class="EditorBlockListItem-handler handle"><span role="img"
-                                                                                              aria-label="menu"
-                                                                                              class="anticon anticon-menu"><svg
-                                            viewBox="64 64 896 896"
-                                            focusable="false"
-                                            data-icon="menu"
-                                            width="1em"
-                                            height="1em"
-                                            fill="currentColor"
-                                            aria-hidden="true"><path
-                                            d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path></svg></span>
-                                        </div>
                                         <component
                                             :element-id="element.id"
                                             :data="element.props"

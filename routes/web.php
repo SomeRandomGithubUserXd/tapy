@@ -35,7 +35,7 @@ Route::group(['domain' => 'app.' . $host], function () {
     Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::group(['prefix' => 'api', 'as' => 'api.'], function () {
             Route::get('currencies', [CurrencyController::class, 'index'])->name('currencies');
-            Route::get('pages', fn() => auth()->user()->pages)->name('pages');
+            Route::get('pages', static fn() => auth()->user()->pages)->name('pages');
         });
         Route::resource('pages', PageController::class)->except('edit');
         Route::group(['prefix' => '/editor/{page:uuid}', 'as' => 'pages.', 'middleware' => 'user.owns_page'], function () {
@@ -65,5 +65,6 @@ Route::group(['domain' => 'app.' . $host], function () {
         });
         Route::resource('products', ProductController::class);
     });
+    Route::get('user_products', [ProductController::class, 'getForPage'])->name('products.get_for_page');
     require __DIR__ . '/auth.php';
 });
