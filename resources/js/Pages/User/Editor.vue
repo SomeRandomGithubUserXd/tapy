@@ -10,11 +10,26 @@ import {Inertia} from "@inertiajs/inertia";
 import Profile from "@/Components/Editor/EdtiorComponents/Profile/Profile.vue";
 import LinkComponent from "@/Components/Editor/EdtiorComponents/Link/LinkComponent.vue";
 import HeaderComponent from "@/Components/Editor/EdtiorComponents/Header/HeaderComponent.vue";
+import SocialButtonsComponent from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButtonsComponent.vue";
+import SocialButton from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButton.vue";
+import SocialButtonsModal from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButtonsModal.vue";
 import {message} from "ant-design-vue";
 import draggable from 'vuedraggable'
 import AddBlockModal from "@/Components/Editor/AddBlockModal.vue";
-import {components} from "@/Helpers/EditorHelper";
 import ShareModal from "@/Components/Editor/ShareModal.vue";
+import TextComponent from "@/Components/Editor/EdtiorComponents/Text/TextComponent.vue";
+import FAQComponent from "@/Components/Editor/EdtiorComponents/FAQ/FAQComponent.vue";
+import ProductsComponent from "@/Components/Editor/EdtiorComponents/Products/ProductsComponent.vue";
+
+const components = {
+    profile: Profile,
+    link: LinkComponent,
+    header: HeaderComponent,
+    text: TextComponent,
+    faq: FAQComponent,
+    social_buttons: SocialButtonsComponent,
+    products: ProductsComponent
+}
 
 const self = getCurrentInstance()
 
@@ -131,7 +146,11 @@ const showSettingsThroughShare = () => {
                         :remove-text="$root.translate('Are you sure?')"
                         :ok-text="$root.translate('Yes')"
                         :cancel-text="$root.translate('Cancel')"/>
-        <add-block-modal :user-products="props.user_products" v-model="showAddBlockModal" :page-uuid="$page.props.page.uuid"/>
+        <add-block-modal
+            :theme="themeStyles"
+            :user-products="props.user_products"
+            v-model="showAddBlockModal"
+            :page-uuid="$page.props.page.uuid"/>
         <share-modal :qr-code="props.page.qr_code" :page-link="props.page.link" @showSettings="showSettingsThroughShare" v-model="showShareModal"/>
         <div class="Content EditorPage-content">
             <div class="Content-inner" style="max-width: 900px;">

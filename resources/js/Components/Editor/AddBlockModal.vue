@@ -1,29 +1,47 @@
 <script setup>
 import {Inertia} from "@inertiajs/inertia";
 import {message} from "ant-design-vue";
-import {getCurrentInstance} from "vue";
+import {getCurrentInstance, reactive, ref, watch} from "vue";
+import ProfileModal from "@/Components/Editor/EdtiorComponents/Profile/ProfileModal.vue";
+import LinkModal from "@/Components/Editor/EdtiorComponents/Link/LinkModal.vue";
+import SocialButton from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButton.vue";
+import SocialButtonsModal from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButtonsModal.vue";
+import HeaderModal from "@/Components/Editor/EdtiorComponents/Header/HeaderModal.vue";
+import TextModal from "@/Components/Editor/EdtiorComponents/Text/TextModal.vue";
+import FAQModal from "@/Components/Editor/EdtiorComponents/FAQ/FAQModal.vue";
+import SocialButtonModal from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButtonModal.vue";
+import ButtonListModal from "@/Components/Editor/EdtiorComponents/SocialButtons/ButtonListModal.vue";
+
 
 const props = defineProps({
     pageUuid: String,
     modelValue: null,
-    userProducts: Array
+    userProducts: Array,
+    theme: Object
 })
 
 const self = getCurrentInstance()
 
 const emit = defineEmits(['update:modelValue'])
 
+const showListModal = ref(false)
+
+const modals = ref({
+    social_buttons: false
+})
+
 function addElement(alias) {
-    Inertia.post(route('pages.page_elements.create', props.pageUuid), {
-        alias
-    }, {
-        onSuccess: () => {
-            message.success(
-                self.parent.ctx.translate('Saved'), 2
-            );
-            emit('update:modelValue', false)
-        }
-    })
+    // Inertia.post(route('pages.page_elements.create', props.pageUuid), {
+    //     alias
+    // }, {
+    //     onSuccess: () => {
+    //         message.success(
+    //             self.parent.ctx.translate('Saved'), 2
+    //         );
+    //         emit('update:modelValue', false)
+    //     }
+    // })
+    modals.value[alias] = true
 }
 
 const addProduct = () => {
@@ -37,6 +55,18 @@ const addProduct = () => {
         })
     }
 }
+
+const socialButtonsData = reactive({})
+
+const handleDataChange = (data) => {
+    socialButtonsData.value = {"buttons":[data],"view":"circle","use_theme_colors":false}
+    showListModal.value = true
+    modals.value.social_buttons = false
+}
+
+watch(socialButtonsData, value => {
+    // console.log(value)
+}, {deep: true})
 </script>
 
 <template>
@@ -45,11 +75,66 @@ const addProduct = () => {
         width="800px"
         :class="modelValue ? 'animate__zoomIn' : 'animate__zoomOut'"
         :visible="modelValue"
-        @change="emit('update:modelValue', false)"
-    >
+        @change="emit('update:modelValue', false)">
         <template #title>
             {{ $root.translate('Choose block') }}
         </template>
+        <profile-modal
+            :recursive="false"
+            :page-uuid="props.pageUuid"
+            :data='{"picture":"/placeholders/logo.svg","username":"@username","caption":"","position":"center"}'
+            v-model="modals.profile"
+            :mode="0"
+            :theme="theme"
+            @dataChanged="emit('update:modelValue', false)"
+        />
+        <link-modal
+            :theme="theme"
+            :recursive="false"
+            :page-uuid="props.pageUuid"
+            :data='{"href":"","text":"","caption":"","position":"center","hide_icon":false}'
+            v-model="modals.link"
+            :mode="0"
+            @dataChanged="emit('update:modelValue', false)"
+        />
+        <social-buttons-modal
+            :theme="theme"
+            :recursive="false"
+            :page-uuid="props.pageUuid"
+            :data="socialButtonsData"
+            v-model="showListModal"
+            :mode="0"
+            @dataChanged="emit('update:modelValue', false)"
+        />
+        <button-list-modal @dataChanged="handleDataChange" :element-id="0" v-model="modals.social_buttons"/>
+        <header-modal
+            :theme="theme"
+            :recursive="false"
+            :page-uuid="props.pageUuid"
+            :data='{"text":"","textAlign":"justify","fontStyle":"normal","textDecoration":"none","fontSize":"20px"}'
+            v-model="modals.header"
+            :mode="0"
+            @dataChanged="emit('update:modelValue', false)"
+        />
+        <text-modal
+            :theme="theme"
+            :recursive="false"
+            :page-uuid="props.pageUuid"
+            :data='{"text":"","textAlign":"justify","fontStyle":"normal","textDecoration":"none","fontSize":"15px"}'
+            v-model="modals.text"
+            :mode="0"
+            @dataChanged="emit('update:modelValue', false)"
+        />
+        <f-a-q-modal
+            :theme="theme"
+            :recursive="false"
+            :page-uuid="props.pageUuid"
+            :data='{"faqs":[]}'
+            :faqs="[]"
+            v-model="modals.faq"
+            :mode="0"
+            @dataChanged="emit('update:modelValue', false)"
+        />
         <div class="ant-row ant-row-stretch" style="margin-left: -8px; margin-right: -8px; row-gap: 16px;">
             <div @click="addElement('profile')"
                  class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"

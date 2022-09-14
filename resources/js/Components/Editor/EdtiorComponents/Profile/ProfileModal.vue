@@ -18,10 +18,20 @@ const props = defineProps({
     },
     elementId: Number,
     modelValue: Boolean,
-    data: Object
+    data: Object,
+    mode: {
+        required: false,
+        default: 1,
+        type: Number
+    },
+    pageUuid: {
+        required: false,
+        default: 0,
+        type: String
+    },
 })
 
-const emit = defineEmits(['update:modelValue', 'dataChanged'])
+const emit = defineEmits(['update:modelValue', 'dataChanged', 'closeAll'])
 
 let editableData = ref(useForm(props.data))
 
@@ -34,28 +44,50 @@ function onUploadPic(val) {
 }
 
 function submit() {
-    editableData.value.post(route('page_elements.update_profile_element', props.elementId), {
-        onError: err => console.log(err),
-        onSuccess: () => {
-            emit('update:modelValue', false)
-            emit('dataChanged', editableData.value)
-            message.success(
-                self.parent.ctx.translate('Saved'), 2
-            );
-        },
-    })
+    if (props.mode) {
+        editableData.value.post(route('page_elements.update_profile_element', props.elementId), {
+            onError: err => console.log(err),
+            onSuccess: () => {
+                emit('update:modelValue', false)
+                emit('dataChanged', editableData.value)
+                message.success(
+                    self.parent.ctx.translate('Saved'), 2
+                );
+            },
+        })
+    } else {
+        console.log(editableData.value)
+        editableData.value.transform((data) => ({
+            ...data,
+            props: data,
+            alias: 'profile'
+        })).post(route('pages.create_profile_element', props.pageUuid), {
+            onError: err => console.log(err),
+            onSuccess: () => {
+                emit('update:modelValue', false)
+                emit('dataChanged', editableData.value)
+                message.success(
+                    self.parent.ctx.translate('Saved'), 2
+                );
+            },
+        })
+    }
 }
 
 function removePic() {
-    Inertia.delete(route('page_elements.remove_profile_picture', props.elementId), {
-        onSuccess: () => {
-            message.success(
-                self.parent.ctx.translate('Saved'), 2
-            );
-            picSrc.value = editableData.value.picture = null
-            emit('dataChanged', editableData.value)
-        }
-    })
+    if (props.mode) {
+        Inertia.delete(route('page_elements.remove_profile_picture', props.elementId), {
+            onSuccess: () => {
+                message.success(
+                    self.parent.ctx.translate('Saved'), 2
+                );
+                picSrc.value = editableData.value.picture = null
+                emit('dataChanged', editableData.value)
+            }
+        })
+    } else {
+        picSrc.value = editableData.value.picture = null
+    }
 }
 </script>
 
@@ -66,18 +98,19 @@ function removePic() {
         :visible="modelValue"
         @ok="submit"
         @change="emit('update:modelValue', false)"
-        >
+    >
         <template #title>
             {{ $root.translate('Profile') }}
         </template>
         <template #footer>
-            <edit-modal-footer @needsClosing="emit('update:modelValue', false)" @onOK="submit" :element-id="props.elementId" :mode="1" :with-copy-action="true"/>
+            <edit-modal-footer @needsClosing="emit('update:modelValue', false)" @onOK="submit"
+                               :element-id="props.elementId" :mode="props.mode" :with-copy-action="true"/>
         </template>
         <div>
             <div class="EditBlockPreview" style="min-height: 200px;" :style="theme.containerStyle">
                 <div class="EditBlockPreview-inner">
                     <div class="BlocksWrapper preview single-block css-1e2ocyy">
-                        <div class="BlocksWrapper-inner css-1mtpsyn" :style="theme.blockStyle" >
+                        <div class="BlocksWrapper-inner css-1mtpsyn" :style="theme.blockStyle">
                             <profile :recursive="false" :data="editableData"/>
                         </div>
                     </div>
@@ -85,8 +118,9 @@ function removePic() {
             </div>
             <a-tabs style="padding: 0 26px">
                 <a-tab-pane key="1">
-                    <template #tab><span class="ant-typography" :class="{'ant-typography-danger': !!editableData?.errors.length}">
-                    {{$root.translate('Settings')}}
+                    <template #tab><span class="ant-typography"
+                                         :class="{'ant-typography-danger': !!editableData?.errors.length}">
+                    {{ $root.translate('Settings') }}
                 </span></template>
                     <single-image-uploader
                         :rounded-preview="true"

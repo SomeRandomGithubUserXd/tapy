@@ -13,7 +13,7 @@ export const components = {
     header: HeaderComponent,
     text: TextComponent,
     faq: FAQComponent,
-    social_buttons: SocialButtonsComponent,
+    // social_buttons: SocialButtonsComponent,
     products: ProductsComponent
 }
 

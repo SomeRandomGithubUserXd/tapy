@@ -27,10 +27,42 @@ class ElementController extends Controller
             ->create([
                 'component_alias' => $request->alias,
                 'order_column' => $order,
-                'props' => ElementService::getAliasProps()[$request->alias]
+                'props' => $request->props
             ]);
         return redirect()->back();
     }
+
+    public function createProfileElement(Page $page, UpdateProfileElementRequest $request)
+    {
+        try {
+            $order = PageElement::query()
+                    ->where(['page_id' => $page->id])
+                    ->orderByDesc('order_column')
+                    ->first()
+                    ->order_column + 1;
+        } catch (\Exception) {
+            $order = 0;
+        }
+        $pageElement = $page
+            ->pageElements()
+            ->create([
+                'component_alias' => $request->alias,
+                'order_column' => $order,
+                'props' => $request->props
+            ]);
+        $data = $request->only('caption', 'username', 'position');
+        if ($request->file('picture')) {
+            $pageElement->clearMediaCollection(PageElement::$profilePicCollection);
+            $media = $pageElement
+                ->addMediaFromRequest('picture')
+                ->usingFileName(\Str::random(12) . '.jpg')
+                ->toMediaCollection(PageElement::$profilePicCollection);
+            $data['picture'] = $media->getUrl();
+        }
+        $pageElement->updateProps(array_replace($pageElement->props, $data));
+        return redirect()->back();
+    }
+
 
     public function updateProfileElement(PageElement $pageElement, UpdateProfileElementRequest $request)
     {

@@ -16,6 +16,16 @@ const props = defineProps({
         type: Object,
         default: {}
     },
+    mode: {
+        required: false,
+        default: 1,
+        type: Number
+    },
+    pageUuid: {
+        required: false,
+        default: 0,
+        type: String
+    },
 })
 
 const emit = defineEmits(['update:modelValue', 'dataChanged'])
@@ -23,19 +33,36 @@ const emit = defineEmits(['update:modelValue', 'dataChanged'])
 let editableData = ref(useForm(props.data))
 
 function submit() {
-    editableData.value.transform((data) => ({
-        ...data,
-        alias: 'header'
-    })).post(route('page_elements.update_static', props.elementId), {
-        onError: err => console.log(err),
-        onSuccess: () => {
-            emit('update:modelValue', false)
-            emit('dataChanged', editableData.value)
-            message.success(
-                self.parent.ctx.translate('Saved'), 2
-            );
-        },
-    })
+    if(props.mode) {
+        editableData.value.transform((data) => ({
+            ...data,
+            alias: 'header'
+        })).post(route('page_elements.update_static', props.elementId), {
+            onError: err => console.log(err),
+            onSuccess: () => {
+                emit('update:modelValue', false)
+                emit('dataChanged', editableData.value)
+                message.success(
+                    self.parent.ctx.translate('Saved'), 2
+                );
+            },
+        })
+    } else {
+        editableData.value.transform((data) => ({
+            ...data,
+            props: data,
+            alias: 'header'
+        })).post(route('pages.page_elements.create', props.pageUuid), {
+            onError: err => console.log(err),
+            onSuccess: () => {
+                emit('update:modelValue', false)
+                emit('dataChanged', editableData.value)
+                message.success(
+                    self.parent.ctx.translate('Saved'), 2
+                );
+            },
+        })
+    }
 }
 </script>
 

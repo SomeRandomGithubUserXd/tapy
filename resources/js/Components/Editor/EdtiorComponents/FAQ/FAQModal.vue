@@ -9,28 +9,62 @@ import draggable from 'vuedraggable'
 const props = defineProps({
     modelValue: Boolean,
     elementId: Number,
-    faqs: Array
+    faqs: Array,
+    mode: {
+        required: false,
+        default: 1,
+        type: Number
+    },
+    pageUuid: {
+        required: false,
+        default: 0,
+        type: String
+    },
 })
 
 const self = getCurrentInstance()
 
 let faqsModel = ref(props.faqs)
 
-const emit = defineEmits(['update:modelValue'])
+console.log(props.faqs)
+
+const emit = defineEmits(['update:modelValue', 'dataChanged'])
 
 const submit = () => {
-    Inertia.post(route('page_elements.update_static', props.elementId), {
-        faqs: faqsModel.value,
-        alias: 'faq'
-    }, {
-        onError: err => console.log(err),
-        onSuccess: () => {
-            message.success(
-                self.parent.ctx.translate('Saved'), 2
-            );
-            emit('update:modelValue', false)
-        }
-    })
+    if(props.mode) {
+        Inertia.post(route('page_elements.update_static', props.elementId), {
+            faqs: faqsModel.value,
+            alias: 'faq'
+        }, {
+            onError: err => console.log(err),
+            onSuccess: () => {
+                message.success(
+                    self.parent.ctx.translate('Saved'), 2
+                );
+                faqsModel.value = []
+                emit('update:modelValue', false)
+                emit('dataChanged', true)
+            }
+        })
+    } else {
+        Inertia.post(route('pages.page_elements.create', props.pageUuid), {
+            faqs: faqsModel.value,
+            props: {
+                faqs: faqsModel.value
+            },
+            alias: 'faq'
+        }, {
+            onError: err => console.log(err),
+            onSuccess: () => {
+                message.success(
+                    self.parent.ctx.translate('Saved'), 2
+                );
+                faqsModel.value = []
+                emit('update:modelValue', false)
+                emit('dataChanged', true)
+            }
+        })
+    }
 }
 
 const addQuestion = () => {
@@ -85,7 +119,7 @@ let drag = ref(false)
         </template>
         <template #footer>
             <edit-modal-footer @needsClosing="emit('update:modelValue', false)" @onOK="submit"
-                               :element-id="props.elementId" :mode="1" :with-copy-action="true"/>
+                               :element-id="props.elementId" :mode="props.mode" :with-copy-action="true"/>
         </template>
         <f-a-q-crud-modal v-model="showCrudModal" @addFaq="addFaq"/>
         <a-tabs style="padding: 0 26px">

@@ -1,5 +1,5 @@
 <script setup>
-import {computed, getCurrentInstance, ref} from "vue";
+import {computed, getCurrentInstance, reactive, ref, watch} from "vue";
 import {useForm} from "@inertiajs/inertia-vue3";
 import {message} from "ant-design-vue";
 import EditModalFooter from "@/Components/Editor/EdtiorComponents/EditModalFooter.vue";
@@ -19,28 +19,72 @@ const props = defineProps({
     },
     elementId: Number,
     modelValue: Boolean,
-    data: Object
+    data: Object,
+    mode: {
+        required: false,
+        default: 1,
+        type: Number
+    },
+    pageUuid: {
+        required: false,
+        default: 0,
+        type: String
+    },
 })
 
 const emit = defineEmits(['update:modelValue', 'dataChanged'])
 
 let editableData = ref(useForm(props.data))
 
+watch(editableData, value => {
+}, {deep: true})
+
+watch(props.data, value => {
+    if (value.value) {
+        editableData.value = useForm(value.value)
+        btnsModel.value = value.value.buttons
+    } else {
+
+    }
+    // console.log(editableData.value)
+}, {deep: true})
+
 function submit() {
-    editableData.value.transform((data) => ({
-        ...data,
-        buttons: btnsModel.value,
-        alias: 'social_buttons'
-    })).post(route('page_elements.update_static', props.elementId), {
-        onError: err => console.log(err),
-        onSuccess: () => {
-            emit('update:modelValue', false)
-            emit('dataChanged', editableData.value)
-            message.success(
-                self.parent.ctx.translate('Saved'), 2
-            );
-        },
-    })
+    if (props.mode) {
+        editableData.value.transform((data) => ({
+            ...data,
+            buttons: btnsModel.value,
+            alias: 'social_buttons'
+        })).post(route('page_elements.update_static', props.elementId), {
+            onError: err => console.log(err),
+            onSuccess: () => {
+                emit('update:modelValue', false)
+                emit('dataChanged', editableData.value)
+                message.success(
+                    self.parent.ctx.translate('Saved'), 2
+                );
+            },
+        })
+    } else {
+        editableData.value.transform((data) => ({
+            ...data,
+            props: {
+                ...data,
+                buttons: btnsModel.value,
+            },
+            buttons: btnsModel.value,
+            alias: 'social_buttons'
+        })).post(route('pages.page_elements.create', props.pageUuid), {
+            onError: err => console.log(err),
+            onSuccess: () => {
+                emit('update:modelValue', false)
+                emit('dataChanged', editableData.value)
+                message.success(
+                    self.parent.ctx.translate('Saved'), 2
+                );
+            },
+        })
+    }
 }
 
 const addBtn = () => {
@@ -84,7 +128,7 @@ const removeBtn = (btn) => {
         @ok="submit"
         @change="emit('update:modelValue', false)">
         <template #title>
-            {{ $root.translate('Profile') }}
+            {{ $root.translate('Social button') }}
         </template>
         <template #footer>
             <edit-modal-footer @needsClosing="emit('update:modelValue', false)" @onOK="submit"
@@ -150,7 +194,8 @@ const removeBtn = (btn) => {
                                         <div class="SortablePanel-content clickable">
                                             <div class="SortablePanel-title">{{
                                                     capitalizeFirstLetter(element.alias)
-                                                }}</div>
+                                                }}
+                                            </div>
                                         </div>
                                         <div @click="removeBtn(element)" class="SortablePanel-button"
                                              v-if="btnsModel.length > 1">

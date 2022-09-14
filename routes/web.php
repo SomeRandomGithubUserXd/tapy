@@ -37,6 +37,7 @@ Route::group(['domain' => $host], function () {
             Route::resource('pages', PageController::class)->except('edit');
             Route::group(['prefix' => '/editor/{page:uuid}', 'as' => 'pages.', 'middleware' => 'user.owns_page'], function () {
                 Route::get('/', [PageController::class, 'edit'])->name('edit');
+                Route::post('/create_profile_element', [ElementController::class, 'createProfileElement'])->name('create_profile_element');
                 Route::group(['as' => 'update.'], function () {
                     Route::prefix('/settings')->as('settings')->group(function () {
                         Route::put('/', [PageController::class, 'updateSettings']);
