@@ -35,7 +35,9 @@ let isMobile = computed({
 })
 
 const logout = () => {
-    Inertia.post(route('logout'))
+    Inertia.post(route('logout'), {}, {
+        onSuccess: () => location.href = '/'
+    })
 }
 
 let showSidebar = ref(false)

@@ -1,6 +1,6 @@
 <script setup>
 import Profile from "@/Components/Editor/EdtiorComponents/Profile/Profile.vue";
-import {computed, getCurrentInstance, ref} from "vue";
+import {computed, getCurrentInstance, ref, watch} from "vue";
 import {useForm} from "@inertiajs/inertia-vue3";
 import SingleImageUploader from "@/Components/Images/SingleImageUploader.vue";
 import TapyInput from "@/Components/Common/TapyInput.vue";
@@ -9,6 +9,8 @@ import {message} from "ant-design-vue";
 import EditModalFooter from "@/Components/Editor/EdtiorComponents/EditModalFooter.vue";
 import ProductsComponent from "@/Components/Editor/EdtiorComponents/Products/ProductsComponent.vue";
 import draggable from 'vuedraggable'
+import ChooseProductsModal from "@/Components/Products/ChooseProductsModal.vue";
+import {collect} from "collect.js";
 
 const self = getCurrentInstance()
 
@@ -41,55 +43,85 @@ const props = defineProps({
     elementId: Number,
     modelValue: Boolean,
     data: Object,
-    products: Array
+    products: Array,
+    mode: {
+        required: false,
+        type: Number,
+        default: 1
+    },
+    pageUuid: {
+        required: false,
+        type: String,
+    },
 })
 
 const btnsModel = ref([])
 
-const fetchProducts = () => {
-    axios.get(route('products.get_for_page', {element_id: props.elementId})).then((resp) => {
+let editableData = ref(useForm(props.data))
+
+const fetchProducts = (productIds) => {
+    axios.get(route('products.get_for_page', {product_ids: productIds})).then((resp) => {
         btnsModel.value = resp.data
     })
 }
 
-fetchProducts()
+if(props.mode) {
+    fetchProducts(props.data.product_ids)
+}
+
+watch(btnsModel, value => {
+    editableData.value.product_ids = collect(value).pluck('id').all()
+}, {deep: true})
 
 const emit = defineEmits(['update:modelValue', 'dataChanged'])
 
-let editableData = ref(useForm(props.data))
-
-let picModel = ref(null)
-
-let picSrc = ref(props?.data?.picture)
-
-function onUploadPic(val) {
-    editableData.value.picture = val
-}
-
 function submit() {
-    editableData.value.post(route('page_elements.update_profile_element', props.elementId), {
-        onError: err => console.log(err),
-        onSuccess: () => {
-            emit('update:modelValue', false)
-            emit('dataChanged', editableData.value)
-            message.success(
-                self.parent.ctx.translate('Saved'), 2
-            );
-        },
-    })
+    if(props.mode) {
+        editableData.value.transform((data) => ({
+            ...data,
+            product_ids: collect(btnsModel.value).pluck('id').all(),
+            props: {
+                product_ids: collect(btnsModel.value).pluck('id').all()
+            },
+            alias: 'products'
+        })).post(route('page_elements.update_static', props.elementId), {
+            onError: err => console.log(err),
+            onSuccess: () => {
+                emit('update:modelValue', false)
+                emit('dataChanged', editableData.value)
+                message.success(
+                    self.parent.ctx.translate('Saved'), 2
+                );
+            },
+        })
+    } else {
+        editableData.value.transform((data) => ({
+            ...data,
+            props: {
+                product_ids: collect(btnsModel.value).pluck('id').all()
+            },
+            alias: 'products'
+        })).post(route('pages.page_elements.create', props.pageUuid), {
+            onError: err => console.log(err),
+            onSuccess: () => {
+                emit('update:modelValue', false)
+                emit('dataChanged', editableData.value)
+                message.success(
+                    self.parent.ctx.translate('Saved'), 2
+                );
+            },
+        })
+    }
 }
 
-function removePic() {
-    Inertia.delete(route('page_elements.remove_profile_picture', props.elementId), {
-        onSuccess: () => {
-            message.success(
-                self.parent.ctx.translate('Saved'), 2
-            );
-            picSrc.value = editableData.value.picture = null
-            emit('dataChanged', editableData.value)
-        }
-    })
-}
+const showProductsModal = ref(false)
+
+const selectedValues = ref([])
+
+watch(selectedValues, value => {
+    showProductsModal.value = false
+    fetchProducts(value)
+}, {deep: true})
 </script>
 
 <template>
@@ -98,21 +130,21 @@ function removePic() {
         :class="modelValue ? 'animate__zoomIn' : 'animate__zoomOut'"
         :visible="modelValue"
         @ok="submit"
-        @change="emit('update:modelValue', false)"
-    >
+        @change="emit('update:modelValue', false)">
         <template #title>
             {{ $root.translate('Profile') }}
         </template>
         <template #footer>
             <edit-modal-footer @needsClosing="emit('update:modelValue', false)" @onOK="submit"
-                               :element-id="props.elementId" :mode="1" :with-copy-action="true"/>
+                               :element-id="props.elementId" :mode="props.mode" :with-copy-action="true"/>
         </template>
+        <choose-products-modal v-model="showProductsModal" v-model:selected-values="selectedValues" :products="products"/>
         <div>
-            <div class="EditBlockPreview" style="min-height: 200px;" :style="theme.containerStyle">
+            <div v-if="btnsModel.length" class="EditBlockPreview" style="min-height: 200px;" :style="theme.containerStyle">
                 <div class="EditBlockPreview-inner">
                     <div class="BlocksWrapper preview single-block css-1e2ocyy">
                         <div class="BlocksWrapper-inner css-1mtpsyn" :style="theme.blockStyle">
-                            <products-component :element-id="props.elementId" :theme="props.theme" :recursive="false"
+                            <products-component :mode="props.mode" :element-id="props.elementId" :theme="props.theme" :recursive="false"
                                                 :data="editableData"/>
                         </div>
                     </div>
@@ -170,14 +202,14 @@ function removePic() {
                         </draggable>
                     </div>
                     <div style="display: block; margin-bottom: 20px;">
-                        <button @click="addBtn" type="button" class="d-flex align-items-center ant-btn ant-btn-primary"
+                        <button @click="showProductsModal = true" type="button" class="d-flex align-items-center ant-btn ant-btn-primary"
                                 ant-click-animating-without-extra-node="false"><span role="img" aria-label="plus"
                                                                                      class="anticon anticon-plus"><svg
                             viewBox="64 64 896 896" focusable="false" data-icon="plus" width="1em" height="1em"
                             fill="currentColor" aria-hidden="true"><path
                             d="M482 152h60q8 0 8 8v704q0 8-8 8h-60q-8 0-8-8V160q0-8 8-8z"></path><path
                             d="M176 474h672q8 0 8 8v60q0 8-8 8H176q-8 0-8-8v-60q0-8 8-8z"></path></svg></span><span>{{
-                                $root.translate('Add another button')
+                                $root.translate('Choose from catalog')
                             }}</span>
                         </button>
                     </div>

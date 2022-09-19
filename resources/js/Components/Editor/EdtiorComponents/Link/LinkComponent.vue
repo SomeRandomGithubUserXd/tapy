@@ -45,7 +45,7 @@ let showEditModal = ref(false)
                :style="`pointer-events:${isEditable ? 'none': 'auto'};` + theme.elementStyle">
                 <div v-if="!data.hide_icon" class="Link-icon"><i class="Icon icon-link" style="font-size: 22px;"></i>
                 </div>
-                <div class="Link-label">{{ data.text }}</div>
+                <div class="Link-label">{{ data.text || $root.translate('Link') }}</div>
                 <div v-if="data.caption" class="Link-caption">{{ data.caption }}</div>
             </a>
         </div>

@@ -61,10 +61,13 @@ class ProductController extends Controller
 
     public function getForPage(Request $request)
     {
-        $data = PageElement::find($request->element_id)->props;
-        $user = User::find($data['user_id']);
+        $user = User::find(auth()->id());
         return $user->products()
-            ->whereIn('id', $data['product_ids'])
-            ->get();
+            ->whereIn('id', $request->product_ids)
+            ->get()
+            ->sortBy(function ($product, $key) use ($request) {
+                return $request->product_ids[$key];
+            })
+            ->values();
     }
 }

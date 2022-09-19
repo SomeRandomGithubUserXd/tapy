@@ -7,6 +7,8 @@ import SocialButtonsComponent from "@/Components/Editor/EdtiorComponents/SocialB
 import ButtonListModal from "@/Components/Editor/EdtiorComponents/SocialButtons/ButtonListModal.vue";
 import draggable from 'vuedraggable'
 import {capitalizeFirstLetter} from "@/Helpers/Helpers.js";
+import {socialButtons} from "@/Helpers/EditorHelper";
+import SocialButtonModal from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButtonModal.vue";
 
 
 const self = getCurrentInstance()
@@ -91,6 +93,18 @@ const addBtn = () => {
     showListModal.value = true
 }
 
+const editingButtonMisc = ref({})
+
+const editingButton = ref({})
+
+const showSocialButtonEditModal = ref(false)
+
+const editElement = (element) => {
+    editingButtonMisc.value = socialButtons[element.alias]
+    editingButton.value = element
+    showSocialButtonEditModal.value = true
+}
+
 let showListModal = ref(false)
 
 const handleDataChange = (btn) => {
@@ -113,10 +127,22 @@ const dragOptions = computed({
 
 const btnsModel = ref(props.data.buttons)
 
+watch(btnsModel, value => {
+    editableData.value.buttons = value
+}, {deep: true})
+
 const drag = ref(false)
 
 const removeBtn = (btn) => {
     btnsModel.value.splice(btnsModel.value.indexOf(btn), 1)
+}
+
+const onStuffEdit = (stuff) => {
+    const index = btnsModel.value.findIndex(elem => elem.alias === editingButton.value.alias && elem.value === editingButton.value.value)
+    if (btnsModel.value[index]) {
+        btnsModel.value[index].value = stuff.value
+        showSocialButtonEditModal.value = false
+    }
 }
 </script>
 
@@ -135,6 +161,13 @@ const removeBtn = (btn) => {
                                :element-id="props.elementId" :mode="1" :with-copy-action="true"/>
         </template>
         <button-list-modal @dataChanged="handleDataChange" :element-id="elementId" v-model="showListModal"/>
+        <social-button-modal
+            :mode="0"
+            :element-id="elementId"
+            :misc="editingButtonMisc"
+            v-model="showSocialButtonEditModal"
+            @editingStuff="onStuffEdit"
+            :content="editingButton"/>
         <div>
             <div class="EditBlockPreview" style="min-height: 200px;" :style="theme.containerStyle">
                 <div class="EditBlockPreview-inner">
@@ -191,7 +224,7 @@ const removeBtn = (btn) => {
                                                     d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"></path></svg></span>
                                             </div>
                                         </div>
-                                        <div class="SortablePanel-content clickable">
+                                        <div class="SortablePanel-content clickable" @click="editElement(element)">
                                             <div class="SortablePanel-title">{{
                                                     capitalizeFirstLetter(element.alias)
                                                 }}

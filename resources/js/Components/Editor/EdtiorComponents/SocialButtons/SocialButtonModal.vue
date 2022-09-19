@@ -1,16 +1,22 @@
 <script setup>
 import TapyInput from "@/Components/Common/TapyInput.vue";
-import {ref} from "vue";
+import {ref, watch} from "vue";
 
 const props = defineProps({
     modelValue: Boolean,
     misc: Object,
-    elementId: Number
+    content: Object,
+    elementId: Number,
+    mode: Number
 })
 
-const emit = defineEmits(['update:modelValue', 'update:content'])
+const emit = defineEmits(['update:modelValue', 'update:content', 'editingStuff'])
 
-const content = ref('')
+const content = ref(props.content.value)
+
+watch(() => props.content, value => {
+    content.value = value.value
+}, {deep: true})
 
 const submit = () => {
     const emitUpdate = new Promise((resolve, reject) => {
@@ -19,10 +25,13 @@ const submit = () => {
             value: content.value
         }
         emit('update:content', btn)
+        emit('editingStuff', btn)
         resolve(btn)
     })
     emitUpdate.then(() => {
-        content.value = ''
+        if(props.mode) {
+            content.value = ''
+        }
     })
 }
 

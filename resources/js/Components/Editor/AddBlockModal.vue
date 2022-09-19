@@ -11,6 +11,7 @@ import TextModal from "@/Components/Editor/EdtiorComponents/Text/TextModal.vue";
 import FAQModal from "@/Components/Editor/EdtiorComponents/FAQ/FAQModal.vue";
 import SocialButtonModal from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButtonModal.vue";
 import ButtonListModal from "@/Components/Editor/EdtiorComponents/SocialButtons/ButtonListModal.vue";
+import ProductsModal from "@/Components/Editor/EdtiorComponents/Products/ProductsModal.vue";
 
 
 const props = defineProps({
@@ -45,7 +46,7 @@ function addElement(alias) {
 }
 
 const addProduct = () => {
-    if(props.userProducts.length) {
+    if (props.userProducts.length) {
         addElement('products')
     } else {
         Inertia.visit(route('products.index'), {
@@ -59,7 +60,7 @@ const addProduct = () => {
 const socialButtonsData = reactive({})
 
 const handleDataChange = (data) => {
-    socialButtonsData.value = {"buttons":[data],"view":"circle","use_theme_colors":false}
+    socialButtonsData.value = {"buttons": [data], "view": "circle", "use_theme_colors": false}
     showListModal.value = true
     modals.value.social_buttons = false
 }
@@ -132,6 +133,16 @@ watch(socialButtonsData, value => {
             :data='{"faqs":[]}'
             :faqs="[]"
             v-model="modals.faq"
+            :mode="0"
+            @dataChanged="emit('update:modelValue', false)"
+        />
+        <products-modal
+            :theme="theme"
+            :recursive="false"
+            :page-uuid="props.pageUuid"
+            :data="{'view': 'grid'}"
+            :products="userProducts"
+            v-model="modals.products"
             :mode="0"
             @dataChanged="emit('update:modelValue', false)"
         />
@@ -255,7 +266,7 @@ watch(socialButtonsData, value => {
                 </div>
             </div>
             <div
-                @click="addProduct"
+                @click="addElement('products')"
                 class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
                 style="padding-left: 8px; padding-right: 8px;">
                 <div class="BlockSelectorModal-block">

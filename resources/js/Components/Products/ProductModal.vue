@@ -39,6 +39,7 @@ let form = ref(useForm({
     btn_label: props.product?.btn_label || 'Buy',
     btn_link: props.product?.btn_link || ''
 }))
+
 let action_btn = ref(false)
 
 watch(() => props.product, (product) => {

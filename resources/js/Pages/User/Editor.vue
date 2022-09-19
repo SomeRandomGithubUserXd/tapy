@@ -20,6 +20,7 @@ import ShareModal from "@/Components/Editor/ShareModal.vue";
 import TextComponent from "@/Components/Editor/EdtiorComponents/Text/TextComponent.vue";
 import FAQComponent from "@/Components/Editor/EdtiorComponents/FAQ/FAQComponent.vue";
 import ProductsComponent from "@/Components/Editor/EdtiorComponents/Products/ProductsComponent.vue";
+import LinkModal from "@/Components/Editor/EdtiorComponents/Link/LinkModal.vue";
 
 const components = {
     profile: Profile,
@@ -33,16 +34,16 @@ const components = {
 
 const self = getCurrentInstance()
 
+let slidesPerView = 8
+
+if(!window.matchMedia("(min-width: 768px)").matches) {
+    slidesPerView = 2
+}
+
+const showLinkModal = ref(false)
+
 function addLink() {
-    Inertia.post(route('pages.page_elements.create', props.page.uuid), {
-        alias: 'link'
-    }, {
-        onSuccess: () => {
-            message.success(
-                self.parent.ctx.translate('Saved'), 2
-            );
-        }
-    })
+    showLinkModal.value = true
 }
 
 let editor = ref([]);
@@ -152,6 +153,14 @@ const showSettingsThroughShare = () => {
             v-model="showAddBlockModal"
             :page-uuid="$page.props.page.uuid"/>
         <share-modal :qr-code="props.page.qr_code" :page-link="props.page.link" @showSettings="showSettingsThroughShare" v-model="showShareModal"/>
+        <link-modal
+            :theme="themeStyles"
+            :recursive="false"
+            :page-uuid="props.page.uuid"
+            :data='{"href":"","text":"","caption":"","position":"center","hide_icon":false}'
+            v-model="showLinkModal"
+            :mode="0"
+        />
         <div class="Content EditorPage-content">
             <div class="Content-inner" style="max-width: 900px;">
                 <div style="display: block; margin-bottom: 20px;">
@@ -225,7 +234,7 @@ const showSettingsThroughShare = () => {
                                         </button>
                                         <swiper
                                             ref="themeSwiper"
-                                            :slides-per-view="8"
+                                            :slides-per-view="slidesPerView"
                                             :spaceBetween="50"
                                             :centeredSlides="true"
                                             :slide-to-clicked-slide="true"
@@ -260,6 +269,8 @@ const showSettingsThroughShare = () => {
                 <div class="BlocksWrapper preview mobile" :style="themeStyles.containerStyle">
                     <div class="BlocksWrapper-inner" :style="themeStyles.blockStyle">
                         <draggable
+                            delay="100"
+                            delay-on-touch-only
                             @change="reorderElements"
                             v-model="elements"
                             tag="ul"
@@ -274,6 +285,7 @@ const showSettingsThroughShare = () => {
                                     style="position: relative; transition: null 0s ease 0s, visibility 0s ease 0s; z-index: 1; opacity: 1;margin-bottom: 10px;">
                                     <div class="EditorBlockListItem">
                                         <component
+                                            :products="props.user_products"
                                             :element-id="element.id"
                                             :data="element.props"
                                             :theme="themeStyles"

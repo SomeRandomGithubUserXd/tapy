@@ -58,7 +58,7 @@ function handleChange(val) {
             <div>
                 <div class="Cover no-image" :class="data?.position">
                     <div class="info">
-                        <div v-if="data?.picture" class="logo-wrapper"><img :src="getPicture"
+                        <div v-if="data?.picture" style="object-fit: cover" class="logo-wrapper"><img :src="getPicture"
                                                        alt="ProfilePic"></div>
                         <span class="title-wrapper">
                             <span class="title">{{ data.username }}</span>

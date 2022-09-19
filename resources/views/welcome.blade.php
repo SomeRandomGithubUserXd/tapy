@@ -302,7 +302,7 @@
 
         <div class="community-items d-flex">
             <a class="community-item d-flex flex-column align-items-center text-black text-decoration-none"
-               href="https://tapy.me/links" target="_blank">
+               href="/" target="_blank">
                 <div class="community-item-image overflow-hidden">
                     <img class="w-100 h-100" src="{{asset('Images/p1.jpg')}}" alt="">
                 </div>
@@ -317,7 +317,7 @@
             </a>
 
             <a class="community-item d-flex flex-column align-items-center text-black text-decoration-none"
-               href="https://tapy.me/kkrash" target="_blank">
+               href="/" target="_blank">
                 <div class="community-item-image overflow-hidden">
                     <img class="w-100 h-100" src="{{asset('Images/p2.jpg')}}" alt="">
                 </div>
@@ -332,7 +332,7 @@
             </a>
 
             <a class="community-item d-flex flex-column align-items-center text-black text-decoration-none"
-               href="https://tapy.me/strela" target="_blank">
+               href="/" target="_blank">
                 <div class="community-item-image overflow-hidden">
                     <img class="w-100 h-100" src="{{asset('Images/p3.jpg')}}" alt="">
                 </div>
@@ -347,7 +347,7 @@
             </a>
 
             <a class="community-item d-flex flex-column align-items-center text-black text-decoration-none"
-               href="https://tapy.me/19_gm" target="_blank">
+               href="/" target="_blank">
                 <div class="community-item-image overflow-hidden">
                     <img class="w-100 h-100" src="{{asset('Images/p4.jpg')}}" alt="">
                 </div>

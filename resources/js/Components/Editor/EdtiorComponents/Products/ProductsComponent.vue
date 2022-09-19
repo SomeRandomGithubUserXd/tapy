@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import ProductsModal from "@/Components/Editor/EdtiorComponents/Products/ProductsModal.vue";
 
 const props = defineProps({
@@ -19,7 +19,13 @@ const props = defineProps({
         required: false,
         type: Boolean,
         default: true
-    }
+    },
+    mode: {
+        required: false,
+        type: Number,
+        default: 1
+    },
+    products: Array
 })
 
 function tryEditModal() {
@@ -47,20 +53,26 @@ let showEditModal = ref(false)
 const products = ref([])
 
 const fetchProducts = () => {
-    axios.get(route('products.get_for_page', {element_id: props.elementId})).then((resp) => {
+    axios.get(route('products.get_for_page', {product_ids: props.data.product_ids})).then((resp) => {
         products.value = resp.data
     })
 }
 
 onMounted(() => {
-    fetchProducts()
+    if (props.mode) {
+        fetchProducts()
+    }
 })
+
+watch(() => props.data, value => {
+    fetchProducts()
+}, {deep: true})
 </script>
 
 <template>
     <div :class="!props.isEditable ? '' : 'EditorBlockListItem-block'" @click="tryEditModal">
-        <products-modal :theme="theme" v-if="recursive" v-model="showEditModal" :data="data"
-                      :element-id="props.elementId"/>
+        <products-modal :products="props.products" :theme="theme" v-if="recursive" v-model="showEditModal" :data="data"
+                        :element-id="props.elementId"/>
         <div class="Block preview mobile" :style="elemStyle">
             <div>
                 <div class="Modal">

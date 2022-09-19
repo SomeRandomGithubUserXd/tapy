@@ -58,6 +58,6 @@ watch(newBtn, (val) => {
                 </div>
             </div>
         </div>
-        <social-button-modal :element-id="elementId" :misc="currentButton" v-model="showSocialButtonModal" v-model:content="newBtn"/>
+        <social-button-modal :element-id="elementId" :misc="currentButton" v-model="showSocialButtonModal" v-model:content="newBtn" :mode="1"/>
     </a-modal>
 </template>
