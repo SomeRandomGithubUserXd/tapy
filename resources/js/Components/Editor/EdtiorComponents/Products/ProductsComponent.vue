@@ -52,8 +52,8 @@ let showEditModal = ref(false)
 
 const products = ref([])
 
-const fetchProducts = () => {
-    axios.get(route('products.get_for_page', {product_ids: props.data.product_ids})).then((resp) => {
+const fetchProducts = (data = null) => {
+    axios.get(route('products.get_for_page', {product_ids: data || props.data.product_ids})).then((resp) => {
         products.value = resp.data
     })
 }
@@ -64,7 +64,7 @@ onMounted(() => {
     }
 })
 
-watch(() => props.data, value => {
+watch(() => props, value => {
     fetchProducts()
 }, {deep: true})
 </script>

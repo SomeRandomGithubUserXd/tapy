@@ -55,6 +55,8 @@ const props = defineProps({
     },
 })
 
+const productsComponent = ref('')
+
 const btnsModel = ref([])
 
 let editableData = ref(useForm(props.data))
@@ -68,6 +70,10 @@ const fetchProducts = (productIds) => {
 if(props.mode) {
     fetchProducts(props.data.product_ids)
 }
+
+watch(editableData, value => {
+    console.log(productsComponent.value)
+}, {deep: true})
 
 watch(btnsModel, value => {
     editableData.value.product_ids = collect(value).pluck('id').all()
@@ -140,11 +146,11 @@ watch(selectedValues, value => {
         </template>
         <choose-products-modal v-model="showProductsModal" v-model:selected-values="selectedValues" :products="products"/>
         <div>
-            <div v-if="btnsModel.length" class="EditBlockPreview" style="min-height: 200px;" :style="theme.containerStyle">
+            <div class="EditBlockPreview" style="min-height: 200px;" :style="theme.containerStyle">
                 <div class="EditBlockPreview-inner">
                     <div class="BlocksWrapper preview single-block css-1e2ocyy">
                         <div class="BlocksWrapper-inner css-1mtpsyn" :style="theme.blockStyle">
-                            <products-component :mode="props.mode" :element-id="props.elementId" :theme="props.theme" :recursive="false"
+                            <products-component ref="productsComponent" :mode="props.mode" :element-id="props.elementId" :theme="props.theme" :recursive="false"
                                                 :data="editableData"/>
                         </div>
                     </div>
