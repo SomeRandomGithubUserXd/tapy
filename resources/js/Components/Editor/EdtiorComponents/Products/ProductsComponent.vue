@@ -93,11 +93,11 @@ watch(() => props, value => {
                         <div class="Lightbox-content"></div>
                     </div>
                 </div>
-                <div class="Products-block grid">
+                <div class="Products-block" :class="data.view">
                     <div v-for="product in products" class="Products-block-item" style="width: calc(33.3333%);">
                         <div class="Products-block-item-photo"
                              :style="{backgroundImage: 'url('+ product.preview_photo +')'}"
-                             style="width: 100%; height: auto; border-radius: 20px;"></div>
+                             style="border-radius: 20px;"></div>
                         <div class="Products-block-item-info">
                             <div class="Products-block-item-title">{{ product.name }}</div>
                             <div class="Products-block-item-price"><span>{{

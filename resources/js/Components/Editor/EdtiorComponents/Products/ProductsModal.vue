@@ -87,7 +87,8 @@ function submit() {
             ...data,
             product_ids: collect(btnsModel.value).pluck('id').all(),
             props: {
-                product_ids: collect(btnsModel.value).pluck('id').all()
+                product_ids: collect(btnsModel.value).pluck('id').all(),
+                view: data.view
             },
             alias: 'products'
         })).post(route('page_elements.update_static', props.elementId), {
@@ -104,7 +105,8 @@ function submit() {
         editableData.value.transform((data) => ({
             ...data,
             props: {
-                product_ids: collect(btnsModel.value).pluck('id').all()
+                product_ids: collect(btnsModel.value).pluck('id').all(),
+                view: data.view
             },
             alias: 'products'
         })).post(route('pages.page_elements.create', props.pageUuid), {
