@@ -63,6 +63,19 @@ class ElementService
                 'user_id' => auth()->id(),
                 'view' => 'grid'
             ],
+            'atc' => [
+                'name' => '',
+                'surname' => '',
+                'patronymic' => '',
+                'phn' => '',
+                'wpn' => '',
+                'company' => '',
+                'address' => '',
+                'website' => '',
+            ],
+            'html' => [
+                'html' => '',
+            ],
         ];
     }
 }

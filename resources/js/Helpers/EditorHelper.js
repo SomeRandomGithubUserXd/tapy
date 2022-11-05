@@ -22,6 +22,7 @@ export const socialButtons = {
     phone: {
         inputLabel: 'Your phone number',
         label: 'Phone',
+        rlabel: 'Телефон',
         placeholder: '+123456789',
         bgColor: '#000',
         icon: 'Icon icon-call',
@@ -121,7 +122,8 @@ export const socialButtons = {
     },
     "vkontakte": {
         "inputLabel": "Link",
-        "label": "Vkontakte",
+        "label": "VKontakte",
+        "rlabel": "ВКонтакте",
         "placeholder": "https://vk.com/example",
         "bgColor": "rgb(39, 135, 245)",
         "color": "rgb(255, 255, 255)",
@@ -132,6 +134,7 @@ export const socialButtons = {
     "ok": {
         "inputLabel": "Link",
         "label": "Ok",
+        "rlabel": "Одноклассники",
         "placeholder": "https://ok.ru/example",
         "bgColor": "rgb(247, 148, 29)",
         "color": "rgb(255, 255, 255)",
@@ -262,6 +265,7 @@ export const socialButtons = {
     "yandex music": {
         "inputLabel": "Link",
         "label": "Yandex Music",
+        "rlabel": "Яндекс музыка",
         "placeholder": "https://music.yandex.ru/album/123",
         "bgColor": "rgb(255, 216, 72)",
         "color": "rgb(0, 0, 0)",
@@ -302,6 +306,7 @@ export const socialButtons = {
     "vk music": {
         "inputLabel": "Link",
         "label": "VK Music",
+        "rlabel": "ВК Музыка",
         "placeholder": "https://share.boom.ru/track/321?share_auth=123",
         "bgColor": "rgb(255, 81, 255)",
         "color": "rgb(255, 255, 255)",

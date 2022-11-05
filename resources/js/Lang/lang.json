@@ -150,6 +150,21 @@
         "Choose from catalog": "Выбрать из каталога",
         "Choose products": "Выберите товар",
         "Add new product": "Добавить новый товар",
-        "Photo": "Фото"
+        "Photo": "Фото",
+        "Add to contacts": "Добавить в контакты",
+        "Surname": "Фамилия",
+        "Patronymic": "Отчество",
+        "Personal phone number": "Личный номер телефона",
+        "Work phone number": "Рабочий номер телефона",
+        "Website": "Сайт",
+        "Company": "Компания",
+        "Address": "Адрес",
+        "Clicks": "Кликов",
+        "Visits": "Посещений",
+        "Views": "Просмотров",
+        "Source": "Источник",
+        "Page analytics": "Аналитика",
+        "Link clicks": "Кликов",
+        "Traffic Sources": "Источники трафика"
     }
 ]

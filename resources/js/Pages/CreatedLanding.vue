@@ -2,15 +2,19 @@
 import Profile from "@/Components/Editor/EdtiorComponents/Profile/Profile.vue"
 import LinkComponent from "@/Components/Editor/EdtiorComponents/Link/LinkComponent.vue"
 import HeaderComponent from "@/Components/Editor/EdtiorComponents/Header/HeaderComponent.vue"
+import ATCComponent from "@/Components/Editor/EdtiorComponents/ATC/ATCComponent.vue"
 import TextComponent from "@/Components/Editor/EdtiorComponents/Text/TextComponent.vue"
 import FAQComponent from "@/Components/Editor/EdtiorComponents/FAQ/FAQComponent.vue"
 import SocialButtonsComponent from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButtonsComponent.vue"
 import ProductsComponent from "@/Components/Editor/EdtiorComponents/Products/ProductsComponent.vue"
+import HTMLComponent from "@/Components/Editor/EdtiorComponents/HTML/HTMLComponent.vue"
 
 const components = {
     profile: Profile,
     link: LinkComponent,
     header: HeaderComponent,
+    html: HTMLComponent,
+    atc: ATCComponent,
     text: TextComponent,
     faq: FAQComponent,
     social_buttons: SocialButtonsComponent,

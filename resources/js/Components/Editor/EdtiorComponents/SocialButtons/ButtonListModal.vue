@@ -26,7 +26,9 @@ const addBtn = (btn) => {
 
 const newBtn = ref({
     alias: '',
-    value: ''
+    value: '',
+    btn_text: '',
+    btn_caption: '',
 })
 
 watch(newBtn, (val) => {

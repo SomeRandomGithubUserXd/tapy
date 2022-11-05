@@ -94,7 +94,7 @@ watch(() => props, value => {
                     </div>
                 </div>
                 <div class="Products-block" :class="data.view">
-                    <div v-for="product in products" class="Products-block-item" style="width: calc(33.3333%);">
+                    <div v-for="product in products" class="Products-block-item">
                         <div class="Products-block-item-photo"
                              :style="{backgroundImage: 'url('+ product.preview_photo +')'}"
                              style="border-radius: 20px;"></div>
@@ -102,7 +102,7 @@ watch(() => props, value => {
                             <div class="Products-block-item-title">{{ product.name }}</div>
                             <div class="Products-block-item-price"><span>{{
                                     product.price || ''
-                                }}</span><span>{{ product.currency || '' }}</span>
+                                }}</span><span v-if="product.price">{{ product.currency || '' }}</span>
                                 <div v-if="product.old_price && product.price" class="Products-block-item-old-price">
                                     {{ product.old_price }} {{ product.currency }}
                                 </div>

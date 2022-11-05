@@ -12,9 +12,11 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'showSettings'])
 
+const appUrl = import.meta.env.VITE_APP_URL
+
 const link = computed({
     get() {
-        return import.meta.env.VITE_APP_URL + '/' + props.pageLink
+        return appUrl + '/' + props.pageLink
     },
     set() {
     }

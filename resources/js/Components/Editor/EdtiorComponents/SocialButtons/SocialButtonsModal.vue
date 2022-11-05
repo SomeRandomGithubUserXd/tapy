@@ -141,6 +141,8 @@ const onStuffEdit = (stuff) => {
     const index = btnsModel.value.findIndex(elem => elem.alias === editingButton.value.alias && elem.value === editingButton.value.value)
     if (btnsModel.value[index]) {
         btnsModel.value[index].value = stuff.value
+        btnsModel.value[index].btn_text = stuff.btn_text
+        btnsModel.value[index].btn_caption = stuff.btn_caption
         showSocialButtonEditModal.value = false
     }
 }

@@ -1191,6 +1191,10 @@ button.swiper-pagination-bullet {
     margin: -6px
 }
 
+.Products-block.grid {
+    grid-template-columns: 1fr 1fr;
+}
+
 .Products-block-item {
     cursor: pointer;
     display: flex;

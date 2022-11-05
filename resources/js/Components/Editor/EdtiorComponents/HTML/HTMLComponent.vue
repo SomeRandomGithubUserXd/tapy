@@ -1,7 +1,6 @@
 <script setup>
 import {computed, ref} from "vue";
-import SocialButton from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButton.vue";
-import SocialButtonsModal from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButtonsModal.vue";
+import HTMLModal from "@/Components/Editor/EdtiorComponents/HTML/HTMLModal.vue";
 
 const props = defineProps({
     isEditable: {
@@ -39,8 +38,7 @@ const elemStyle = computed({
         style = res.join(';');
         return style
     },
-    set() {
-    }
+    set(){}
 })
 
 let showEditModal = ref(false)
@@ -48,13 +46,10 @@ let showEditModal = ref(false)
 
 <template>
     <div :class="!props.isEditable ? '' : 'EditorBlockListItem-block'" @click="tryEditModal">
-        <social-buttons-modal :theme="theme" v-if="recursive" v-model="showEditModal" :data="data"
-                              :element-id="props.elementId"/>
-        <div class="Block mobile last" :class="{preview: props.isEditable}">
-            <div class="social-btns" :class="props.data.view">
-                <social-button v-for="btn in props.data.buttons" :alias="btn.alias" :value="btn.value"
-                               :btn-text="btn.btn_text" :btn-caption="btn.btn_caption" :view="props.data.view"/>
-            </div>
+        <h-t-m-l-modal :theme="theme" v-if="recursive" v-model="showEditModal" :data="data"
+                    :element-id="props.elementId"/>
+        <div class="Block preview mobile last" :style="elemStyle">
+            <div v-html="props.data.html"></div>
         </div>
     </div>
 </template>

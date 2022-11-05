@@ -12,6 +12,8 @@ import FAQModal from "@/Components/Editor/EdtiorComponents/FAQ/FAQModal.vue";
 import SocialButtonModal from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButtonModal.vue";
 import ButtonListModal from "@/Components/Editor/EdtiorComponents/SocialButtons/ButtonListModal.vue";
 import ProductsModal from "@/Components/Editor/EdtiorComponents/Products/ProductsModal.vue";
+import ATCModal from "@/Components/Editor/EdtiorComponents/ATC/ATCModal.vue";
+import HTMLModal from "@/Components/Editor/EdtiorComponents/HTML/HTMLModal.vue";
 
 
 const props = defineProps({
@@ -27,9 +29,7 @@ const emit = defineEmits(['update:modelValue'])
 
 const showListModal = ref(false)
 
-const modals = ref({
-    social_buttons: false
-})
+const modals = ref({})
 
 function addElement(alias) {
     // Inertia.post(route('pages.page_elements.create', props.pageUuid), {
@@ -136,6 +136,15 @@ watch(socialButtonsData, value => {
             :mode="0"
             @dataChanged="emit('update:modelValue', false)"
         />
+        <h-t-m-l-modal
+            :theme="theme"
+            :recursive="false"
+            :page-uuid="props.pageUuid"
+            :data='{"html":""}'
+            v-model="modals.html"
+            :mode="0"
+            @dataChanged="emit('update:modelValue', false)"
+        />
         <products-modal
             :theme="theme"
             :recursive="false"
@@ -143,6 +152,25 @@ watch(socialButtonsData, value => {
             :data="{'view': 'grid'}"
             :products="userProducts"
             v-model="modals.products"
+            :mode="0"
+            @dataChanged="emit('update:modelValue', false)"
+        />
+        <a-t-c-modal
+            :theme="theme"
+            :recursive="false"
+            :page-uuid="props.pageUuid"
+            :data='{
+                name: "",
+                surname: "",
+                patronymic: "",
+                phn: "",
+                wpn: "",
+                company: "",
+                address: "",
+                website: "",
+                picture: "",
+            }'
+            v-model="modals.atc"
             :mode="0"
             @dataChanged="emit('update:modelValue', false)"
         />
@@ -425,6 +453,45 @@ watch(socialButtonsData, value => {
                         </svg>
                     </div>
                     <div class="BlockSelectorModal-title">Разделитель</div>
+                </div>
+            </div>
+            <div
+                @click="addElement('atc')"
+                class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
+                style="padding-left: 8px; padding-right: 8px;">
+                <div class="BlockSelectorModal-block">
+                    <div class="BlockSelectorModal-plan"></div>
+                    <div class="BlockSelectorModal-icon">
+                        <svg width="32" height="4" viewBox="0 0 32 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="21" y="3" width="2" height="11" rx="1" transform="rotate(-90 21 3)"
+                                  fill="#8791AB"></rect>
+                            <rect y="3" width="2" height="11" rx="1" transform="rotate(-90 0 3)" fill="#8791AB"></rect>
+                            <circle cx="16" cy="2" r="2" fill="#8791AB"></circle>
+                        </svg>
+                    </div>
+                    <div class="BlockSelectorModal-title">"{{ $root.translate('Add to contacts') }}"</div>
+                </div>
+            </div>
+            <div
+                @click="addElement('html')"
+                class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
+                style="padding-left: 8px; padding-right: 8px;">
+                <div class="BlockSelectorModal-block">
+                    <div class="BlockSelectorModal-plan"></div>
+                    <div class="BlockSelectorModal-icon">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M10.6252 20.233C10.6252 20.4261 10.5454 20.6032 10.3858 20.7642C10.2421 20.9091 10.0825 20.9815 9.90694 20.9815C9.73137 20.9815 9.60368 20.9574 9.52388 20.9091L1.69507 17.3594C1.21624 17.134 0.984811 16.7959 1.00077 16.3452V16.1761C1.00077 15.7093 1.2322 15.3712 1.69507 15.1619L9.52388 11.6122C9.61964 11.58 9.74733 11.5639 9.90694 11.5639C10.0825 11.5478 10.2421 11.6203 10.3858 11.7813C10.5454 11.9422 10.6252 12.1193 10.6252 12.3125C10.6252 12.6989 10.4496 12.9564 10.0985 13.0852L3.03578 16.2727L10.0985 19.4361C10.2581 19.5005 10.3858 19.6051 10.4815 19.75C10.5773 19.8788 10.6252 20.0398 10.6252 20.233Z"
+                                fill="#8791AB"></path>
+                            <path
+                                d="M17.8555 7.5554C17.9672 7.18513 18.2305 7 18.6455 7C18.869 7 19.0525 7.08049 19.1962 7.24148C19.3558 7.40246 19.4356 7.54735 19.4356 7.67614C19.4356 7.88542 19.4116 8.0303 19.3638 8.1108L14.1685 23.4446C14.0568 23.8149 13.8014 24 13.4024 24C13.1789 24 12.9874 23.9195 12.8278 23.7585C12.6682 23.5975 12.5884 23.4446 12.5884 23.2997C12.5884 23.1065 12.6123 22.9697 12.6602 22.8892L17.8555 7.5554Z"
+                                fill="#8791AB"></path>
+                            <path
+                                d="M22.4761 20.9091C22.3804 20.9413 22.2447 20.9654 22.0691 20.9815C21.9095 20.9815 21.7499 20.9091 21.5903 20.7642C21.4466 20.6032 21.3748 20.4261 21.3748 20.233C21.3748 19.8466 21.5504 19.581 21.9015 19.4361L28.9882 16.2727L21.9015 13.0852C21.7419 13.0208 21.6142 12.9242 21.5185 12.7955C21.4227 12.6506 21.3748 12.4896 21.3748 12.3125C21.3748 12.1193 21.4466 11.9422 21.5903 11.7813C21.7499 11.6203 21.9095 11.5398 22.0691 11.5398C22.2287 11.5398 22.3644 11.5639 22.4761 11.6122L30.3049 15.1619C30.7838 15.3873 31.0152 15.7254 30.9992 16.1761V16.3452C30.9992 16.812 30.7678 17.1501 30.3049 17.3594L22.4761 20.9091Z"
+                                fill="#8791AB"></path>
+                        </svg>
+                    </div>
+                    <div class="BlockSelectorModal-title">{{ $root.translate('Custom HTML') }}</div>
                 </div>
             </div>
         </div>

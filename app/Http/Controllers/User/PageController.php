@@ -4,8 +4,10 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Pages\SettingsRequest;
+use App\Models\Page\LinkClick;
 use App\Models\Page\Page;
 use App\Models\Page\PageSeo;
+use App\Models\Page\Visit;
 use App\Models\Theme;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -17,6 +19,22 @@ class PageController extends Controller
         return inertia('User/Pages', ['pages' => auth()->user()->pages]);
     }
 
+    public function show(Page $page)
+    {
+        Visit::create(['page_id' => $page->id, 'source' => $_SERVER['HTTP_REFERER'] ?? "Direct"]);
+        return inertia('CreatedLanding', [
+            'page' => $page
+        ]);
+    }
+
+    public function registerLinkClick(Request $request)
+    {
+        LinkClick::create([
+            'page_id' => Page::firstWhere(['link' => $request->link])->id,
+            'link_name' => $request->link_name
+        ]);
+    }
+
     public function store()
     {
         $page = auth()->user()->pages()->create(['uuid' => \Str::uuid(), 'link' => \Str::random(6)]);
@@ -26,7 +44,7 @@ class PageController extends Controller
     public function edit(Page $page)
     {
         return inertia('User/Editor', [
-            'page' => $page,
+            'page' => $page->append(['visits_grouped', 'link_clicks_grouped', 'chart']),
             'themes' => Theme::orderBy('key')->get(),
             'user_products' => auth()->user()->products
         ]);

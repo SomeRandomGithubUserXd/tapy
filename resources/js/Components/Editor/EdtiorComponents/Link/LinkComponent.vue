@@ -19,7 +19,7 @@ const props = defineProps({
         required: false,
         type: Boolean,
         default: true
-    }
+    },
 })
 
 function tryEditModal() {
@@ -30,9 +30,12 @@ function tryEditModal() {
 
 let showEditModal = ref(false)
 
-// function handleChange(val) {
-//     data.value = val.data()
-// }
+const registerClick = () => {
+    axios.post(route('api.register_link_click'), {
+        link: window.location.pathname.split('/')[1],
+        link_name: props.data.text || "Ссылка"
+    });
+}
 </script>
 
 <template>
@@ -42,6 +45,7 @@ let showEditModal = ref(false)
         <div class="Block preview mobile first">
             <a class="Link" :class="data.position === 'center' ? 'icon-label-center' : 'icon-label-left'"
                rel="noopener nofollow ugc" :href="data.href" target="_blank"
+               @click="registerClick"
                :style="`pointer-events:${isEditable ? 'none': 'auto'};` + theme.elementStyle">
                 <div v-if="!data.hide_icon" class="Link-icon"><i class="Icon icon-link" style="font-size: 22px;"></i>
                 </div>

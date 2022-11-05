@@ -1,7 +1,6 @@
 <script setup>
 import {computed, ref} from "vue";
-import SocialButton from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButton.vue";
-import SocialButtonsModal from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButtonsModal.vue";
+import ATCModal from "@/Components/Editor/EdtiorComponents/ATC/ATCModal.vue";
 
 const props = defineProps({
     isEditable: {
@@ -44,17 +43,21 @@ const elemStyle = computed({
 })
 
 let showEditModal = ref(false)
+
+console.log(props.data)
 </script>
 
 <template>
     <div :class="!props.isEditable ? '' : 'EditorBlockListItem-block'" @click="tryEditModal">
-        <social-buttons-modal :theme="theme" v-if="recursive" v-model="showEditModal" :data="data"
-                              :element-id="props.elementId"/>
-        <div class="Block mobile last" :class="{preview: props.isEditable}">
-            <div class="social-btns" :class="props.data.view">
-                <social-button v-for="btn in props.data.buttons" :alias="btn.alias" :value="btn.value"
-                               :btn-text="btn.btn_text" :btn-caption="btn.btn_caption" :view="props.data.view"/>
-            </div>
+        <a-t-c-modal :theme="theme" v-if="recursive" v-model="showEditModal" :data="data"
+                     :element-id="props.elementId"/>
+        <div class="Block preview mobile last" :style="elemStyle">
+            <a class="Link"
+               rel="noopener nofollow ugc"
+               :href="route('add_to_contacts', props.elementId)"
+               :style="`pointer-events:${isEditable ? 'none': 'auto'};` + theme.elementStyle">
+                {{ $root.translate("Add to contacts") }}
+            </a>
         </div>
     </div>
 </template>

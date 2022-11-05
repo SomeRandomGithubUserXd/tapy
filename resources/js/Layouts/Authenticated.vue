@@ -9,6 +9,7 @@ import {Link} from "@inertiajs/inertia-vue3";
 import {message} from "ant-design-vue";
 import {MenuOutlined} from "@ant-design/icons-vue";
 import {Inertia} from "@inertiajs/inertia";
+import FeedbackModal from "@/Components/FeedbackModal.vue";
 
 const self = getCurrentInstance()
 
@@ -58,10 +59,13 @@ let sidebarStyle = computed({
 function showMenu() {
     showSidebar.value = true
 }
+
+const feedbackModel = ref(false)
 </script>
 
 <template>
     <section class="ant-layout ant-layout-has-sider AppLayout">
+        <feedback-modal v-model="feedbackModel"/>
         <aside class="ant-layout-sider ant-layout-sider-dark animate__animated"
                :class="sidebarStyle"
                style="flex: 0 0 220px; max-width: 220px; min-width: 220px; width: 220px;">
@@ -138,7 +142,7 @@ function showMenu() {
                 <div class="AppLayout-header-content">
                     <div class="ant-space ant-space-horizontal ant-space-align-center" style="gap: 8px;">
                         <div class="ant-space-item" style="">
-                            <button type="button" class="ant-btn ant-btn-text ant-btn-icon-only"><span role="img"
+                            <button @click="feedbackModel = true" type="button" class="ant-btn ant-btn-text ant-btn-icon-only"><span role="img"
                                                                                                        aria-label="like"
                                                                                                        class="anticon anticon-like"><svg
                                 viewBox="64 64 896 896" focusable="false" data-icon="like" width="1em" height="1em"

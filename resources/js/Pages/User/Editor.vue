@@ -11,21 +11,26 @@ import Profile from "@/Components/Editor/EdtiorComponents/Profile/Profile.vue";
 import LinkComponent from "@/Components/Editor/EdtiorComponents/Link/LinkComponent.vue";
 import HeaderComponent from "@/Components/Editor/EdtiorComponents/Header/HeaderComponent.vue";
 import SocialButtonsComponent from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButtonsComponent.vue";
-import SocialButton from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButton.vue";
-import SocialButtonsModal from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButtonsModal.vue";
 import {message} from "ant-design-vue";
-import draggable from 'vuedraggable'
 import AddBlockModal from "@/Components/Editor/AddBlockModal.vue";
 import ShareModal from "@/Components/Editor/ShareModal.vue";
 import TextComponent from "@/Components/Editor/EdtiorComponents/Text/TextComponent.vue";
 import FAQComponent from "@/Components/Editor/EdtiorComponents/FAQ/FAQComponent.vue";
 import ProductsComponent from "@/Components/Editor/EdtiorComponents/Products/ProductsComponent.vue";
 import LinkModal from "@/Components/Editor/EdtiorComponents/Link/LinkModal.vue";
+import AnalyticsModal from "@/Components/Editor/AnalyticsModal.vue";
+import ATCComponent from "@/Components/Editor/EdtiorComponents/ATC/ATCComponent.vue"
+import SocialButton from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButton.vue";
+import SocialButtonsModal from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButtonsModal.vue";
+import draggable from 'vuedraggable'
+import HTMLComponent from "@/Components/Editor/EdtiorComponents/HTML/HTMLComponent.vue"
 
 const components = {
     profile: Profile,
     link: LinkComponent,
     header: HeaderComponent,
+    html: HTMLComponent,
+    atc: ATCComponent,
     text: TextComponent,
     faq: FAQComponent,
     social_buttons: SocialButtonsComponent,
@@ -55,6 +60,8 @@ const props = defineProps({
 })
 
 let settingsModal = ref(false)
+
+let analyticsModal = ref(false)
 
 let themeSwiper = ref(null)
 
@@ -147,6 +154,8 @@ const showSettingsThroughShare = () => {
                         :remove-text="$root.translate('Are you sure?')"
                         :ok-text="$root.translate('Yes')"
                         :cancel-text="$root.translate('Cancel')"/>
+        <analytics-modal v-model="analyticsModal"
+                        :page="$page.props.page"/>
         <add-block-modal
             :theme="themeStyles"
             :user-products="props.user_products"
@@ -179,7 +188,9 @@ const showSettingsThroughShare = () => {
                                     </button>
                                 </div>
                                 <div class="ant-space-item" style="">
-                                    <button type="button" class="ant-btn ant-btn-icon-only"><span role="img"
+                                    <button type="button"
+                                            @click="analyticsModal = true"
+                                            class="ant-btn ant-btn-icon-only"><span role="img"
                                                                                                   aria-label="line-chart"
                                                                                                   class="anticon anticon-line-chart"><svg
                                         viewBox="64 64 896 896" focusable="false" data-icon="line-chart" width="1em"
