@@ -48,7 +48,7 @@ let showEditModal = ref(false)
     <div :class="!props.isEditable ? '' : 'EditorBlockListItem-block'" @click="tryEditModal">
         <h-t-m-l-modal :theme="theme" v-if="recursive" v-model="showEditModal" :data="data"
                     :element-id="props.elementId"/>
-        <div class="Block preview mobile last" :style="elemStyle">
+        <div class="Block mobile last" :style="elemStyle" :class="isEditable ? 'preview' : ''">
             <div v-html="props.data.html"></div>
         </div>
     </div>

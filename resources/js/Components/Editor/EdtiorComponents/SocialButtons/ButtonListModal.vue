@@ -56,7 +56,7 @@ watch(newBtn, (val) => {
                  style="padding-left: 8px; padding-right: 8px;">
                 <div class="SocialNetworkButton" :style="{backgroundColor: btn.bgColor, color: btn.color}"><i
                     class="Icon" :class="btn.icon" style="font-size: 24px;"></i>
-                    <div class="SocialNetworkButton-label">{{ btn.label }}</div>
+                    <div class="SocialNetworkButton-label">{{ btn.rlabel || btn.label }}</div>
                 </div>
             </div>
         </div>

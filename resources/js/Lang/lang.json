@@ -165,6 +165,13 @@
         "Source": "Источник",
         "Page analytics": "Аналитика",
         "Link clicks": "Кликов",
-        "Traffic Sources": "Источники трафика"
+        "Traffic Sources": "Источники трафика",
+        "Help to make QCD better!": "Помогите сделать QCD лучше",
+        "Didn't find the function you want?": "Не нашли нужную функцию?",
+        "Found a bug?": "Обнаружили недоработку?",
+        "Have a suggestion?": "Есть предложение?",
+        "Enter your feedback here": "Введите отзыв",
+        "Send feedback": "Отправить отзыв",
+        "Custom HTML": "HTML блок"
     }
 ]

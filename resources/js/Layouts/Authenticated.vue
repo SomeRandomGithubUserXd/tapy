@@ -95,13 +95,13 @@ const feedbackModel = ref(false)
                         {{
                             $root.translate('Subscribe to stay tuned to the news and contribute to the development of')
                         }} {{ $root.translate($root.appName) }}
-                        <div style="display: flex; margin-top: 12px;"><a href="https://www.instagram.com/tapy.me/"
+                        <div style="display: flex; margin-top: 12px;"><a href="https://instagram.com/qcd_barnaul?igshid=YmMyMTA2M2Y="
                                                                          target="_blank" rel="noreferrer">
                             <logo-instagram
                                 class="tapy-social"
                                 width="32" height="32" style="display: block; margin-right: 12px;"/>
                         </a><a
-                            href="https://t.me/tapyme" target="_blank" rel="noreferrer">
+                            href="https://t.me/qcqinfo" target="_blank" rel="noreferrer">
                             <logo-telegram class="tapy-social"
                                            src="https://tapy.me/land-assets/images/socials/telegram.svg"
                                            alt="" width="32"

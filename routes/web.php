@@ -88,7 +88,10 @@ Route::get('/add_to_contacts/{element}', function (PageElement $element) {
     $vcard->addAddress(null, null, $props['address'], null, null, null);
     $vcard->addURL($props['website']);
     try {
-        $vcard->addPhoto($element->getMedia(PageElement::$profilePicCollection)->first()->getPath());
+        $path = $element->getMedia(PageElement::$profilePicCollection)?->first()?->getPath();
+        if ($path) {
+            $vcard->addPhoto($path);
+        }
     } catch (Exception) {
     }
     $vcard->download();

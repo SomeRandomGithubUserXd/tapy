@@ -7,6 +7,8 @@ const props = defineProps({
 
 const content = ref('')
 
+const emit = defineEmits(['update:modelValue'])
+
 const submit = () => {
 
 }
@@ -18,13 +20,16 @@ const submit = () => {
         :class="modelValue ? 'animate__zoomIn' : 'animate__zoomOut'"
         :visible="modelValue"
         @ok="submit"
+        :cancel-button-props="{style: 'display:none'}"
         @change="emit('update:modelValue', false)">
         <template #title>
             {{ $root.translate('Send feedback') }}
         </template>
-        <form id="create-feedback" class="ant-form ant-form-vertical">
+        <form id="create-feedback" class="ant-form ant-form-vertical p-3">
             <div style="display: block; padding-bottom: 20px;"><p><span
-                class="ant-typography">{{ $root.translate('Help to make QCD better!') }}</span></p><span class="ant-typography">🤔 {{ $root.translate("Didn't find the function you want?") }}</span><br><span
+                class="ant-typography">{{ $root.translate('Help to make QCD better!') }}</span></p><span class="ant-typography">
+                🤔 {{ $root.translate("Didn't find the function you want?") }}
+            </span><br><span
                 class="ant-typography">😑 {{ $root.translate('Found a bug?') }}</span><br><span
                 class="ant-typography">😊 {{ $root.translate('Have a suggestion?') }}</span></div>
             <div class="ant-row ant-form-item" style="row-gap: 0px;">
