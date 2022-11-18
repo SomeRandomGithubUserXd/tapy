@@ -182,6 +182,14 @@ function removePic() {
                             </div>
                             <div class="ant-form-item-control-input">
                                 <div class="ant-form-item-control-input-content">
+                                    <tapy-input
+                                        :with-label="true"
+                                        :placeholder="$root.translate('Note')"
+                                        v-model="editableData.note"/>
+                                </div>
+                            </div>
+                            <div class="ant-form-item-control-input">
+                                <div class="ant-form-item-control-input-content">
                                     <single-image-uploader
                                         :rounded-preview="true"
                                         @onUpload="onUploadPic"

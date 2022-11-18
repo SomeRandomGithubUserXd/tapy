@@ -76,6 +76,18 @@ class ElementService
             'html' => [
                 'html' => '',
             ],
+            'image' => [
+                'picture' => '',
+                'view' => '',
+                'rounded' => '',
+                'square' => '',
+                'zoom' => '',
+                'caption' => '',
+            ],
+            'video' => [
+                'url' => '',
+                'caption' => '',
+            ],
         ];
     }
 }

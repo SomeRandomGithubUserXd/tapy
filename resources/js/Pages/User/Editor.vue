@@ -20,13 +20,17 @@ import ProductsComponent from "@/Components/Editor/EdtiorComponents/Products/Pro
 import LinkModal from "@/Components/Editor/EdtiorComponents/Link/LinkModal.vue";
 import AnalyticsModal from "@/Components/Editor/AnalyticsModal.vue";
 import ATCComponent from "@/Components/Editor/EdtiorComponents/ATC/ATCComponent.vue"
+import ImageComponent from "@/Components/Editor/EdtiorComponents/Image/ImageComponent.vue"
 import SocialButton from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButton.vue";
 import SocialButtonsModal from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButtonsModal.vue";
 import draggable from 'vuedraggable'
 import HTMLComponent from "@/Components/Editor/EdtiorComponents/HTML/HTMLComponent.vue"
+import VideoComponent from "@/Components/Editor/EdtiorComponents/Video/VideoComponent.vue"
 
 const components = {
     profile: Profile,
+    video: VideoComponent,
+    image: ImageComponent,
     link: LinkComponent,
     header: HeaderComponent,
     html: HTMLComponent,

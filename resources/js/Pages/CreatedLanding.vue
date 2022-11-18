@@ -8,9 +8,13 @@ import FAQComponent from "@/Components/Editor/EdtiorComponents/FAQ/FAQComponent.
 import SocialButtonsComponent from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButtonsComponent.vue"
 import ProductsComponent from "@/Components/Editor/EdtiorComponents/Products/ProductsComponent.vue"
 import HTMLComponent from "@/Components/Editor/EdtiorComponents/HTML/HTMLComponent.vue"
+import ImageComponent from "@/Components/Editor/EdtiorComponents/Image/ImageComponent.vue"
+import VideoComponent from "@/Components/Editor/EdtiorComponents/Image/ImageComponent.vue"
 
 const components = {
     profile: Profile,
+    video: VideoComponent,
+    image: ImageComponent,
     link: LinkComponent,
     header: HeaderComponent,
     html: HTMLComponent,

@@ -32,6 +32,37 @@ class ElementController extends Controller
         return redirect()->back();
     }
 
+    public function createImageElement(Page $page, UpdateProfileElementRequest $request)
+    {
+        try {
+            $order = PageElement::query()
+                    ->where(['page_id' => $page->id])
+                    ->orderByDesc('order_column')
+                    ->first()
+                    ->order_column + 1;
+        } catch (\Exception) {
+            $order = 0;
+        }
+        $pageElement = $page
+            ->pageElements()
+            ->create([
+                'component_alias' => 'image',
+                'order_column' => $order,
+                'props' => $request->props
+            ]);
+        $data = $request->only('view', 'rounded', 'square', 'zoom', 'caption');
+        if ($request->file('picture')) {
+            $pageElement->clearMediaCollection(PageElement::$profilePicCollection);
+            $media = $pageElement
+                ->addMediaFromRequest('picture')
+                ->usingFileName(\Str::random(12) . '.jpg')
+                ->toMediaCollection(PageElement::$profilePicCollection);
+            $data['picture'] = $media->getUrl();
+        }
+        $pageElement->updateProps(array_replace($pageElement->props, $data));
+        return redirect()->back();
+    }
+
     public function createProfileElement(Page $page, UpdateProfileElementRequest $request)
     {
         try {
@@ -113,6 +144,21 @@ class ElementController extends Controller
     public function updateContactElement(PageElement $pageElement, Request $request)
     {
         $data = $request->only(array_keys(ElementService::getAliasProps()[$request->alias]));
+        if ($request->file('picture')) {
+            $pageElement->clearMediaCollection(PageElement::$profilePicCollection);
+            $media = $pageElement
+                ->addMediaFromRequest('picture')
+                ->usingFileName(\Str::random(12) . '.jpg')
+                ->toMediaCollection(PageElement::$profilePicCollection);
+            $data['picture'] = $media->getUrl();
+        }
+        $pageElement->updateProps(array_replace($pageElement->props, $data));
+        return redirect()->back();
+    }
+
+    public function updateImageElement(PageElement $pageElement, Request $request)
+    {
+        $data = $request->only(array_keys(ElementService::getAliasProps()["image"]));
         if ($request->file('picture')) {
             $pageElement->clearMediaCollection(PageElement::$profilePicCollection);
             $media = $pageElement

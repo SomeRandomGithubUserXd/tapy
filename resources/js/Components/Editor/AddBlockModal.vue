@@ -14,6 +14,9 @@ import ButtonListModal from "@/Components/Editor/EdtiorComponents/SocialButtons/
 import ProductsModal from "@/Components/Editor/EdtiorComponents/Products/ProductsModal.vue";
 import ATCModal from "@/Components/Editor/EdtiorComponents/ATC/ATCModal.vue";
 import HTMLModal from "@/Components/Editor/EdtiorComponents/HTML/HTMLModal.vue";
+import ImageModal from "@/Components/Editor/EdtiorComponents/Image/ImageModal.vue";
+import VideoModal from "@/Components/Editor/EdtiorComponents/Video/VideoModal.vue";
+import SeparatorModal from "@/Components/Editor/EdtiorComponents/Separator/SeparatorModal.vue";
 
 
 const props = defineProps({
@@ -80,6 +83,33 @@ watch(socialButtonsData, value => {
         <template #title>
             {{ $root.translate('Choose block') }}
         </template>
+        <image-modal
+            :recursive="false"
+            :page-uuid="props.pageUuid"
+            :data='{"picture":"/placeholders/img.png","view":"square","rounded":false,"zoom":false,"caption": ""}'
+            v-model="modals.image"
+            :mode="0"
+            :theme="theme"
+            @dataChanged="emit('update:modelValue', false)"
+        />
+        <video-modal
+            :recursive="false"
+            :page-uuid="props.pageUuid"
+            :data='{"url":"","caption": ""}'
+            v-model="modals.video"
+            :mode="0"
+            :theme="theme"
+            @dataChanged="emit('update:modelValue', false)"
+        />
+        <separator-modal
+            :recursive="false"
+            :page-uuid="props.pageUuid"
+            :data='{"type":1,"fw": "","smooth": ""}'
+            v-model="modals.separator"
+            :mode="0"
+            :theme="theme"
+            @dataChanged="emit('update:modelValue', false)"
+        />
         <profile-modal
             :recursive="false"
             :page-uuid="props.pageUuid"
@@ -168,6 +198,7 @@ watch(socialButtonsData, value => {
                 company: "",
                 address: "",
                 website: "",
+                note: "",
                 picture: "",
             }'
             v-model="modals.atc"
@@ -323,6 +354,7 @@ watch(socialButtonsData, value => {
                 </div>
             </div>
             <div class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
+                 @click="addElement('image')"
                  style="padding-left: 8px; padding-right: 8px;">
                 <div class="BlockSelectorModal-block">
                     <div class="BlockSelectorModal-plan"></div>
@@ -343,7 +375,7 @@ watch(socialButtonsData, value => {
                             </defs>
                         </svg>
                     </div>
-                    <div class="BlockSelectorModal-title">Изображение</div>
+                    <div class="BlockSelectorModal-title">{{ $root.translate('Image') }}</div>
                 </div>
             </div>
             <div class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
@@ -379,6 +411,7 @@ watch(socialButtonsData, value => {
                 </div>
             </div>
             <div class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
+                 @click="addElement('video')"
                  style="padding-left: 8px; padding-right: 8px;">
                 <div class="BlockSelectorModal-block">
                     <div class="BlockSelectorModal-plan"></div>
@@ -400,7 +433,7 @@ watch(socialButtonsData, value => {
                             </defs>
                         </svg>
                     </div>
-                    <div class="BlockSelectorModal-title">Видео</div>
+                    <div class="BlockSelectorModal-title">{{ $root.translate('Video') }}</div>
                 </div>
             </div>
             <div class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
@@ -441,6 +474,7 @@ watch(socialButtonsData, value => {
                 </div>
             </div>
             <div class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
+                 @click="addElement('separator')"
                  style="padding-left: 8px; padding-right: 8px;">
                 <div class="BlockSelectorModal-block">
                     <div class="BlockSelectorModal-plan"></div>
@@ -452,7 +486,7 @@ watch(socialButtonsData, value => {
                             <circle cx="16" cy="2" r="2" fill="#8791AB"></circle>
                         </svg>
                     </div>
-                    <div class="BlockSelectorModal-title">Разделитель</div>
+                    <div class="BlockSelectorModal-title">{{ $root.translate('Separator') }}</div>
                 </div>
             </div>
             <div
@@ -469,7 +503,7 @@ watch(socialButtonsData, value => {
                                 d="M594.3 601.5a111.8 111.8 0 0029.1-75.5c0-61.9-49.9-112-111.4-112s-111.4 50.1-111.4 112c0 29.1 11 55.5 29.1 75.5a158.09 158.09 0 00-74.6 126.1 8 8 0 008 8.4H407c4.2 0 7.6-3.3 7.9-7.5 3.8-50.6 46-90.5 97.2-90.5s93.4 40 97.2 90.5c.3 4.2 3.7 7.5 7.9 7.5H661a8 8 0 008-8.4c-2.8-53.3-32-99.7-74.7-126.1zM512 578c-28.5 0-51.7-23.3-51.7-52s23.2-52 51.7-52 51.7 23.3 51.7 52-23.2 52-51.7 52zm416-354H768v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H548v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H328v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56H96c-17.7 0-32 14.3-32 32v576c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V256c0-17.7-14.3-32-32-32zm-40 568H136V296h120v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h148v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56h120v496z"></path>
                         </svg>
                     </div>
-                    <div class="BlockSelectorModal-title">"{{ $root.translate('Add to contacts') }}"</div>
+                    <div class="BlockSelectorModal-title">{{ $root.translate('Add to contacts') }}</div>
                 </div>
             </div>
             <div
