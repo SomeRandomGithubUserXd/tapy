@@ -10,7 +10,7 @@ class PageElement extends Model implements HasMedia
 {
     use InteractsWithMedia;
 
-    protected $fillable = ['page_id', 'component_alias', 'props', 'order_column'];
+    protected $fillable = ['page_id', 'component_alias', 'props', 'order_column', 'id'];
 
     public static string $profilePicCollection = "PROFILE_PIC_COLLECTION";
 

@@ -3,6 +3,8 @@ import {computed, ref} from "vue";
 import HTMLModal from "@/Components/Editor/EdtiorComponents/HTML/HTMLModal.vue";
 import SeparatorModal from "@/Components/Editor/EdtiorComponents/Separator/SeparatorModal.vue";
 import SeparatorOne from "@/Components/Editor/EdtiorComponents/Separator/SeparatorOne.vue";
+import SeparatorTwo from "@/Components/Editor/EdtiorComponents/Separator/SeparatorTwo.vue";
+import SeparatorThree from "@/Components/Editor/EdtiorComponents/Separator/SeparatorThree.vue";
 
 const props = defineProps({
     isEditable: {
@@ -48,7 +50,19 @@ let showEditModal = ref(false)
 
 const getSeparator = computed({
     get() {
-        return SeparatorOne
+        let separator = null;
+        switch (props.data.type) {
+            case 1:
+                separator = SeparatorOne
+                break;
+            case 2:
+                separator = SeparatorTwo
+                break;
+            case 3:
+                separator = SeparatorThree
+                break;
+        }
+        return separator
     },
     set() {
 
@@ -61,7 +75,7 @@ const getSeparator = computed({
         <separator-modal :theme="theme" v-if="recursive" v-model="showEditModal" :data="data"
                          :element-id="props.elementId"/>
         <div class="Block mobile last" :style="elemStyle" :class="isEditable ? 'preview' : ''">
-            <component :is="getSeparator"/>
+            <component :fw="props.data.fw" :smooth="props.data.smooth" :is="getSeparator"/>
         </div>
     </div>
 </template>

@@ -38,7 +38,7 @@ function submit() {
     if(props.mode) {
         editableData.value.transform((data) => ({
             ...data,
-            alias: 'html'
+            alias: 'separator'
         })).post(route('page_elements.update_static', props.elementId), {
             onError: err => console.log(err),
             onSuccess: () => {
@@ -53,7 +53,7 @@ function submit() {
         editableData.value.transform((data) => ({
             ...data,
             props: data,
-            alias: 'html'
+            alias: 'separator'
         })).post(route('pages.page_elements.create', props.pageUuid), {
             onError: err => console.log(err),
             onSuccess: () => {
@@ -77,18 +77,18 @@ function submit() {
         @change="emit('update:modelValue', false)"
         >
         <template #title>
-            {{ $root.translate('Custom html') }}
+            {{ $root.translate('Separator') }}
         </template>
         <template #footer>
             <edit-modal-footer @needsClosing="emit('update:modelValue', false)" @onOK="submit"
-                               :element-id="props.elementId" :mode="0" :with-copy-action="true"/>
+                               :element-id="props.elementId" :mode="props.mode" :with-copy-action="true"/>
         </template>
         <div>
             <div class="EditBlockPreview" style="min-height: 200px;" :style="theme.containerStyle">
                 <div class="EditBlockPreview-inner">
                     <div class="BlocksWrapper preview single-block css-1e2ocyy">
                         <div class="BlocksWrapper-inner css-1mtpsyn" :style="theme.blockStyle">
-                            <separator-component  ref="productsComponent" :mode="props.mode" :element-id="props.elementId" :theme="props.theme" :recursive="false"
+                            <separator-component :mode="props.mode" :element-id="props.elementId" :theme="props.theme" :recursive="false"
                                                   :data="editableData"/>
                         </div>
                     </div>
@@ -107,11 +107,32 @@ function submit() {
                             }}</label>
                         </div>
                         <div class="ant-col ant-form-item-control">
-                            <a-radio-group v-model:value="editableData.type">
-                                <a-radio :value="1">Option A</a-radio>
-                                <a-radio :value="2">Option B</a-radio>
-                                <a-radio :value="3">(empty)</a-radio>
+                            <a-radio-group class="d-flex flex-column" v-model:value="editableData.type">
+                                <a-radio :value="1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="60" height="2" viewBox="0 0 31 1" fill="none">
+                                        <rect width="31" height="1" fill="#989898"/>
+                                    </svg>
+                                </a-radio>
+                                <a-radio :value="2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="31" height="3" viewBox="0 0 31 3" fill="none">
+                                        <rect y="1" width="11" height="1" fill="#989898"/>
+                                        <rect x="20" y="1" width="11" height="1" fill="#989898"/>
+                                        <circle cx="15.5" cy="1.5" r="1" stroke="#989898"/>
+                                    </svg>
+                                </a-radio>
+                                <a-radio :value="3">({{ $root.translate('empty') }})</a-radio>
                             </a-radio-group>
+                        </div>
+                        <br/>
+                        <div class="ant-col ant-form-item-control">
+                            <div class="d-flex align-items-center" style="margin-bottom: 15px">
+                                <a-switch v-model:checked="editableData.fw"/>
+                                <span class="ms-2">{{ $root.translate('Full width') }}</span>
+                            </div>
+                            <div class="d-flex align-items-center" style="margin-bottom: 15px">
+                                <a-switch v-model:checked="editableData.smooth"/>
+                                <span class="ms-2">{{ $root.translate('Smooth') }}</span>
+                            </div>
                         </div>
                     </div>
                 </a-tab-pane>

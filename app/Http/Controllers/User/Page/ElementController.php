@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Pages\PageElements\UpdateProfileElementRequest;
 use App\Models\Page\Page;
 use App\Models\Page\PageElement;
+use App\Models\Product;
 use App\Services\ElementService;
 use Illuminate\Http\Request;
 
@@ -58,6 +59,41 @@ class ElementController extends Controller
                 ->usingFileName(\Str::random(12) . '.jpg')
                 ->toMediaCollection(PageElement::$profilePicCollection);
             $data['picture'] = $media->getUrl();
+        }
+        $pageElement->updateProps(array_replace($pageElement->props, $data));
+        return redirect()->back();
+    }
+
+    public function createImageGalleryElement(Page $page, Request $request, $id = null, $clear = true)
+    {
+        try {
+            $order = PageElement::query()
+                    ->where(['page_id' => $page->id])
+                    ->orderByDesc('order_column')
+                    ->first()
+                    ->order_column + 1;
+        } catch (\Exception) {
+            $order = 0;
+        }
+        $pageElement = $page
+            ->pageElements()
+            ->create([
+                'id' => $id,
+                'component_alias' => 'image_gallery',
+                'order_column' => $order,
+                'props' => ['images' => []]
+            ]);
+        $data = [];
+        $i = 0;
+        foreach ($request->props as $photo) {
+            if ($clear) $pageElement->clearMediaCollection(PageElement::$profilePicCollection);
+            $media = $pageElement
+                ->addMediaFromBase64($photo['file'])
+                ->usingFileName(\Str::random(12) . '.jpg')
+                ->setOrder($i)
+                ->toMediaCollection(PageElement::$profilePicCollection);
+            $data['images'][] = $media->getUrl();
+            $i++;
         }
         $pageElement->updateProps(array_replace($pageElement->props, $data));
         return redirect()->back();
@@ -168,6 +204,15 @@ class ElementController extends Controller
             $data['picture'] = $media->getUrl();
         }
         $pageElement->updateProps(array_replace($pageElement->props, $data));
+        return redirect()->back();
+    }
+
+    public function updateImageGalleryElement(PageElement $pageElement, Request $request)
+    {
+        $id = $pageElement->id;
+        $page = Page::find($pageElement->page_id);
+        $pageElement->delete();
+        $this->createImageGalleryElement($page, $request, $id, false);
         return redirect()->back();
     }
 

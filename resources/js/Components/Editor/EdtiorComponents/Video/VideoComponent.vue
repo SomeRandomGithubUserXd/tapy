@@ -62,6 +62,7 @@ let showEditModal = ref(false)
         <div class="Block preview mobile last" :style="elemStyle">
             <iframe style="width: 100%" :src="getSrc">
             </iframe>
+            <div class="caption text-center mt-3">{{ props.data.caption }}</div>
         </div>
     </div>
 </template>

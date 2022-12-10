@@ -88,6 +88,10 @@ class ElementService
                 'url' => '',
                 'caption' => '',
             ],
+            'separator' => [
+                'fw' => '',
+                'smooth' => '',
+            ],
         ];
     }
 }

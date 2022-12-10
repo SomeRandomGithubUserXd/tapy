@@ -67,10 +67,10 @@ function handleChange(val) {
                             <div class="Lightbox-content"><img class="LightboxImage"
                                                                :src="getPicture"
                                                                alt=""></div>
-                            <div class="caption">{{ props.data.caption }}</div>
                         </div>
                     </div>
                 </div>
+                <div class="caption text-center mt-3">{{ props.data.caption }}</div>
             </div>
         </div>
 <!--        <div class="Block preview mobile first">-->

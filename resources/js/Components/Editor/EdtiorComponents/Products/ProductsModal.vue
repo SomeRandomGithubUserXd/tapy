@@ -140,7 +140,7 @@ watch(selectedValues, value => {
         @ok="submit"
         @change="emit('update:modelValue', false)">
         <template #title>
-            {{ $root.translate('Profile') }}
+            {{ $root.translate('Products') }}
         </template>
         <template #footer>
             <edit-modal-footer @needsClosing="emit('update:modelValue', false)" @onOK="submit"

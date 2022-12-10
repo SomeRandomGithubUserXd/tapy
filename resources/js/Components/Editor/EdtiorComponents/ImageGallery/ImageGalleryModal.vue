@@ -1,22 +1,28 @@
 <script setup>
-import {getCurrentInstance, ref} from "vue";
+import Profile from "@/Components/Editor/EdtiorComponents/Profile/Profile.vue";
+import {getCurrentInstance, ref, watch} from "vue";
 import {useForm} from "@inertiajs/inertia-vue3";
+import SingleImageUploader from "@/Components/Images/SingleImageUploader.vue";
 import TapyInput from "@/Components/Common/TapyInput.vue";
+import {Inertia} from "@inertiajs/inertia";
 import {message} from "ant-design-vue";
 import EditModalFooter from "@/Components/Editor/EdtiorComponents/EditModalFooter.vue";
-import HTMLComponent from "@/Components/Editor/EdtiorComponents/HTML/HTMLComponent.vue";
+import ImageGalleryComponent from "@/Components/Editor/EdtiorComponents/ImageGallery/ImageGalleryComponent.vue";
+import UploadGallery from "@/Components/Images/UploadGallery.vue";
 
 const self = getCurrentInstance()
 
+let images = ref([])
+
 const props = defineProps({
-    elementId: Number,
-    modelValue: Boolean,
-    data: Object,
     theme: {
         required: false,
         type: Object,
         default: {}
     },
+    elementId: Number,
+    modelValue: Boolean,
+    data: Object,
     mode: {
         required: false,
         default: 1,
@@ -29,16 +35,50 @@ const props = defineProps({
     },
 })
 
-const emit = defineEmits(['update:modelValue', 'dataChanged'])
+function toDataUrl(url, callback) {
+    let xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+        let reader = new FileReader();
+        reader.onloadend = function() {
+            callback(reader.result);
+        }
+        reader.readAsDataURL(xhr.response);
+    };
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
+}
+
+const formatImages = () => {
+    if (props.data?.images?.length) {
+        const imagesLocal = []
+        for (const image of props.data.images) {
+            toDataUrl(image, function(base) {
+                imagesLocal.push({
+                    preview: image,
+                    file: base
+                })
+            });
+        }
+        console.log(imagesLocal)
+        images.value = imagesLocal
+    }
+}
+
+watch(images, value => {}, {deep: true})
+
+formatImages()
+
+const emit = defineEmits(['update:modelValue', 'dataChanged', 'closeAll'])
 
 let editableData = ref(useForm(props.data))
 
 function submit() {
-    if(props.mode) {
+    if (props.mode) {
         editableData.value.transform((data) => ({
-            ...data,
-            alias: 'html'
-        })).post(route('page_elements.update_static', props.elementId), {
+            props: images.value,
+            alias: 'image_gallery'
+        })).post(route('page_elements.update_image_gallery_element', props.elementId), {
             onError: err => console.log(err),
             onSuccess: () => {
                 emit('update:modelValue', false)
@@ -50,10 +90,9 @@ function submit() {
         })
     } else {
         editableData.value.transform((data) => ({
-            ...data,
-            props: data,
-            alias: 'html'
-        })).post(route('pages.page_elements.create', props.pageUuid), {
+            props: images.value,
+            alias: 'image_gallery'
+        })).post(route('pages.create_image_gallery_element', props.pageUuid), {
             onError: err => console.log(err),
             onSuccess: () => {
                 emit('update:modelValue', false)
@@ -74,49 +113,26 @@ function submit() {
         :visible="modelValue"
         @ok="submit"
         @change="emit('update:modelValue', false)"
-        >
+    >
         <template #title>
-            {{ $root.translate('Custom html') }}
+            {{ $root.translate('Image gallery') }}
         </template>
         <template #footer>
             <edit-modal-footer @needsClosing="emit('update:modelValue', false)" @onOK="submit"
                                :element-id="props.elementId" :mode="props.mode" :with-copy-action="true"/>
         </template>
         <div>
-            <div class="EditBlockPreview" style="min-height: 200px;" :style="theme.containerStyle">
-                <div class="EditBlockPreview-inner">
-                    <div class="BlocksWrapper preview single-block css-1e2ocyy">
-                        <div class="BlocksWrapper-inner css-1mtpsyn" :style="theme.blockStyle">
-                            <div class="Block preview mobile last" :style="theme.elemStyle">
-                                <div v-html="editableData.html"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <a-tabs style="padding: 0 26px">
                 <a-tab-pane key="1">
                     <template #tab><span class="ant-typography"
                                          :class="{'ant-typography-danger': !!editableData?.errors.length}">
                     {{ $root.translate('Settings') }}
                 </span></template>
-                    <div class="ant-row ant-form-item d-flex flex-column" style="row-gap: 0px;">
-                        <div class="ant-col ant-form-item-label me-auto"><label for="params_heading"
-                                                                                class="ant-form-item-required">{{
-                                $root.translate('HTML')
-                            }}</label>
-                        </div>
-                        <div class="ant-col ant-form-item-control">
-                            <div class="ant-form-item-control-input">
-                                <div class="ant-form-item-control-input-content">   <textarea
-                                    :placeholder="$root.translate('Enter html here')" rows="4"
-                                    id="params_heading"
-                                    class="ant-input"
-                                    v-model="editableData.html"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <upload-gallery
+                        v-model="images"
+                        :remove-text="$root.translate('Are you sure?')"
+                        :ok-text="$root.translate('Yes')"
+                        :cancel-text="$root.translate('Cancel')"/>
                 </a-tab-pane>
             </a-tabs>
         </div>

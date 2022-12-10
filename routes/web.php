@@ -42,6 +42,7 @@ Route::group(['domain' => $host], function () {
                 Route::post('/create_profile_element', [ElementController::class, 'createProfileElement'])->name('create_profile_element');
                 Route::post('/create_contact_element', [ElementController::class, 'createContactElement'])->name('create_contact_element');
                 Route::post('/create_image_element', [ElementController::class, 'createImageElement'])->name('create_image_element');
+                Route::post('/create_image_gallery_element', [ElementController::class, 'createImageGalleryElement'])->name('create_image_gallery_element');
                 Route::group(['as' => 'update.'], function () {
                     Route::prefix('/settings')->as('settings')->group(function () {
                         Route::put('/', [PageController::class, 'updateSettings']);
@@ -63,6 +64,7 @@ Route::group(['domain' => $host], function () {
                     Route::post('/update_profile_element', [ElementController::class, 'updateProfileElement'])->name('update_profile_element');
                     Route::post('/update_contact_element', [ElementController::class, 'updateContactElement'])->name('update_contact_element');
                     Route::post('/update_image_element', [ElementController::class, 'updateImageElement'])->name('update_image_element');
+                    Route::post('/update_image_gallery_element', [ElementController::class, 'updateImageGalleryElement'])->name('update_image_gallery_element');
                     Route::delete('/remove_profile_picture', [ElementController::class, 'removeProfilePicture'])->name('remove_profile_picture');
                     Route::post('/update_static', [ElementController::class, 'updateStatic'])->name('update_static');
                 });

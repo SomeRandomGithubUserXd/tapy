@@ -26,6 +26,8 @@ import SocialButtonsModal from "@/Components/Editor/EdtiorComponents/SocialButto
 import draggable from 'vuedraggable'
 import HTMLComponent from "@/Components/Editor/EdtiorComponents/HTML/HTMLComponent.vue"
 import VideoComponent from "@/Components/Editor/EdtiorComponents/Video/VideoComponent.vue"
+import SeparatorComponent from "@/Components/Editor/EdtiorComponents/Separator/SeparatorComponent.vue"
+import ImageGallery from "@/Components/Editor/EdtiorComponents/ImageGallery/ImageGalleryComponent.vue"
 
 const components = {
     profile: Profile,
@@ -38,7 +40,9 @@ const components = {
     text: TextComponent,
     faq: FAQComponent,
     social_buttons: SocialButtonsComponent,
-    products: ProductsComponent
+    products: ProductsComponent,
+    separator: SeparatorComponent,
+    image_gallery: ImageGallery,
 }
 
 const self = getCurrentInstance()

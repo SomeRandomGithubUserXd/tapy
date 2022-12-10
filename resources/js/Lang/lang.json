@@ -172,6 +172,20 @@
         "Have a suggestion?": "Есть предложение?",
         "Enter your feedback here": "Введите отзыв",
         "Send feedback": "Отправить отзыв",
-        "Custom HTML": "HTML блок"
+        "Custom html": "HTML блок",
+        "Image": "Изображение",
+        "Original": "Оригинал",
+        "Rounded corners": "Скругленные рамки",
+        "Click to zoom": "Увеличивать на нажатии",
+        "Note": "Заметка",
+        "Video": "Видео",
+        "Separator": "Разделитель",
+        "Smooth": "Плавные края",
+        "Full width": "На всю ширину",
+        "empty": "пустота",
+        "Enter html here": "Введите HTML код",
+        "Header": "Заголовок",
+        "Custom HTML": "HTML блок",
+        "Image gallery": "Галерея изображений"
     }
 ]

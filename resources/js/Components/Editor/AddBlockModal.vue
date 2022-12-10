@@ -17,6 +17,7 @@ import HTMLModal from "@/Components/Editor/EdtiorComponents/HTML/HTMLModal.vue";
 import ImageModal from "@/Components/Editor/EdtiorComponents/Image/ImageModal.vue";
 import VideoModal from "@/Components/Editor/EdtiorComponents/Video/VideoModal.vue";
 import SeparatorModal from "@/Components/Editor/EdtiorComponents/Separator/SeparatorModal.vue";
+import ImageGalleryModal from "@/Components/Editor/EdtiorComponents/ImageGallery/ImageGalleryModal.vue";
 
 
 const props = defineProps({
@@ -92,6 +93,15 @@ watch(socialButtonsData, value => {
             :theme="theme"
             @dataChanged="emit('update:modelValue', false)"
         />
+        <image-gallery-modal
+            :recursive="false"
+            :page-uuid="props.pageUuid"
+            :data='{"pictures": []}'
+            v-model="modals.image_gallery"
+            :mode="0"
+            :theme="theme"
+            @dataChanged="emit('update:modelValue', false)"
+        />
         <video-modal
             :recursive="false"
             :page-uuid="props.pageUuid"
@@ -104,7 +114,7 @@ watch(socialButtonsData, value => {
         <separator-modal
             :recursive="false"
             :page-uuid="props.pageUuid"
-            :data='{"type":1,"fw": "","smooth": ""}'
+            :data='{"type":1,"fw": false,"smooth": false}'
             v-model="modals.separator"
             :mode="0"
             :theme="theme"
@@ -379,6 +389,7 @@ watch(socialButtonsData, value => {
                 </div>
             </div>
             <div class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
+                 @click="addElement('image_gallery')"
                  style="padding-left: 8px; padding-right: 8px;">
                 <div class="BlockSelectorModal-block">
                     <div class="BlockSelectorModal-plan"></div>
@@ -407,7 +418,7 @@ watch(socialButtonsData, value => {
                             </defs>
                         </svg>
                     </div>
-                    <div class="BlockSelectorModal-title">Галерея изображений</div>
+                    <div class="BlockSelectorModal-title">{{ $root.translate('Image gallery') }}</div>
                 </div>
             </div>
             <div class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"

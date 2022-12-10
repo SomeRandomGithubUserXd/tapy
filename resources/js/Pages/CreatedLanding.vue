@@ -10,6 +10,7 @@ import ProductsComponent from "@/Components/Editor/EdtiorComponents/Products/Pro
 import HTMLComponent from "@/Components/Editor/EdtiorComponents/HTML/HTMLComponent.vue"
 import ImageComponent from "@/Components/Editor/EdtiorComponents/Image/ImageComponent.vue"
 import VideoComponent from "@/Components/Editor/EdtiorComponents/Image/ImageComponent.vue"
+import SeparatorComponent from "@/Components/Editor/EdtiorComponents/Separator/SeparatorComponent.vue";
 
 const components = {
     profile: Profile,
@@ -22,7 +23,8 @@ const components = {
     text: TextComponent,
     faq: FAQComponent,
     social_buttons: SocialButtonsComponent,
-    products: ProductsComponent
+    products: ProductsComponent,
+    separator: SeparatorComponent,
 }
 
 </script>
