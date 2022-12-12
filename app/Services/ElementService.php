@@ -92,6 +92,9 @@ class ElementService
                 'fw' => '',
                 'smooth' => '',
             ],
+            'video_gallery' => [
+                'faqs' => '',
+            ],
         ];
     }
 }

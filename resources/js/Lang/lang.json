@@ -186,6 +186,8 @@
         "Enter html here": "Введите HTML код",
         "Header": "Заголовок",
         "Custom HTML": "HTML блок",
-        "Image gallery": "Галерея изображений"
+        "Image gallery": "Галерея изображений",
+        "Video gallery": "Видео галерея",
+        "Add video": "Добавить видео"
     }
 ]

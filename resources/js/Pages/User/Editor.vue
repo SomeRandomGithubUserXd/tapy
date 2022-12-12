@@ -28,6 +28,7 @@ import HTMLComponent from "@/Components/Editor/EdtiorComponents/HTML/HTMLCompone
 import VideoComponent from "@/Components/Editor/EdtiorComponents/Video/VideoComponent.vue"
 import SeparatorComponent from "@/Components/Editor/EdtiorComponents/Separator/SeparatorComponent.vue"
 import ImageGallery from "@/Components/Editor/EdtiorComponents/ImageGallery/ImageGalleryComponent.vue"
+import VideoGallery from "@/Components/Editor/EdtiorComponents/VideoGallery/VideoGalleryComponent.vue"
 
 const components = {
     profile: Profile,
@@ -43,6 +44,7 @@ const components = {
     products: ProductsComponent,
     separator: SeparatorComponent,
     image_gallery: ImageGallery,
+    video_gallery: VideoGallery,
 }
 
 const self = getCurrentInstance()

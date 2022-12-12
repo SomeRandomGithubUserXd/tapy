@@ -11,6 +11,8 @@ import HTMLComponent from "@/Components/Editor/EdtiorComponents/HTML/HTMLCompone
 import ImageComponent from "@/Components/Editor/EdtiorComponents/Image/ImageComponent.vue"
 import VideoComponent from "@/Components/Editor/EdtiorComponents/Image/ImageComponent.vue"
 import SeparatorComponent from "@/Components/Editor/EdtiorComponents/Separator/SeparatorComponent.vue";
+import ImageGallery from "@/Components/Editor/EdtiorComponents/ImageGallery/ImageGalleryComponent.vue";
+import VideoGallery from "@/Components/Editor/EdtiorComponents/VideoGallery/VideoGalleryComponent.vue"
 
 const components = {
     profile: Profile,
@@ -25,6 +27,8 @@ const components = {
     social_buttons: SocialButtonsComponent,
     products: ProductsComponent,
     separator: SeparatorComponent,
+    image_gallery: ImageGallery,
+    video_gallery: VideoGallery,
 }
 
 </script>

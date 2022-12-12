@@ -18,6 +18,7 @@ import ImageModal from "@/Components/Editor/EdtiorComponents/Image/ImageModal.vu
 import VideoModal from "@/Components/Editor/EdtiorComponents/Video/VideoModal.vue";
 import SeparatorModal from "@/Components/Editor/EdtiorComponents/Separator/SeparatorModal.vue";
 import ImageGalleryModal from "@/Components/Editor/EdtiorComponents/ImageGallery/ImageGalleryModal.vue";
+import VideoGalleryModal from "@/Components/Editor/EdtiorComponents/VideoGallery/VideoGalleryModal.vue";
 
 
 const props = defineProps({
@@ -107,6 +108,16 @@ watch(socialButtonsData, value => {
             :page-uuid="props.pageUuid"
             :data='{"url":"","caption": ""}'
             v-model="modals.video"
+            :mode="0"
+            :theme="theme"
+            @dataChanged="emit('update:modelValue', false)"
+        />
+        <video-gallery-modal
+            :recursive="false"
+            :page-uuid="props.pageUuid"
+            :data='{"faqs":[]}'
+            :faqs="[]"
+            v-model="modals.video_gallery"
             :mode="0"
             :theme="theme"
             @dataChanged="emit('update:modelValue', false)"
@@ -448,6 +459,7 @@ watch(socialButtonsData, value => {
                 </div>
             </div>
             <div class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
+                 @click="addElement('video_gallery')"
                  style="padding-left: 8px; padding-right: 8px;">
                 <div class="BlockSelectorModal-block">
                     <div class="BlockSelectorModal-plan"></div>
@@ -481,7 +493,7 @@ watch(socialButtonsData, value => {
                             </defs>
                         </svg>
                     </div>
-                    <div class="BlockSelectorModal-title">Видеогалерея</div>
+                    <div class="BlockSelectorModal-title">{{ $root.translate('Video gallery') }}</div>
                 </div>
             </div>
             <div class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
