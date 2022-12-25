@@ -19,6 +19,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->smallInteger('role')->default(config('roles.user'));
+            $table->date('subscribed_until')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

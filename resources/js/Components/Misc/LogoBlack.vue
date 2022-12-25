@@ -1,10 +1,7 @@
 <template>
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  zoomAndPan="magnify"
          viewBox="0 120 375 120" preserveAspectRatio="xMidYMid meet" version="1.0">
-        <defs>
-            <g/>
-        </defs>
-        <g fill="#fff" fill-opacity="1">
+        <g fill="#000" fill-opacity="1">
             <g transform="translate(42.693777, 229.045977)">
                 <g>
                     <path
@@ -12,7 +9,7 @@
                 </g>
             </g>
         </g>
-        <g fill="#fff" fill-opacity="1">
+        <g fill="#000" fill-opacity="1">
             <g transform="translate(140.775592, 229.045977)">
                 <g>
                     <path
@@ -20,7 +17,7 @@
                 </g>
             </g>
         </g>
-        <g fill="#fff" fill-opacity="1">
+        <g fill="#000" fill-opacity="1">
             <g transform="translate(226.276548, 229.045977)">
                 <g>
                     <path

@@ -47,11 +47,13 @@ const components = {
     video_gallery: VideoGallery,
 }
 
+const pro_components = ['html']
+
 const self = getCurrentInstance()
 
 let slidesPerView = 8
 
-if(!window.matchMedia("(min-width: 768px)").matches) {
+if (!window.matchMedia("(min-width: 768px)").matches) {
     slidesPerView = 2
 }
 
@@ -65,6 +67,9 @@ let editor = ref([]);
 
 const props = defineProps({
     page: Object,
+    chart: Object,
+    visits: Object,
+    link_clicks: Object,
     themes: Array,
     user_products: Array,
 })
@@ -165,13 +170,17 @@ const showSettingsThroughShare = () => {
                         :ok-text="$root.translate('Yes')"
                         :cancel-text="$root.translate('Cancel')"/>
         <analytics-modal v-model="analyticsModal"
-                        :page="$page.props.page"/>
+                         :page="$page.props.page"
+                         :link_clicks="props.link_clicks"
+                         :visits="props.visits"
+                         :chart_stuff="props.chart"/>
         <add-block-modal
             :theme="themeStyles"
             :user-products="props.user_products"
             v-model="showAddBlockModal"
             :page-uuid="$page.props.page.uuid"/>
-        <share-modal :qr-code="props.page.qr_code" :page-link="props.page.link" @showSettings="showSettingsThroughShare" v-model="showShareModal"/>
+        <share-modal :qr-code="props.page.qr_code" :page-link="props.page.link" @showSettings="showSettingsThroughShare"
+                     v-model="showShareModal"/>
         <link-modal
             :theme="themeStyles"
             :recursive="false"
@@ -201,8 +210,8 @@ const showSettingsThroughShare = () => {
                                     <button type="button"
                                             @click="analyticsModal = true"
                                             class="ant-btn ant-btn-icon-only"><span role="img"
-                                                                                                  aria-label="line-chart"
-                                                                                                  class="anticon anticon-line-chart"><svg
+                                                                                    aria-label="line-chart"
+                                                                                    class="anticon anticon-line-chart"><svg
                                         viewBox="64 64 896 896" focusable="false" data-icon="line-chart" width="1em"
                                         height="1em" fill="currentColor" aria-hidden="true"><path
                                         d="M888 792H200V168c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v688c0 4.4 3.6 8 8 8h752c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM305.8 637.7c3.1 3.1 8.1 3.1 11.3 0l138.3-137.6L583 628.5c3.1 3.1 8.2 3.1 11.3 0l275.4-275.3c3.1-3.1 3.1-8.2 0-11.3l-39.6-39.6a8.03 8.03 0 00-11.3 0l-230 229.9L461.4 404a8.03 8.03 0 00-11.3 0L266.3 586.7a8.03 8.03 0 000 11.3l39.5 39.7z"></path></svg></span>
@@ -228,7 +237,9 @@ const showSettingsThroughShare = () => {
                                     viewBox="64 64 896 896" focusable="false" data-icon="share-alt" width="1em"
                                     height="1em"
                                     fill="currentColor" aria-hidden="true"><path
-                                    d="M752 664c-28.5 0-54.8 10-75.4 26.7L469.4 540.8a160.68 160.68 0 000-57.6l207.2-149.9C697.2 350 723.5 360 752 360c66.2 0 120-53.8 120-120s-53.8-120-120-120-120 53.8-120 120c0 11.6 1.6 22.7 4.7 33.3L439.9 415.8C410.7 377.1 364.3 352 312 352c-88.4 0-160 71.6-160 160s71.6 160 160 160c52.3 0 98.7-25.1 127.9-63.8l196.8 142.5c-3.1 10.6-4.7 21.8-4.7 33.3 0 66.2 53.8 120 120 120s120-53.8 120-120-53.8-120-120-120zm0-476c28.7 0 52 23.3 52 52s-23.3 52-52 52-52-23.3-52-52 23.3-52 52-52zM312 600c-48.5 0-88-39.5-88-88s39.5-88 88-88 88 39.5 88 88-39.5 88-88 88zm440 236c-28.7 0-52-23.3-52-52s23.3-52 52-52 52 23.3 52 52-23.3 52-52 52z"></path></svg></span><span>{{ $root.translate('Share') }}</span>
+                                    d="M752 664c-28.5 0-54.8 10-75.4 26.7L469.4 540.8a160.68 160.68 0 000-57.6l207.2-149.9C697.2 350 723.5 360 752 360c66.2 0 120-53.8 120-120s-53.8-120-120-120-120 53.8-120 120c0 11.6 1.6 22.7 4.7 33.3L439.9 415.8C410.7 377.1 364.3 352 312 352c-88.4 0-160 71.6-160 160s71.6 160 160 160c52.3 0 98.7-25.1 127.9-63.8l196.8 142.5c-3.1 10.6-4.7 21.8-4.7 33.3 0 66.2 53.8 120 120 120s120-53.8 120-120-53.8-120-120-120zm0-476c28.7 0 52 23.3 52 52s-23.3 52-52 52-52-23.3-52-52 23.3-52 52-52zM312 600c-48.5 0-88-39.5-88-88s39.5-88 88-88 88 39.5 88 88-39.5 88-88 88zm440 236c-28.7 0-52-23.3-52-52s23.3-52 52-52 52 23.3 52 52-23.3 52-52 52z"></path></svg></span><span>{{
+                                        $root.translate('Share')
+                                    }}</span>
                                 </button>
                             </div>
                         </div>
@@ -304,7 +315,14 @@ const showSettingsThroughShare = () => {
                             <template #item="{element}">
                                 <li class="list-group-item"
                                     style="position: relative; transition: null 0s ease 0s, visibility 0s ease 0s; z-index: 1; opacity: 1;margin-bottom: 10px;">
-                                    <div class="EditorBlockListItem">
+                                    <div class="EditorBlockListItem"
+                                         :class="pro_components.includes(element.component_alias) && !$page.props.auth.user.is_pro ? 'error' : ''">
+                                        <div
+                                            v-if="pro_components.includes(element.component_alias) && !$page.props.auth.user.is_pro"
+                                            class="EditorBlockListItem-error"><span class="ant-tag ant-tag-error"
+                                                                                    style="margin-right: 0px;"
+                                                                                    ant-click-animating-without-extra-node="false">PRO</span>
+                                        </div>
                                         <component
                                             :products="props.user_products"
                                             :element-id="element.id"
@@ -319,7 +337,7 @@ const showSettingsThroughShare = () => {
                             <button type="button"
                                     @click="addLink"
                                     class="ant-btn ant-btn-primary ant-btn-round ant-btn-lg ant-btn-block"
-                                    style="overflow: hidden;"><span>{{ $root.translate('Add link')}}</span></button>
+                                    style="overflow: hidden;"><span>{{ $root.translate('Add link') }}</span></button>
                             <button type="button"
                                     @click="showAddBlockModal = true"
                                     class="ant-btn ant-btn-primary ant-btn-circle ant-btn-lg ant-btn-icon-only"

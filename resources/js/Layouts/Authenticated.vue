@@ -10,6 +10,7 @@ import {message} from "ant-design-vue";
 import {MenuOutlined} from "@ant-design/icons-vue";
 import {Inertia} from "@inertiajs/inertia";
 import FeedbackModal from "@/Components/FeedbackModal.vue";
+import UpgradeToProModal from "@/Components/Misc/UpgradeToProModal.vue";
 
 const self = getCurrentInstance()
 
@@ -61,18 +62,20 @@ function showMenu() {
 }
 
 const feedbackModel = ref(false)
+const showUpgradeModal = ref(false)
 </script>
 
 <template>
     <section class="ant-layout ant-layout-has-sider AppLayout">
         <feedback-modal v-model="feedbackModel"/>
+        <upgrade-to-pro-modal v-model="showUpgradeModal"/>
         <aside class="ant-layout-sider ant-layout-sider-dark animate__animated"
                :class="sidebarStyle"
                style="flex: 0 0 220px; max-width: 220px; min-width: 220px; width: 220px;">
             <div class="ant-layout-sider-children">
                 <div>
                     <a href="/">
-                        <div class="AppLayout-logo">
+                        <div class="AppLayout-logo py-2">
                             <logo-white width="120"/>
                         </div>
                     </a>
@@ -95,8 +98,9 @@ const feedbackModel = ref(false)
                         {{
                             $root.translate('Subscribe to stay tuned to the news and contribute to the development of')
                         }} {{ $root.translate($root.appName) }}
-                        <div style="display: flex; margin-top: 12px;"><a href="https://instagram.com/qcd_barnaul?igshid=YmMyMTA2M2Y="
-                                                                         target="_blank" rel="noreferrer">
+                        <div style="display: flex; margin-top: 12px;"><a
+                            href="https://instagram.com/qcd_barnaul?igshid=YmMyMTA2M2Y="
+                            target="_blank" rel="noreferrer">
                             <logo-instagram
                                 class="tapy-social"
                                 width="32" height="32" style="display: block; margin-right: 12px;"/>
@@ -141,10 +145,18 @@ const feedbackModel = ref(false)
                 </div>
                 <div class="AppLayout-header-content">
                     <div class="ant-space ant-space-horizontal ant-space-align-center" style="gap: 8px;">
+                        <div v-if="$page.props.auth.user.is_pro" class="ant-space-item" style="">
+                            <div><span class="ant-tag ant-tag-has-color" style="background-color: black;">PRO</span>
+                            </div>
+                        </div>
+                        <div v-else style="" @click="showUpgradeModal = true">
+                            <span class="ant-tag ant-tag-volcano cursor-pointer py-1">🚀 Перейти на PRO</span>
+                        </div>
                         <div class="ant-space-item" style="">
-                            <button @click="feedbackModel = true" type="button" class="ant-btn ant-btn-text ant-btn-icon-only"><span role="img"
-                                                                                                       aria-label="like"
-                                                                                                       class="anticon anticon-like"><svg
+                            <button @click="feedbackModel = true" type="button"
+                                    class="ant-btn ant-btn-text ant-btn-icon-only"><span role="img"
+                                                                                         aria-label="like"
+                                                                                         class="anticon anticon-like"><svg
                                 viewBox="64 64 896 896" focusable="false" data-icon="like" width="1em" height="1em"
                                 fill="currentColor" aria-hidden="true"><path
                                 d="M885.9 533.7c16.8-22.2 26.1-49.4 26.1-77.7 0-44.9-25.1-87.4-65.5-111.1a67.67 67.67 0 00-34.3-9.3H572.4l6-122.9c1.4-29.7-9.1-57.9-29.5-79.4A106.62 106.62 0 00471 99.9c-52 0-98 35-111.8 85.1l-85.9 311H144c-17.7 0-32 14.3-32 32v364c0 17.7 14.3 32 32 32h601.3c9.2 0 18.2-1.8 26.5-5.4 47.6-20.3 78.3-66.8 78.3-118.4 0-12.6-1.8-25-5.4-37 16.8-22.2 26.1-49.4 26.1-77.7 0-12.6-1.8-25-5.4-37 16.8-22.2 26.1-49.4 26.1-77.7-.2-12.6-2-25.1-5.6-37.1zM184 852V568h81v284h-81zm636.4-353l-21.9 19 13.9 25.4a56.2 56.2 0 016.9 27.3c0 16.5-7.2 32.2-19.6 43l-21.9 19 13.9 25.4a56.2 56.2 0 016.9 27.3c0 16.5-7.2 32.2-19.6 43l-21.9 19 13.9 25.4a56.2 56.2 0 016.9 27.3c0 22.4-13.2 42.6-33.6 51.8H329V564.8l99.5-360.5a44.1 44.1 0 0142.2-32.3c7.6 0 15.1 2.2 21.1 6.7 9.9 7.4 15.2 18.6 14.6 30.5l-9.6 198.4h314.4C829 418.5 840 436.9 840 456c0 16.5-7.2 32.1-19.6 43z"></path></svg></span>
@@ -169,13 +181,21 @@ const feedbackModel = ref(false)
                                     <a-menu>
                                         <a-menu-item disabled key="0">
                                             <span
-                                                class="ant-typography ant-typography-secondary">{{ $page.props.auth.user.email }}</span>
+                                                class="ant-typography ant-typography-secondary">{{
+                                                    $page.props.auth.user.email
+                                                }}</span>
                                         </a-menu-item>
                                         <a-menu-divider/>
                                         <a-menu-item key="1">
                                             <div class="d-flex align-items-center">
-                                                <span role="img" aria-label="logout" class="anticon anticon-logout ant-dropdown-menu-item-icon"><svg viewBox="64 64 896 896" focusable="false" data-icon="logout" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M868 732h-70.3c-4.8 0-9.3 2.1-12.3 5.8-7 8.5-14.5 16.7-22.4 24.5a353.84 353.84 0 01-112.7 75.9A352.8 352.8 0 01512.4 866c-47.9 0-94.3-9.4-137.9-27.8a353.84 353.84 0 01-112.7-75.9 353.28 353.28 0 01-76-112.5C167.3 606.2 158 559.9 158 512s9.4-94.2 27.8-137.8c17.8-42.1 43.4-80 76-112.5s70.5-58.1 112.7-75.9c43.6-18.4 90-27.8 137.9-27.8 47.9 0 94.3 9.3 137.9 27.8 42.2 17.8 80.1 43.4 112.7 75.9 7.9 7.9 15.3 16.1 22.4 24.5 3 3.7 7.6 5.8 12.3 5.8H868c6.3 0 10.2-7 6.7-12.3C798 160.5 663.8 81.6 511.3 82 271.7 82.6 79.6 277.1 82 516.4 84.4 751.9 276.2 942 512.4 942c152.1 0 285.7-78.8 362.3-197.7 3.4-5.3-.4-12.3-6.7-12.3zm88.9-226.3L815 393.7c-5.3-4.2-13-.4-13 6.3v76H488c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h314v76c0 6.7 7.8 10.5 13 6.3l141.9-112a8 8 0 000-12.6z"></path></svg></span>
-                                                <span @click="logout" class="ant-dropdown-menu-title-content">{{ $root.translate('Logout') }}</span>
+                                                <span role="img" aria-label="logout"
+                                                      class="anticon anticon-logout ant-dropdown-menu-item-icon"><svg
+                                                    viewBox="64 64 896 896" focusable="false" data-icon="logout"
+                                                    width="1em" height="1em" fill="currentColor" aria-hidden="true"><path
+                                                    d="M868 732h-70.3c-4.8 0-9.3 2.1-12.3 5.8-7 8.5-14.5 16.7-22.4 24.5a353.84 353.84 0 01-112.7 75.9A352.8 352.8 0 01512.4 866c-47.9 0-94.3-9.4-137.9-27.8a353.84 353.84 0 01-112.7-75.9 353.28 353.28 0 01-76-112.5C167.3 606.2 158 559.9 158 512s9.4-94.2 27.8-137.8c17.8-42.1 43.4-80 76-112.5s70.5-58.1 112.7-75.9c43.6-18.4 90-27.8 137.9-27.8 47.9 0 94.3 9.3 137.9 27.8 42.2 17.8 80.1 43.4 112.7 75.9 7.9 7.9 15.3 16.1 22.4 24.5 3 3.7 7.6 5.8 12.3 5.8H868c6.3 0 10.2-7 6.7-12.3C798 160.5 663.8 81.6 511.3 82 271.7 82.6 79.6 277.1 82 516.4 84.4 751.9 276.2 942 512.4 942c152.1 0 285.7-78.8 362.3-197.7 3.4-5.3-.4-12.3-6.7-12.3zm88.9-226.3L815 393.7c-5.3-4.2-13-.4-13 6.3v76H488c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h314v76c0 6.7 7.8 10.5 13 6.3l141.9-112a8 8 0 000-12.6z"></path></svg></span>
+                                                <span @click="logout" class="ant-dropdown-menu-title-content">{{
+                                                        $root.translate('Logout')
+                                                    }}</span>
                                             </div>
                                         </a-menu-item>
                                     </a-menu>

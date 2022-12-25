@@ -25,9 +25,6 @@ const props = defineProps({
 const getSrc = computed({
     get(){
         const params = new URLSearchParams(props.data.url.split("?")[1])
-        console.log(params)
-        console.log(props.data.url)
-        console.log(params.get("v"))
         return `https://www.youtube.com/embed/${params.get("v")}`
     },
     set(){}

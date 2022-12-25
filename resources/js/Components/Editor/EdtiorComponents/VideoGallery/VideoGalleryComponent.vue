@@ -2,6 +2,8 @@
 import {computed, ref} from "vue";
 import VideoGalleryModal from "@/Components/Editor/EdtiorComponents/VideoGallery/VideoGalleryModal.vue";
 import VideoGalleryItem from "@/Components/Editor/EdtiorComponents/VideoGallery/VideoGalleryItem.vue";
+import {Swiper, SwiperSlide, useSwiper} from 'swiper/vue';
+import 'swiper/css';
 
 const props = defineProps({
     isEditable: {
@@ -29,6 +31,11 @@ function tryEditModal() {
     }
 }
 
+const getSrc = (video) => {
+    const params = new URLSearchParams(video.split("?")[1])
+    return `https://www.youtube.com/embed/${params.get("v")}`
+}
+
 const elemStyle = computed({
     get() {
         let style = props.theme.blockStyle
@@ -50,9 +57,22 @@ let showEditModal = ref(false)
     <div :class="!props.isEditable ? '' : 'EditorBlockListItem-block'" @click="tryEditModal">
         <video-gallery-modal v-model:faqs="data.faqs" :theme="theme" v-if="recursive" v-model="showEditModal"
                     :element-id="props.elementId"/>
-        <div class="Block preview mobile last" :style="elemStyle">
-            <div class="Faq" v-for="item in data.faqs" :style="elemStyle">
-                <video-gallery-item :is-editable="isEditable" :item="item" :elem-style="elemStyle"/>
+        <div class="w-100" :class="props.isEditable ? 'Block preview mobile' : ''">
+            <div class="w-100 px-3">
+                <swiper
+                    class="w-100"
+                    ref="themeSwiper"
+                    :slides-per-view="1"
+                    :spaceBetween="50"
+                    @swiper="() => {}">
+                    <swiper-slide
+                        v-for="video in props.data.faqs"
+                        class="d-flex flex-column justify-content-center cursor-drag w-100">
+                        <iframe style="width: 100%" :src="getSrc(video.url)">
+                        </iframe>
+                        <div class="caption text-center mt-3">{{ video.caption }}</div>
+                    </swiper-slide>
+                </swiper>
             </div>
         </div>
     </div>

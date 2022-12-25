@@ -37,7 +37,8 @@ let form = ref(useForm({
     tik_tok_pixel_id: props.page?.page_tracking?.tik_tok_pixel_id || '',
     title: props.page?.page_seo?.title || '',
     description: props.page?.page_seo?.description || '',
-    favicon: null
+    favicon: null,
+    hide_logo: !!props.page?.hide_logo || false
 }))
 
 let faviconModel = ref(null)
@@ -160,6 +161,11 @@ function destroyPage() {
                     :label="$root.translate('Page link')"
                     :info='$root.translate("Only letters, digits and \".-_\" symbols")'
                     :placeholder="$root.translate('xxxxxx')"/>
+                <div class="d-flex w-100 align-items-center mb-3">
+                    <a-switch :disabled="!$page.props.auth.user.is_pro" v-model:checked="form.hide_logo" class="me-3" />
+                    {{$root.translate('Hide QCD logo')}}
+                    <div class="ant-space-item ms-2"><span class="ant-tag ant-tag-has-color" style="background-color: rgb(0, 0, 0);">PRO</span></div>
+                </div>
             </a-tab-pane>
             <a-tab-pane key="2" :tab="$root.translate('Tracking')">
                 <div style="display: flex; padding-bottom: 20px;">

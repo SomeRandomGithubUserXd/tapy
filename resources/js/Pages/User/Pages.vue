@@ -4,11 +4,32 @@ import {PlusOutlined, RightOutlined} from "@ant-design/icons-vue";
 import {Inertia} from "@inertiajs/inertia";
 import CreatePageButton from "@/Components/Pages/CreatePageButton.vue";
 import {Link} from "@inertiajs/inertia-vue3";
+import {message} from "ant-design-vue";
+import {getCurrentInstance, ref} from "vue";
+import UpgradeToProModal from "@/Components/Misc/UpgradeToProModal.vue";
 
 const prettyUrl = import.meta.env.VITE_PRETTY_URL
 
+const props = defineProps({
+    canCreateMore: Boolean,
+    auth: Object
+})
+
+const self = getCurrentInstance();
+
+const showUpgradeModal = ref(false)
+
 function createPage() {
-    Inertia.post(route('pages.store'))
+    if(props.canCreateMore) {
+        Inertia.post(route('pages.store'))
+    } else {
+        message.error(
+            self.parent.ctx.translate('You cannot create more pages with the current plan'), 2
+        );
+        if (!props.auth.user.is_pro) {
+            showUpgradeModal.value = true
+        }
+    }
 }
 </script>
 
@@ -16,6 +37,7 @@ function createPage() {
     <Authenticated>
         <template #header>{{ $root.translate('Pages') }}</template>
         <div class="Content">
+            <upgrade-to-pro-modal v-model="showUpgradeModal"/>
             <div class="Content-inner" style="max-width: 900px;">
                 <div v-if="!$page.props.pages.length" class="ant-empty">
                     <div class="ant-empty-image">

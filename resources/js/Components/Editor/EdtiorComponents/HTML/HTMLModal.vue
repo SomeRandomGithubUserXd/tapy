@@ -5,6 +5,7 @@ import TapyInput from "@/Components/Common/TapyInput.vue";
 import {message} from "ant-design-vue";
 import EditModalFooter from "@/Components/Editor/EdtiorComponents/EditModalFooter.vue";
 import HTMLComponent from "@/Components/Editor/EdtiorComponents/HTML/HTMLComponent.vue";
+import UpgradeToProModal from "@/Components/Misc/UpgradeToProModal.vue";
 
 const self = getCurrentInstance()
 
@@ -34,7 +35,7 @@ const emit = defineEmits(['update:modelValue', 'dataChanged'])
 let editableData = ref(useForm(props.data))
 
 function submit() {
-    if(props.mode) {
+    if (props.mode) {
         editableData.value.transform((data) => ({
             ...data,
             alias: 'html'
@@ -65,6 +66,8 @@ function submit() {
         })
     }
 }
+
+const showUpgradeModal = ref(false)
 </script>
 
 <template>
@@ -73,8 +76,7 @@ function submit() {
         :class="modelValue ? 'animate__zoomIn' : 'animate__zoomOut'"
         :visible="modelValue"
         @ok="submit"
-        @change="emit('update:modelValue', false)"
-        >
+        @change="emit('update:modelValue', false)">
         <template #title>
             {{ $root.translate('Custom html') }}
         </template>
@@ -82,8 +84,21 @@ function submit() {
             <edit-modal-footer @needsClosing="emit('update:modelValue', false)" @onOK="submit"
                                :element-id="props.elementId" :mode="props.mode" :with-copy-action="true"/>
         </template>
+        <upgrade-to-pro-modal v-model="showUpgradeModal"/>
+        <div style="display: flex; margin: 10px 26px;" v-if="!$page.props.auth.user.is_pro">
+            <div data-show="true" class="ant-alert ant-alert-error ant-alert-no-icon" role="alert">
+                <div class="ant-alert-content">
+                    <div class="ant-alert-message">
+                        {{
+                            $root.translate("This block requires a PRO tariff plan and will not be shown on your page.")
+                        }}
+                        <a href="#" @click="showUpgradeModal = true">{{ $root.translate('Upgrade plan') }}</a></div>
+                    <div class="ant-alert-description"></div>
+                </div>
+            </div>
+        </div>
         <div>
-            <div class="EditBlockPreview" style="min-height: 200px;" :style="theme.containerStyle">
+            <div class="EditBlockPreview" :style="theme.containerStyle">
                 <div class="EditBlockPreview-inner">
                     <div class="BlocksWrapper preview single-block css-1e2ocyy">
                         <div class="BlocksWrapper-inner css-1mtpsyn" :style="theme.blockStyle">
@@ -114,6 +129,20 @@ function submit() {
                                     class="ant-input"
                                     v-model="editableData.html"></textarea>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="Hint ant-alert mb-3"><span role="img" aria-label="info-circle"
+                                                           class="anticon anticon-info-circle"><svg
+                        viewBox="64 64 896 896" focusable="false" data-icon="info-circle" width="1em" height="1em"
+                        fill="currentColor" aria-hidden="true"><path
+                        d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"></path><path
+                        d="M464 336a48 48 0 1096 0 48 48 0 10-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z"></path></svg></span>
+                        <div class="ant-alert-content">
+                            <div class="ant-alert-message">
+                                {{
+                                    $root.translate('Please note that the JS code will be ignored in the editor, but it will work on your Tapy page.')
+                                }}
                             </div>
                         </div>
                     </div>

@@ -9,6 +9,11 @@ use App\Models\Page\Page;
 use App\Models\Page\PageSeo;
 use App\Models\Page\Visit;
 use App\Models\Theme;
+use App\Services\Chart\AbstractStats;
+use App\Services\Chart\DayStats;
+use App\Services\Chart\MonthStats;
+use App\Services\Chart\WeekStats;
+use App\Services\Chart\YearStats;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -16,14 +21,16 @@ class PageController extends Controller
 {
     public function index()
     {
-        return inertia('User/Pages', ['pages' => auth()->user()->pages]);
+        $user = auth()->user();
+        return inertia('User/Pages', ['pages' => $user->pages, 'canCreateMore' => $user->canCreateMorePages()]);
     }
 
     public function show(Page $page)
     {
         Visit::create(['page_id' => $page->id, 'source' => $_SERVER['HTTP_REFERER'] ?? "Direct"]);
         return inertia('CreatedLanding', [
-            'page' => $page
+            'page' => $page,
+            'is_pro' => $page->user->is_pro
         ]);
     }
 
@@ -37,14 +44,35 @@ class PageController extends Controller
 
     public function store()
     {
+        abort_unless(auth()->user()->canCreateMorePages(), 401);
         $page = auth()->user()->pages()->create(['uuid' => \Str::uuid(), 'link' => \Str::random(6)]);
         return Inertia::location(route('pages.edit', $page->uuid));
     }
 
-    public function edit(Page $page)
+    public function edit(Page $page, Request $request)
     {
+        $stats = new DayStats($page);
+        if (auth()->user()->is_pro) {
+            switch ($request->period) {
+                case AbstractStats::DAY_STATS:
+                    break;
+                case AbstractStats::WEEK_STATS:
+                    $stats = new WeekStats($page);
+                    break;
+                case AbstractStats::MONTH_STATS:
+                    $stats = new MonthStats($page);
+                    break;
+                case AbstractStats::YEAR_STATS:
+                    $stats = new YearStats($page);
+                    break;
+            }
+        }
+        $counts = $stats->getStats();
         return inertia('User/Editor', [
-            'page' => $page->append(['visits_grouped', 'link_clicks_grouped', 'chart']),
+            'page' => $page,
+            'chart' => $stats->getChart(),
+            'visits' => $counts[0],
+            'link_clicks' => $counts[1],
             'themes' => Theme::orderBy('key')->get(),
             'user_products' => auth()->user()->products
         ]);
@@ -52,7 +80,7 @@ class PageController extends Controller
 
     public function updateSettings(SettingsRequest $request, Page $page)
     {
-        $page->update($request->only('name', 'link'));
+        $page->update($request->only('name', 'link', 'hide_logo'));
         $trackingIds = ['facebook_pixel_id', 'google_analytics_tracking_id', 'yandex_metrika_id', 'tik_tok_pixel_id'];
         $page->pageTracking->update($request->only(...$trackingIds));
         $seo = $page->pageSeo;

@@ -10,6 +10,7 @@ class SettingsRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
+            'hide_logo' => ['required', 'boolean'],
             'link' => ['required', 'string'],
             'facebook_pixel_id' => ['nullable'],
             'google_analytics_tracking_id' => ['nullable'],

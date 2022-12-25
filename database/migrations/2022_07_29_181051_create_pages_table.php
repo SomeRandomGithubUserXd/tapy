@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->uuid();
             $table->foreignIdFor(User::class);
             $table->string('name')->default('New page');
+            $table->boolean('hide_logo')->default(false);
             $table->string('link')->unique();
             $table->timestamps();
         });

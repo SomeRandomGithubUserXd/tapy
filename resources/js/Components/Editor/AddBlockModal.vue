@@ -191,7 +191,7 @@ watch(socialButtonsData, value => {
             :theme="theme"
             :recursive="false"
             :page-uuid="props.pageUuid"
-            :data='{"html":""}'
+            :data='{"html":"Hello <b>world</b>"}'
             v-model="modals.html"
             :mode="0"
             @dataChanged="emit('update:modelValue', false)"
@@ -529,12 +529,14 @@ watch(socialButtonsData, value => {
                     <div class="BlockSelectorModal-title">{{ $root.translate('Add to contacts') }}</div>
                 </div>
             </div>
-            <div
-                @click="addElement('html')"
-                class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
-                style="padding-left: 8px; padding-right: 8px;">
+            <div class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
+                 @click="addElement('html')"
+                 style="padding-left: 8px; padding-right: 8px;">
                 <div class="BlockSelectorModal-block">
-                    <div class="BlockSelectorModal-plan"></div>
+                    <div class="BlockSelectorModal-plan"><span class="ant-tag ant-tag-has-color"
+                                                               style="background-color: rgb(0, 0, 0);"
+                                                               ant-click-animating-without-extra-node="false">PRO</span>
+                    </div>
                     <div class="BlockSelectorModal-icon">
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path

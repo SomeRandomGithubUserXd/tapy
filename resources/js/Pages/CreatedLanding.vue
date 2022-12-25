@@ -13,6 +13,7 @@ import VideoComponent from "@/Components/Editor/EdtiorComponents/Image/ImageComp
 import SeparatorComponent from "@/Components/Editor/EdtiorComponents/Separator/SeparatorComponent.vue";
 import ImageGallery from "@/Components/Editor/EdtiorComponents/ImageGallery/ImageGalleryComponent.vue";
 import VideoGallery from "@/Components/Editor/EdtiorComponents/VideoGallery/VideoGalleryComponent.vue"
+import LogoBlack from "@/Components/Misc/LogoBlack.vue";
 
 const components = {
     profile: Profile,
@@ -31,20 +32,41 @@ const components = {
     video_gallery: VideoGallery,
 }
 
+const pro_components = ['html']
+
+const allowedElements = (elements, isPro) => {
+    let allowed = elements
+    if (!isPro) {
+        allowed = []
+        for (const element of elements) {
+            if(!pro_components.includes(element.component_alias)) {
+                allowed.push(element)
+            }
+        }
+    }
+    return allowed
+}
+const prettyUrl = import.meta.env.VITE_PRETTY_URL
+const appUrl = import.meta.env.VITE_APP_URL
+
 </script>
 
 <template>
-    <div style="height: 100vh;" class="BlocksWrapper preview mobile" :style="$page.props.page.theme[0].containerStyle">
+    <div style="min-height: 100vh;" class="BlocksWrapper preview mobile py-5"
+         :style="$page.props.page.theme[0].containerStyle">
         <div class="BlocksWrapper-inner" :style="$page.props.page.theme[0].blockStyle">
             <component
                 class="block-production"
                 :is-editable="false"
-                v-for="element in $page.props.page.page_elements"
+                v-for="element in allowedElements($page.props.page.page_elements, $page.props.is_pro)"
                 :element-id="element.id"
                 :data="element.props"
                 :theme="$page.props.page.theme[0]"
                 :recursive="false"
                 :is="components[element.component_alias]"/>
+            <div class="d-flex justify-content-center w-100 my-4" v-if="!$page.props.page.hide_logo && $page.props.is_pro">
+                Made on <logo-black style="width: 10%;"/> <a :href="appUrl">{{prettyUrl}}</a>
+            </div>
         </div>
     </div>
 </template>

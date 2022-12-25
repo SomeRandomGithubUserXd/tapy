@@ -1,29 +1,23 @@
 <script setup>
 
-import {getCurrentInstance, onMounted, ref} from "vue";
+import {getCurrentInstance, onMounted, ref, watch} from "vue";
 import 'cropperjs/dist/cropper.css';
-import { Line } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement} from 'chart.js'
+import {Line} from 'vue-chartjs'
+import {
+    Chart as ChartJS,
+    Title,
+    Tooltip,
+    Legend,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement
+} from 'chart.js'
+import {Inertia} from "@inertiajs/inertia";
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement)
 
-console.log(JSON.stringify(props.page.chart))
-
-const chartData = {
-    labels: ['January', 'February', 'March'],
-    datasets: [
-        {
-            label: 'Visitors',
-            backgroundColor: '#8B5DCF',
-            data: [1, 2, 3]
-        },
-        {
-            label: 'Views',
-            backgroundColor: '#E5408A',
-            data: [1, 1, 4]
-        },
-    ]
-}
 const chartOptions = {
     responsive: true,
     options: {
@@ -37,7 +31,7 @@ const chartOptions = {
             yAxes: [{
                 ticks: {
                     beginAtZero: true,
-                    userCallback: function(label, index, labels) {
+                    userCallback: function (label, index, labels) {
                         if (Math.floor(label) === label) {
                             return label;
                         }
@@ -51,6 +45,9 @@ const chartOptions = {
 
 const props = defineProps({
     page: Object,
+    chart_stuff: Object,
+    visits: Object,
+    link_clicks: Object,
     modelValue: Boolean,
 })
 
@@ -76,12 +73,11 @@ const columns = [
 const compileLinkClicks = () => {
     let i = 0
     const newArr = []
-    for (const key in props.page.link_clicks_grouped)
-    {
+    for (const key in props.link_clicks) {
         newArr.push({
             key: i,
             link: key,
-            clicks: props.page.link_clicks_grouped[key]
+            clicks: props.link_clicks[key]
         })
         i++
     }
@@ -90,18 +86,16 @@ const compileLinkClicks = () => {
 
 compileLinkClicks()
 
-
 const dataSource1 = ref([]);
 
 const compileVisits = () => {
     let i = 0
     const newArr = []
-    for (const key in props.page.visits_grouped)
-    {
+    for (const key in props.visits) {
         newArr.push({
             key: i,
-            from: key,
-            visits: props.page.visits_grouped[key]
+            from: self.parent.ctx.translate(key),
+            visits: props.visits[key]
         })
         i++
     }
@@ -122,6 +116,23 @@ const columns1 = [
         key: 'visits',
     }
 ];
+
+const period = ref(Number((new URL(window.location)).searchParams.get('period')));
+
+watch(period, value => {
+    const url = new URL(window.location);
+    url.searchParams.set('period', value);
+    window.history.pushState({}, '', url);
+    Inertia.reload()
+})
+
+watch(() => props.visits, () => {
+    compileVisits()
+})
+
+watch(() => props.link_clicks, () => {
+    compileLinkClicks()
+})
 </script>
 
 <template>
@@ -134,11 +145,66 @@ const columns1 = [
         <template #title>
             <div>{{ $root.translate('Page analytics') }}</div>
         </template>
-        <div class="py-5 d-flex flex-column">
+        <div class="d-flex flex-column pb-4">
+            <div style="display: flex; justify-content: center; margin-bottom: 20px;margin-top: 20px">
+                <div class="ant-radio-group ant-radio-group-outline ant-radio-group-small">
+                    <label
+                        @click="period = 0"
+                        class="ant-radio-button-wrapper"
+                        :class="period === 0 ? 'ant-radio-button-wrapper-checked' : ''">
+                    <span class="ant-radio-button" :class="period === 0 ? 'ant-radio-button-checked' : ''">
+                        <span class="ant-radio-button-inner">
+
+                        </span>
+                    </span>
+                        <span>
+                        {{ $root.translate('Today') }}
+                        </span>
+                    </label>
+                    <label
+                        @click="period = 1"
+                        class="ant-radio-button-wrapper"
+                        :class="$page.props.auth.user.is_pro ? period === 1 ? 'ant-radio-button-wrapper-checked' : '' : 'ant-radio-button-wrapper-disabled'">
+                    <span class="ant-radio-button" :class="$page.props.auth.user.is_pro ? period === 1 ? 'ant-radio-button-checked' : '' : 'ant-radio-button-disabled'">
+                        <span class="ant-radio-button-inner">
+                        </span>
+                    </span>
+                        <span class="d-flex">
+                            {{ $root.translate('Week') }}
+                            <div v-if="!$page.props.auth.user.is_pro" class="ant-space-item ms-2"><span class="ant-tag ant-tag-has-color m-0" style="background-color: rgb(0, 0, 0);">PRO</span></div>
+                        </span>
+                    </label>
+                    <label
+                        @click="period = 2"
+                        class="ant-radio-button-wrapper"
+                        :class="$page.props.auth.user.is_pro ? period === 2 ? 'ant-radio-button-wrapper-checked' : '' : 'ant-radio-button-wrapper-disabled'">
+                    <span class="ant-radio-button" :class="$page.props.auth.user.is_pro ? period === 2 ? 'ant-radio-button-checked' : '' : 'ant-radio-button-disabled'">
+                        <span class="ant-radio-button-inner">
+                        </span>
+                    </span>
+                        <span class="d-flex">
+                            {{ $root.translate('Month') }}
+                            <div v-if="!$page.props.auth.user.is_pro" class="ant-space-item ms-2"><span class="ant-tag ant-tag-has-color m-0" style="background-color: rgb(0, 0, 0);">PRO</span></div>
+                        </span>
+                    </label>
+                    <label
+                        @click="period = 3"
+                        class="ant-radio-button-wrapper"
+                        :class="$page.props.auth.user.is_pro ? period === 3 ? 'ant-radio-button-wrapper-checked' : '' : 'ant-radio-button-wrapper-disabled'">
+                    <span class="ant-radio-button" :class="$page.props.auth.user.is_pro ? period === 3 ? 'ant-radio-button-checked' : '' : 'ant-radio-button-disabled'">
+                            <span class="ant-radio-button-inner"></span>
+                        </span>
+                        <span class="d-flex">
+                            {{ $root.translate('Year') }}
+                            <div v-if="!$page.props.auth.user.is_pro" class="ant-space-item ms-2"><span class="ant-tag ant-tag-has-color m-0" style="background-color: rgb(0, 0, 0);">PRO</span></div>
+                        </span>
+                    </label>
+                </div>
+            </div>
             <Line
                 ref="chart"
                 :chart-options="chartOptions"
-                :chart-data="props.page.chart"
+                :chart-data="chart_stuff"
                 :chart-id="1"
                 :dataset-id-key="1"
                 :width="200"
