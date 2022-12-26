@@ -213,7 +213,8 @@
         "Domains": "Домены",
         "Domain": "Домен",
         "Edit domain": "Редактирование домена",
-        "Add domain": "Добавить домена",
+        "Add domain": "Добавить домен",
+        "Sent": "Отправлено",
         "If you don't have your own domain, you can register it on godaddy.com, namecheap.com, nic.ua, reg.ru, or any other registrar.\nThere are 2 ways to connect a domain:\n\nMethod 1: In your domain's DNS settings, add a CNAME record:\n- name: @ (or subdomain name if you want to connect a subdomain)\n- alias: domain.tapy.me. (dot at the end is required)\n\nMethod 2: In your domain's DNS settings, add an A record:\n- name: @ (or subdomain name if you want to connect a subdomain)\n- host addresses: 159.253.23.182\n\nPlease note that the domain will work only after a few hours.": "<p>Если у вас нет своего домена, вы можете зарегистрировать его\nна godaddy.com, namecheap.com, nic.ua, reg.ru, либо любом другом регистраторе<br>Для\nподключения домена есть 2 способа:</p>\n<p>Способ 1: В настройках DNS вашего домена, добавьте CNAME запись:<br>- имя: <b>@</b> (или\nназвание поддомена, если хотите подключить поддомен)<br>- алиас: <b>domain.tapy.me.</b>\n(точка в конце обязательна)</p>\n<p>Способ 2: В настройках DNS вашего домена, добавьте A запись:<br>- имя: <b>@</b> (или\nназвание поддомена, если хотите подключить поддомен)<br>- адреса хоста: <b>159.253.23.182</b>\n</p>\n<p>Обратите внимание, что домен заработает только через несколько часов.</p>"
     }
 ]

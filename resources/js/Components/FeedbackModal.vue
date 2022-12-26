@@ -1,5 +1,6 @@
 <script setup>
-import {ref} from "vue";
+import {getCurrentInstance, ref} from "vue";
+import {message} from "ant-design-vue";
 
 const props = defineProps({
     modelValue: Boolean,
@@ -9,8 +10,13 @@ const content = ref('')
 
 const emit = defineEmits(['update:modelValue'])
 
-const submit = () => {
+const self = getCurrentInstance()
 
+const submit = () => {
+    message.success(
+        self.parent.ctx.translate('Sent'), 2
+    );
+    emit('update:modelValue', false)
 }
 </script>
 

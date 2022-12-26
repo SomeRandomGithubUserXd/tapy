@@ -64,7 +64,7 @@ const appUrl = import.meta.env.VITE_APP_URL
                 :theme="$page.props.page.theme[0]"
                 :recursive="false"
                 :is="components[element.component_alias]"/>
-            <div class="d-flex justify-content-center w-100 my-4" v-if="!$page.props.page.hide_logo && $page.props.is_pro">
+            <div class="d-flex justify-content-center w-100 my-4" v-if="!$page.props.page.hide_logo">
                 Made on <logo-black style="width: 10%;"/> <a :href="appUrl">{{prettyUrl}}</a>
             </div>
         </div>

@@ -62,7 +62,7 @@ const setRadio = (value) => {
             </div>
         </div>
         <div class="d-flex justify-content-center">
-            <div class="w-50 mt-4">
+            <div class="w-50 md:w-100 mt-4">
                 <one-month v-if="selectedTab === 'months_1'"/>
                 <twelve-month v-else/>
             </div>

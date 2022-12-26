@@ -203,6 +203,7 @@ watch(() => props.link_clicks, () => {
             </div>
             <Line
                 ref="chart"
+                class="overflow-scroll"
                 :chart-options="chartOptions"
                 :chart-data="chart_stuff"
                 :chart-id="1"

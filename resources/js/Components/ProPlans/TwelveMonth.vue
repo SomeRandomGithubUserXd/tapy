@@ -12,11 +12,11 @@
                                                                   style="background-color: rgb(0, 0, 0); font-size: 20px; padding: 5px 10px;">PRO</span>
                     </div>
                     <div class="SelectPlanModal-plan-price-month">
-                        <div>$2,49</div>
+                        <div>175 руб.</div>
                         <div class="SelectPlanModal-plan-price-month-caption">/ {{$root.translate('month')}}</div>
                     </div>
                 </div>
-                <div class="SelectPlanModal-plan-price"><b>$29,88</b> {{$root.translate('per month')}}</div>
+                <div class="SelectPlanModal-plan-price"><b>2100 руб.</b> {{$root.translate('per month')}}</div>
                 <div class="SelectPlanModal-features">
                     <div class="SelectPlanModal-feature"><span role="img" aria-label="check-circle"
                                                                class="anticon anticon-check-circle"><svg
