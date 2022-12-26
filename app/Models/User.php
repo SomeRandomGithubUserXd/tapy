@@ -44,6 +44,11 @@ class User extends Authenticatable
         return $this->hasMany(Product::class);
     }
 
+    public function domains(): HasMany
+    {
+        return $this->hasMany(UserDomain::class);
+    }
+
     public function getIsProAttribute()
     {
         return $this->subscribed_until && $this->subscribed_until->greaterThanOrEqualTo(Carbon::now());

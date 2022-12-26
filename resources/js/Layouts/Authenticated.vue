@@ -4,7 +4,7 @@ import LogoInstagram from "@/Components/Misc/LogoInstagram.vue";
 import LogoTelegram from "@/Components/Misc/LogoTelegram.vue";
 import LocaleDropdown from "@/Components/LocaleDropdown.vue";
 import {computed, getCurrentInstance, reactive, ref} from "vue";
-import {ShoppingCartOutlined, FileTextOutlined} from '@ant-design/icons-vue';
+import {ShoppingCartOutlined, FileTextOutlined, SettingOutlined} from '@ant-design/icons-vue';
 import {Link} from "@inertiajs/inertia-vue3";
 import {message} from "ant-design-vue";
 import {MenuOutlined} from "@ant-design/icons-vue";
@@ -26,6 +26,12 @@ const menuItems = reactive([
         icon: ShoppingCartOutlined,
         href: route('products.index'),
         selected: route().current('products.index'),
+    },
+    {
+        name: 'Settings',
+        icon: SettingOutlined,
+        href: route('settings.index'),
+        selected: route().current('settings.index'),
     }
 ])
 

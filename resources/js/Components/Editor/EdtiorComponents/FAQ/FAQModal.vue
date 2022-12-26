@@ -189,6 +189,5 @@ let drag = ref(false)
                 </div>
             </a-tab-pane>
         </a-tabs>
-
     </a-modal>
 </template>

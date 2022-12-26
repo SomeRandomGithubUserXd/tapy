@@ -4,6 +4,7 @@ use App\Http\Controllers\API\CurrencyController;
 use App\Http\Controllers\User\Page\ElementController;
 use App\Http\Controllers\User\PageController;
 use App\Http\Controllers\User\ProductController;
+use App\Http\Controllers\User\SettingsController;
 use App\Http\Controllers\User\UserController;
 use App\Models\Page\Page;
 use App\Models\Page\PageElement;
@@ -70,6 +71,11 @@ Route::group(['domain' => $host], function () {
                 });
             });
             Route::resource('products', ProductController::class);
+            Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
+                Route::get('/', [SettingsController::class, 'index'])->name('index');
+                Route::post('/add_domain', [SettingsController::class, 'addDomain'])->name('add-domain');
+                Route::delete('/delete_domain/{domain}', [SettingsController::class, 'deleteDomain'])->name('delete-domain');
+            });
         });
         Route::get('/user_products', [ProductController::class, 'getForPage'])->name('products.get_for_page');
         Route::get('/send_feedback', [UserController::class, 'sendFeedback'])->name('user.send-feedback');

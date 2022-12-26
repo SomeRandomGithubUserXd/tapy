@@ -20,16 +20,16 @@ class YearStats extends AbstractStats
 
     protected function getIterationStart(): int
     {
-        return (int)Carbon::now()->startOfYear()->format('d');
+        return (int)Carbon::now()->startOfYear()->format('m');
     }
 
     protected function getIterationEnd(): int
     {
-        return (int)Carbon::now()->format('d');
+        return (int)Carbon::now()->format('m');
     }
 
     protected function getLabelOnIteration(int $i): string
     {
-        return Carbon::createFromFormat('m/d/Y', $i . '/01/' . Carbon::now()->year)->format('M, y');
+        return Carbon::createFromFormat('m/d/Y', $i . '/01/' . Carbon::now()->year)->format('Y, M');
     }
 }
