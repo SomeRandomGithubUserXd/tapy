@@ -25,8 +25,16 @@ class PageController extends Controller
         return inertia('User/Pages', ['pages' => $user->pages, 'canCreateMore' => $user->canCreateMorePages()]);
     }
 
-    public function show(Page $page)
+    public function show($url, Request $request)
     {
+        $page = Page::where(['uuid' => $url])->orWhere(['link' => $url])->firstOrFail();
+        if (!$page->user_id) {
+            if (!auth()->check()) {
+                return redirect()->route('sign-up')->with('flashContent', $page->uuid);
+            }
+            $page->update(['user_id' => auth()->id()]);
+            return $this->edit($page, $request);
+        }
         Visit::create(['page_id' => $page->id, 'source' => $_SERVER['HTTP_REFERER'] ?? "Direct"]);
         return inertia('CreatedLanding', [
             'page' => $page,
@@ -73,7 +81,7 @@ class PageController extends Controller
             'chart' => $stats->getChart(),
             'visits' => $counts[0],
             'link_clicks' => $counts[1],
-            'themes' => Theme::orderBy('key')->get(),
+            'themes' => Theme::where('user_id', auth()->id())->orWhere(['user_id' => null])->orderBy('key')->get(),
             'user_products' => auth()->user()->products
         ]);
     }

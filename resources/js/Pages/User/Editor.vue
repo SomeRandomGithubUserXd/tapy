@@ -1,4 +1,6 @@
 <script setup>
+import Vue3ColorPicker from "vue3-colorpicker";
+import "vue3-colorpicker/style.css";
 import Authenticated from "@/Layouts/Authenticated.vue";
 import SettingsModal from "@/Components/Editor/SettingsModal.vue";
 import {computed, getCurrentInstance, ref, watch} from "vue";
@@ -29,6 +31,8 @@ import VideoComponent from "@/Components/Editor/EdtiorComponents/Video/VideoComp
 import SeparatorComponent from "@/Components/Editor/EdtiorComponents/Separator/SeparatorComponent.vue"
 import ImageGallery from "@/Components/Editor/EdtiorComponents/ImageGallery/ImageGalleryComponent.vue"
 import VideoGallery from "@/Components/Editor/EdtiorComponents/VideoGallery/VideoGalleryComponent.vue"
+import SingleImageUploader from "@/Components/Images/SingleImageUploader.vue";
+import {usePage} from "@inertiajs/inertia-vue3";
 
 const components = {
     profile: Profile,
@@ -96,6 +100,8 @@ function triggerThemePicker() {
     showThemePicker.value = !showThemePicker.value
 }
 
+const refreshStyles = ref(0)
+
 const saveTheme = () => {
     Inertia.put(route('pages.update.theme', props.page.uuid), {theme_key: currentThemeKey.value}, {
         onSuccess: () => {
@@ -110,6 +116,9 @@ const saveTheme = () => {
 
 const themeStyles = computed({
     get() {
+        if (showThemeConstructor.value) {
+            return customTheme.value
+        }
         if (showThemePicker.value) {
             return props.themes[currentThemeKey.value]
         }
@@ -159,6 +168,121 @@ const showSettingsThroughShare = () => {
     settingsModal.value = true
 }
 
+const showThemeConstructor = ref(false)
+
+const themeConstructor = () => {
+    showThemeConstructor.value = true
+    showThemePicker.value = false
+}
+
+function onUploadPic(val) {
+    customThemeImage.value = val
+}
+
+function removePic() {
+    customThemeImage.value = null
+}
+
+const customThemeProps = ref({
+    background_color_type: '',
+    background_image: null,
+    background_type: 'cover',
+    background_color: '',
+    background_color_gr1: '',
+    background_color_gr2: '',
+})
+
+const getStyleObject = (str) => {
+    const regex = /([\w-]*)\s*:\s*([^;]*)/g;
+    let match, properties = {};
+    while (match = regex.exec(str)) properties[match[1]] = match[2].trim();
+    return properties
+}
+
+const applyOverlayStyle = (style) => {
+    customTheme.value.overlayStyle = Object.entries(style).map(([k, v]) => `${k.replace('_', '-')}:${v}`).join(';')
+}
+
+const applyContainerStyle = (style) => {
+    customTheme.value.containerStyle = Object.entries(style).map(([k, v]) => `${k.replace('_', '-')}:${v}`).join(';')
+}
+
+const hexToRgb = hex =>
+    hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
+        , (m, r, g, b) => '#' + r + r + g + g + b + b)
+        .substring(1).match(/.{2}/g)
+        .map(x => parseInt(x, 16))
+
+const doThemeStuff = (value) => {
+    const overlayStyle = getStyleObject(customTheme.value.overlayStyle)
+    const containerStyle = getStyleObject(customTheme.value.containerStyle)
+
+    overlayStyle.background_size = value.background_type
+    let color = '';
+    if (value.background_color_type === 'plain') {
+        containerStyle.background_image = 'url()'
+        color = hexToRgb(value.background_color || '#000000')
+        color = `rgb(${color[0] || 0},${color[1] || 0},${color[2] || 0})`
+        if (customThemeImage.value) {
+            color = color
+                .replace('rgb', 'rgba')
+                .replace(')', ',0.5)')
+        }
+        containerStyle.background_color = color
+    } else if (value.background_color_type === 'gradient') {
+        containerStyle.background_color = 'rgba(0,0,0,0)'
+        const col1 = hexToRgb(value.background_color_gr1 || '#000000')
+        const col2 = hexToRgb(value.background_color_gr2 || '#000000')
+        color = `linear-gradient(rgba(${col1[0] || 0},${col1[1] || 0},${col1[2] || 0}, 0.53), rgba(${col2[0] || 0},${col2[1] || 0},${col2[2] || 0}, 0.53));`
+        containerStyle.background_image = color
+    } else if(value.background_color_type === 'no') {
+        containerStyle.background_color = 'rgba(0,0,0,0)'
+        containerStyle.background_image = 'url()'
+    }
+
+    applyOverlayStyle(overlayStyle)
+    applyContainerStyle(containerStyle)
+}
+
+watch(customThemeProps, (value, previous) => {
+    doThemeStuff(value)
+}, {deep: true})
+
+const customThemeImage = ref(null)
+
+watch(customThemeImage, (value, previous) => {
+    const overlayStyle = getStyleObject(customTheme.value.overlayStyle)
+    const containerStyle = getStyleObject(customTheme.value.containerStyle)
+    if (value) {
+        Inertia.post(route('upload-temp-image'), {
+            file: value
+        }, {
+            onSuccess: () => {
+                overlayStyle.background_image = `url(${usePage().props.value.flash})`
+                applyOverlayStyle(overlayStyle)
+            }
+        })
+    } else {
+        containerStyle.background_color = ''
+        applyContainerStyle(containerStyle)
+        overlayStyle.background_image = 'url()'
+        applyOverlayStyle(overlayStyle)
+    }
+    doThemeStuff(customThemeProps.value)
+}, {deep: true})
+
+
+const customTheme = ref({
+    overlayStyle: 'background-image: url();background-size:cover;',
+    containerStyle: 'background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial; background-color: ;',
+    blockStyle: 'background: rgb(255, 255, 255);border-radius: 16px;color: black;',
+    elementStyle: 'background: rgb(24, 26, 34); opacity: 0.9; border: 2px none; border-radius: 10px;color: white !important'
+})
+
+watch(customTheme, value => {
+    // console.log(value)
+}, {deep: true})
+
 </script>
 
 <template>
@@ -189,6 +313,94 @@ const showSettingsThroughShare = () => {
             v-model="showLinkModal"
             :mode="0"
         />
+        <div
+            :class="showThemeConstructor ? 'animate__zoomIn' : 'animate__zoomOut'"
+            :hidden="!showThemeConstructor"
+            class="d-flex flex-column"
+            style="position:fixed;right: 0;top: 0;width: 25vw;height: 100vh;background: white;box-shadow: 0 0 10px rgba(0,0,0,0.5);z-index: 9999">
+            <div style="height: 5%" class="flex items-center justify-between p-3 bg-white align-items-center">
+                <div style="font-size: 1.125rem">{{ $root.translate('Theme editor') }}</div>
+                <div style="margin-left: auto" class="ml-auto flex gap-x-1">
+                    <div class="d-flex justify-content-center align-items-center" @click="showThemeConstructor = false"><span
+                        role="img"
+                        aria-label="close"
+                        class="anticon anticon-close"><svg
+                        viewBox="64 64 896 896" focusable="false" data-icon="close" width="1em" height="1em"
+                        fill="currentColor" aria-hidden="true"><path
+                        d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"></path></svg></span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-1 overflow-y-auto bg-slate-100 px-3 py-2" style="background: rgb(241 245 249);height: 90%">
+                <div data-show="true" class="ant-alert ant-alert-error ant-alert-no-icon mb-2" role="alert">
+                    <div class="ant-alert-content">
+                        <div class="ant-alert-message">
+                            {{ $root.translate('Own themes are available only in the PRO plan.') }}
+                        </div>
+                        <div class="ant-alert-description"></div>
+                    </div>
+                </div>
+                <div class="d-flex flex-column">
+                    <a-collapse>
+                        <a-collapse-panel key="1" :header="$root.translate('Background')">
+                            <single-image-uploader
+                                :rounded-preview="true"
+                                @onUpload="onUploadPic"
+                                @onRemove="removePic"
+                                v-model="customThemeImage"
+                                :src="null">
+                                <template #label>
+                                    <label>{{ $root.translate('Background image') }}</label>
+                                </template>
+                            </single-image-uploader>
+                            <div v-if="customThemeImage"
+                                 class="d-flex flex-column ant-row ant-form-item" style="row-gap: 0px;margin: 0">
+                                <div class="ant-col ant-form-item-label d-flex"><label for="update-page_backgroundSize"
+                                                                                       class="" title="Background type">{{
+                                        $root.translate('Background type')
+                                    }}</label></div>
+                                <a-radio-group size="small" v-model:value="customThemeProps.background_type"
+                                               style="margin-bottom: 20px;">
+                                    <a-radio-button value="cover">{{ $root.translate('Stretch') }}</a-radio-button>
+                                    <a-radio-button value="auto">{{ $root.translate('Repeat') }}</a-radio-button>
+                                </a-radio-group>
+                            </div>
+                            <div class="d-flex flex-column ant-row ant-form-item" style="row-gap: 0px;margin: 0">
+                                <div class="ant-col ant-form-item-label d-flex"><label for="update-page_backgroundSize"
+                                                                                       class="" title="Background type">{{
+                                        $root.translate('Background color')
+                                    }}</label></div>
+                                <a-radio-group size="small" v-model:value="customThemeProps.background_color_type"
+                                               style="margin-bottom: 20px;">
+                                    <a-radio-button value="no">{{ $root.translate('No color') }}</a-radio-button>
+                                    <a-radio-button value="plain">{{ $root.translate('Color') }}</a-radio-button>
+                                    <a-radio-button value="gradient">{{ $root.translate('Gradient') }}</a-radio-button>
+                                </a-radio-group>
+                                <div v-if="customThemeProps.background_color_type === 'plain'">
+                                    <input type="color" v-model="customThemeProps.background_color">
+                                </div>
+                                <div v-if="customThemeProps.background_color_type === 'gradient'">
+                                    <input type="color" v-model="customThemeProps.background_color_gr1">
+                                    <input type="color" v-model="customThemeProps.background_color_gr2">
+                                </div>
+                            </div>
+                        </a-collapse-panel>
+                        <a-collapse-panel key="2" :header="$root.translate('Wrapper')">
+                            <p>{{ 2 }}</p>
+                        </a-collapse-panel>
+                        <a-collapse-panel key="3" :header="$root.translate('Text')">
+                            <p>{{ 3 }}</p>
+                        </a-collapse-panel>
+                        <a-collapse-panel key="4" :header="$root.translate('Links')">
+                            <p>{{ 4 }}</p>
+                        </a-collapse-panel>
+                    </a-collapse>
+                </div>
+            </div>
+            <div style="height: 5%" class="flex items-center justify-between p-3 bg-white">
+                <div style="font-size: 1.125rem">{{ $root.translate('Theme editor') }}</div>
+            </div>
+        </div>
         <div class="Content EditorPage-content">
             <div class="Content-inner" style="max-width: 900px;">
                 <div style="display: block; margin-bottom: 20px;">
@@ -257,6 +469,11 @@ const showSettingsThroughShare = () => {
                             <div class="ant-collapse-content ant-collapse-content-active" style="">
                                 <div class="ant-collapse-content-box">
                                     <div class="ThemePicker-wrapper">
+                                        <button @click="themeConstructor"
+                                                style="position: absolute;left: 15px;top: 15px"
+                                                class="ant-btn ant-btn-primary ant-btn-sm">
+                                            {{ $root.translate('Add theme') }}
+                                        </button>
                                         <button @click="triggerThemePicker" class="ThemePicker-close"><span role="img"
                                                                                                             aria-label="close"
                                                                                                             class="anticon anticon-close"><svg
@@ -298,56 +515,59 @@ const showSettingsThroughShare = () => {
                         </div>
                     </div>
                 </slide-up-down>
-                <div class="BlocksWrapper preview mobile" :style="themeStyles.containerStyle">
-                    <div class="BlocksWrapper-inner" :style="themeStyles.blockStyle">
-                        <draggable
-                            delay="100"
-                            delay-on-touch-only
-                            @change="reorderElements"
-                            v-model="elements"
-                            tag="ul"
-                            item-key="order_column"
-                            v-bind="dragOptions"
-                            :component-data="{tag: 'ul',type: 'transition',name: !drag ? 'flip-list' : null,class: 'ul-flip-list'}"
-                            @start="drag = true"
-                            @end="drag = false"
-                        >
-                            <template #item="{element}">
-                                <li class="list-group-item"
-                                    style="position: relative; transition: null 0s ease 0s, visibility 0s ease 0s; z-index: 1; opacity: 1;margin-bottom: 10px;">
-                                    <div class="EditorBlockListItem"
-                                         :class="pro_components.includes(element.component_alias) && !$page.props.auth.user.is_pro ? 'error' : ''">
-                                        <div
-                                            v-if="pro_components.includes(element.component_alias) && !$page.props.auth.user.is_pro"
-                                            class="EditorBlockListItem-error"><span class="ant-tag ant-tag-error"
-                                                                                    style="margin-right: 0px;"
-                                                                                    ant-click-animating-without-extra-node="false">PRO</span>
+                <div class="w-100" :style="themeStyles.overlayStyle">
+                    <div class="BlocksWrapper preview mobile" :style="themeStyles.containerStyle">
+                        <div class="BlocksWrapper-inner" :style="themeStyles.blockStyle">
+                            <draggable
+                                delay="100"
+                                delay-on-touch-only
+                                @change="reorderElements"
+                                v-model="elements"
+                                tag="ul"
+                                item-key="order_column"
+                                v-bind="dragOptions"
+                                :component-data="{tag: 'ul',type: 'transition',name: !drag ? 'flip-list' : null,class: 'ul-flip-list'}"
+                                @start="drag = true"
+                                @end="drag = false"
+                            >
+                                <template #item="{element}">
+                                    <li class="list-group-item"
+                                        style="position: relative; transition: null 0s ease 0s, visibility 0s ease 0s; z-index: 1; opacity: 1;margin-bottom: 10px;">
+                                        <div class="EditorBlockListItem"
+                                             :class="pro_components.includes(element.component_alias) && !$page.props.auth.user.is_pro ? 'error' : ''">
+                                            <div
+                                                v-if="pro_components.includes(element.component_alias) && !$page.props.auth.user.is_pro"
+                                                class="EditorBlockListItem-error"><span class="ant-tag ant-tag-error"
+                                                                                        style="margin-right: 0px;"
+                                                                                        ant-click-animating-without-extra-node="false">PRO</span>
+                                            </div>
+                                            <component
+                                                :products="props.user_products"
+                                                :element-id="element.id"
+                                                :data="element.props"
+                                                :theme="themeStyles"
+                                                :is="components[element.component_alias]"/>
                                         </div>
-                                        <component
-                                            :products="props.user_products"
-                                            :element-id="element.id"
-                                            :data="element.props"
-                                            :theme="themeStyles"
-                                            :is="components[element.component_alias]"/>
-                                    </div>
-                                </li>
-                            </template>
-                        </draggable>
-                        <div style="display: flex; margin: 20px;">
-                            <button type="button"
-                                    @click="addLink"
-                                    class="ant-btn ant-btn-primary ant-btn-round ant-btn-lg ant-btn-block"
-                                    style="overflow: hidden;"><span>{{ $root.translate('Add link') }}</span></button>
-                            <button type="button"
-                                    @click="showAddBlockModal = true"
-                                    class="ant-btn ant-btn-primary ant-btn-circle ant-btn-lg ant-btn-icon-only"
-                                    style="margin-left: 8px;"><span role="img" aria-label="appstore"
-                                                                    class="anticon anticon-appstore"><svg
-                                viewBox="64 64 896 896" focusable="false" data-icon="appstore" width="1em"
-                                height="1em"
-                                fill="currentColor" aria-hidden="true"><path
-                                d="M464 144H160c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V160c0-8.8-7.2-16-16-16zm-52 268H212V212h200v200zm452-268H560c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V160c0-8.8-7.2-16-16-16zm-52 268H612V212h200v200zM464 544H160c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V560c0-8.8-7.2-16-16-16zm-52 268H212V612h200v200zm452-268H560c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V560c0-8.8-7.2-16-16-16zm-52 268H612V612h200v200z"></path></svg></span>
-                            </button>
+                                    </li>
+                                </template>
+                            </draggable>
+                            <div style="display: flex; margin: 20px;">
+                                <button type="button"
+                                        @click="addLink"
+                                        class="ant-btn ant-btn-primary ant-btn-round ant-btn-lg ant-btn-block"
+                                        style="overflow: hidden;"><span>{{ $root.translate('Add link') }}</span>
+                                </button>
+                                <button type="button"
+                                        @click="showAddBlockModal = true"
+                                        class="ant-btn ant-btn-primary ant-btn-circle ant-btn-lg ant-btn-icon-only"
+                                        style="margin-left: 8px;"><span role="img" aria-label="appstore"
+                                                                        class="anticon anticon-appstore"><svg
+                                    viewBox="64 64 896 896" focusable="false" data-icon="appstore" width="1em"
+                                    height="1em"
+                                    fill="currentColor" aria-hidden="true"><path
+                                    d="M464 144H160c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V160c0-8.8-7.2-16-16-16zm-52 268H212V212h200v200zm452-268H560c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V160c0-8.8-7.2-16-16-16zm-52 268H612V212h200v200zM464 544H160c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V560c0-8.8-7.2-16-16-16zm-52 268H212V612h200v200zm452-268H560c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V560c0-8.8-7.2-16-16-16zm-52 268H612V612h200v200z"></path></svg></span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

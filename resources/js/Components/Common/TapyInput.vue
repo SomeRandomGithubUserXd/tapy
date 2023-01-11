@@ -8,6 +8,16 @@ const props = defineProps({
         type: String,
         default: 'text'
     },
+    disabled: {
+        required: false,
+        type: Boolean,
+        default: false
+    },
+    value: {
+        required: false,
+        type: String,
+        default: ''
+    },
     placeholder: String,
     modelValue: [String, Number],
     selectValue: String,
@@ -111,10 +121,11 @@ const emit = defineEmits(['update:modelValue', 'update:selectValue'])
                             <slot/>
                         </span>
                         <input
+                            :disabled="props.disabled"
                             :placeholder="props.placeholder"
                             class="ant-input"
                             :type="type"
-                            :value="props.modelValue"
+                            :value="props.modelValue || props.value"
                             @input="emit('update:modelValue', $event.target.value)">
                         <span class="d-flex align-items-center"
                               v-if="props.type === 'password' && props.canShowPassword">

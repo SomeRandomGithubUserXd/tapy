@@ -9,3 +9,17 @@
  }
 .EditorBlockListItem{transition: .3s}
 .EditorBlockListItem:active{box-shadow: 0 0 10px rgba(0,0,0,0.5) !important;cursor: move !important;}
+input[type=color]{
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 40px;
+    background: none;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+    border: 0;
+    border-radius: 30px;
+}

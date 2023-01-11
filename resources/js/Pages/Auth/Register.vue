@@ -1,6 +1,6 @@
 <script setup>
 import BreezeGuestLayout from '@/Layouts/Guest.vue';
-import {Link, useForm} from "@inertiajs/inertia-vue3";
+import {Link, useForm, usePage} from "@inertiajs/inertia-vue3";
 import {EyeInvisibleOutlined, EyeTwoTone} from '@ant-design/icons-vue';
 import {ref} from "vue";
 import TapyInput from "@/Components/Common/TapyInput.vue";
@@ -24,6 +24,9 @@ function submit() {
             <div class="ant-card ant-card-bordered" style="margin-bottom: 12px;">
                 <div class="ant-card-body">
                     <div style="display: block; margin: 12px;">
+                        <div v-if="$page.props.flash" class="px-1 text-xs text-slate-500 mb-3">
+                            {{$root.translate('Register or log in then try again')}}
+                        </div>
                         <form @submit.prevent="submit" id="sign-up" class="ant-form ant-form-horizontal">
                             <tapy-input
                                 :placeholder="$root.translate('Your email')"
@@ -67,6 +70,10 @@ function submit() {
                         {{ $root.translate('Already have an account?') }}
                         <Link :href="route('login')">{{ $root.translate('Login') }}</Link>
                     </div>
+                    <div class="py-2 px-5 text-xs text-slate-500">{{$root.translate('By continuing, you agree to our')}} <a
+                        :href="route('terms-of-use')" target="_blank" rel="noreferrer">{{
+                            $root.translate('Terms of use')
+                        }}</a></div>
                 </div>
             </div>
         </div>

@@ -4,8 +4,8 @@ import LogoInstagram from "@/Components/Misc/LogoInstagram.vue";
 import LogoTelegram from "@/Components/Misc/LogoTelegram.vue";
 import LocaleDropdown from "@/Components/LocaleDropdown.vue";
 import {computed, getCurrentInstance, reactive, ref} from "vue";
-import {ShoppingCartOutlined, FileTextOutlined, SettingOutlined} from '@ant-design/icons-vue';
-import {Link} from "@inertiajs/inertia-vue3";
+import {ShoppingCartOutlined, FileTextOutlined, SettingOutlined, UserOutlined} from '@ant-design/icons-vue';
+import {Link, usePage} from "@inertiajs/inertia-vue3";
 import {message} from "ant-design-vue";
 import {MenuOutlined} from "@ant-design/icons-vue";
 import {Inertia} from "@inertiajs/inertia";
@@ -34,6 +34,15 @@ const menuItems = reactive([
         selected: route().current('settings.index'),
     }
 ])
+
+if (usePage().props.value.auth.user?.is_admin) {
+    menuItems.push({
+        name: 'Admin',
+        icon: UserOutlined,
+        href: route('admin.index'),
+        selected: route().current('admin.index'),
+    })
+}
 
 let isMobile = computed({
     get() {

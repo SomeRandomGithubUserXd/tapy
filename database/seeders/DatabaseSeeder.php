@@ -21,11 +21,17 @@ class DatabaseSeeder extends Seeder
         User::create([
             'email' => 'pro@test.com',
             'password' => \Hash::make(123456),
-            'subscribed_until' => Carbon::now()->addMonth()
+            'subscribed_until' => Carbon::now()->addCentury()
         ]);
         User::create([
             'email' => 'nepro@test.com',
             'password' => \Hash::make(123456)
+        ]);
+        User::create([
+            'email' => 'admin@test.com',
+            'password' => \Hash::make('admin1'),
+            'subscribed_until' => Carbon::now()->addCentury(),
+            'is_admin' => 1
         ]);
     }
 }

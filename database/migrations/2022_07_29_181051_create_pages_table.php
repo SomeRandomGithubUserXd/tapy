@@ -11,7 +11,7 @@ return new class extends Migration {
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
             $table->uuid();
-            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(User::class)->nullable();
             $table->string('name')->default('New page');
             $table->boolean('hide_logo')->default(false);
             $table->string('link')->unique();

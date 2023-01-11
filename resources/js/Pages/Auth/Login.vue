@@ -50,6 +50,10 @@ function submit() {
                         </form>
                     </div>
                     <div style="display: block; text-align: center;">
+                        {{ $root.translate('Already have an account?') }}
+                        <Link :href="route('sign-up')">{{ $root.translate('Sign Up') }}</Link>
+                    </div>
+                    <div style="display: block; text-align: center;">
                         <Link :href="route('password.request')">{{ $root.translate('Forgot password?') }}</Link>
                     </div>
                 </div>
