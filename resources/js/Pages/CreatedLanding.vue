@@ -14,6 +14,8 @@ import SeparatorComponent from "@/Components/Editor/EdtiorComponents/Separator/S
 import ImageGallery from "@/Components/Editor/EdtiorComponents/ImageGallery/ImageGalleryComponent.vue";
 import VideoGallery from "@/Components/Editor/EdtiorComponents/VideoGallery/VideoGalleryComponent.vue"
 import LogoBlack from "@/Components/Misc/LogoBlack.vue";
+import {usePage} from "@inertiajs/inertia-vue3";
+import {onMounted} from "vue";
 
 const components = {
     profile: Profile,
@@ -48,6 +50,14 @@ const allowedElements = (elements, isPro) => {
 }
 const prettyUrl = import.meta.env.VITE_PRETTY_URL
 const appUrl = import.meta.env.VITE_APP_URL
+
+onMounted(() => {
+    setTimeout(() => {
+        window.history.pushState({}, '', appUrl + '/' + usePage().props.value.page.link);
+    }, 100)
+    console.log(appUrl + '/' + usePage().props.value.page.link)
+})
+
 
 </script>
 
