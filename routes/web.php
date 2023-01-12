@@ -25,7 +25,7 @@ use JeroenDesloovere\VCard\VCard;
 */
 
 Route::view('/', 'welcome');
-Route::get('/{url}', [PageController::class, 'show']);
+Route::get('/{url}', [PageController::class, 'show'])->name('created-landing');
 Route::group(['prefix' => 'app'], function () {
     Route::redirect('/', RouteServiceProvider::HOME);
     Route::group(['middleware' => ['auth', 'verified']], function () {

@@ -27,7 +27,11 @@ class PageController extends Controller
 
     public function show($url, Request $request)
     {
-        $page = Page::where(['uuid' => $url])->orWhere(['link' => $url])->firstOrFail();
+        if (strlen($url) > 6) {
+            $page = Page::where(['uuid' => $url])->firstOrFail();
+            return redirect()->route('created-landing', ['url' => $page->link]);
+        }
+        $page = Page::where(['link' => $url])->firstOrFail();
         if (!$page->user_id) {
             if (!auth()->check()) {
                 return redirect()->route('sign-up')->with('flashContent', $page->uuid);
