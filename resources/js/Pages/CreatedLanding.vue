@@ -51,14 +51,6 @@ const allowedElements = (elements, isPro) => {
 const prettyUrl = import.meta.env.VITE_PRETTY_URL
 const appUrl = import.meta.env.VITE_APP_URL
 
-onMounted(() => {
-    setTimeout(() => {
-        window.history.pushState({}, '', appUrl + '/' + usePage().props.value.page.link);
-    }, 100)
-    console.log(appUrl + '/' + usePage().props.value.page.link)
-})
-
-
 </script>
 
 <template>
