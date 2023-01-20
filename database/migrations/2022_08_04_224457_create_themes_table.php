@@ -11,11 +11,11 @@ return new class extends Migration {
         Schema::create('themes', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->nullable();
-            $table->string('overlayStyle')->nullable();
-            $table->string('containerStyle');
-            $table->string('blockStyle');
-            $table->string('elementStyle');
-            $table->smallInteger('key');
+            $table->text('overlayStyle')->nullable();
+            $table->text('containerStyle');
+            $table->text('blockStyle');
+            $table->text('elementStyle');
+            $table->text('linkStyle')->nullable();
             $table->timestamps();
         });
     }

@@ -42,6 +42,7 @@ class PageController extends Controller
         Visit::create(['page_id' => $page->id, 'source' => $_SERVER['HTTP_REFERER'] ?? "Direct"]);
         return inertia('CreatedLanding', [
             'page' => $page,
+            'qrCode' => $page->qr_code,
             'is_pro' => $page->user->is_pro
         ]);
     }
@@ -80,12 +81,20 @@ class PageController extends Controller
             }
         }
         $counts = $stats->getStats();
+        $themes = Theme::query()
+            ->where('user_id', auth()->id())
+            ->orWhere(['user_id' => null])
+            ->orderByDesc('user_id')
+            ->get();
         return inertia('User/Editor', [
             'page' => $page,
             'chart' => $stats->getChart(),
             'visits' => $counts[0],
             'link_clicks' => $counts[1],
-            'themes' => Theme::where('user_id', auth()->id())->orWhere(['user_id' => null])->orderBy('key')->get(),
+            'themes' => $themes,
+            'current_theme_key' => $themes->search(function($theme) use($page) {
+                return $theme->id === $page->theme[0]->id;
+            }),
             'user_products' => auth()->user()->products
         ]);
     }
@@ -115,8 +124,7 @@ class PageController extends Controller
 
     public function updateTheme(Request $request, Page $page)
     {
-        $themeId = Theme::where(['key' => $request->theme_key])->valueOrFail('id');
-        $page->theme()->sync($themeId);
+        $page->theme()->sync($request->theme_key);
         return redirect()->back();
     }
 
@@ -124,5 +132,18 @@ class PageController extends Controller
     {
         $page->delete();
         return redirect()->route('pages.index');
+    }
+
+    public function destroyTheme(Theme $theme)
+    {
+        abort_if($theme->user_id !== auth()->id(), 401);
+        $theme->delete();
+        return redirect()->back();
+    }
+
+    public function addTheme(Request $request)
+    {
+        $theme = Theme::create($request->theme + ['user_id' => auth()->id()]);
+        return redirect()->back()->with('flashContent', $theme->id);
     }
 }

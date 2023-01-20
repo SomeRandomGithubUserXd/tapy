@@ -1,7 +1,7 @@
 import Profile from "@/Components/Editor/EdtiorComponents/Profile/Profile.vue";
 import LinkComponent from "@/Components/Editor/EdtiorComponents/Link/LinkComponent.vue";
 import HeaderComponent from "@/Components/Editor/EdtiorComponents/Header/HeaderComponent.vue";
-import TextComponent from "@/Components/Editor/EdtiorComponents/Text/TextComponent.vue";
+import TextComponent from "@/Components/Editor/EdtiorComponents/Text/CounterpartyCardComponent.vue";
 import FAQComponent from "@/Components/Editor/EdtiorComponents/FAQ/FAQComponent.vue";
 import SocialButtonsComponent from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButtonsComponent.vue";
 import ProductsComponent from "@/Components/Editor/EdtiorComponents/Products/ProductsComponent.vue";
@@ -46,6 +46,26 @@ export const socialButtons = {
         placeholder: 'https://example.com',
         bgColor: '#000',
         icon: 'Icon icon-web',
+        valuePrefix: "",
+        color: '#fff',
+        group: 'Misc'
+    },
+    sms: {
+        inputLabel: 'Phone number',
+        label: 'SMS',
+        placeholder: '+123456789',
+        bgColor: '#000',
+        icon: 'Icon icon',
+        valuePrefix: "sms:",
+        color: '#fff',
+        group: 'Misc'
+    },
+    copy: {
+        inputLabel: 'Content',
+        label: 'Copy',
+        placeholder: 'Sth important',
+        bgColor: '#000',
+        icon: 'Icon icon',
         valuePrefix: "",
         color: '#fff',
         group: 'Misc'
@@ -421,6 +441,16 @@ export const socialButtons = {
         "bgColor": "rgb(51, 51, 51)",
         "color": "rgb(255, 255, 255)",
         "icon": "icon-github",
+        "valuePrefix": "",
+        "group": "Other"
+    },
+    "sber": {
+        "inputLabel": "Phone number",
+        "label": "SBER",
+        "placeholder": "+79005001010",
+        "bgColor": "rgb(240, 240, 240)",
+        "color": "rgb(0, 0, 0)",
+        "icon": "",
         "valuePrefix": "",
         "group": "Other"
     }

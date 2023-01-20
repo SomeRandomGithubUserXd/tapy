@@ -1,6 +1,6 @@
 <script setup>
 import TapyInput from "@/Components/Common/TapyInput.vue";
-import {ref, watch} from "vue";
+import {computed, ref, watch} from "vue";
 
 const props = defineProps({
     modelValue: Boolean,
@@ -15,11 +15,13 @@ const emit = defineEmits(['update:modelValue', 'update:content', 'editingStuff']
 const content = ref(props.content.value)
 const btn_text = ref(props.content.btn_text)
 const btn_caption = ref(props.content.btn_caption)
+const btn_extra = ref(props.content.btn_extra)
 
 watch(() => props.content, value => {
     content.value = value.value
     btn_text.value = value.btn_text
     btn_caption.value = value.btn_caption
+    btn_extra.value = value.btn_extra
 }, {deep: true})
 
 const submit = () => {
@@ -29,6 +31,7 @@ const submit = () => {
             value: content.value,
             btn_text: btn_text.value,
             btn_caption: btn_caption.value,
+            btn_extra: btn_extra.value,
         }
         emit('update:content', btn)
         emit('editingStuff', btn)
@@ -39,9 +42,31 @@ const submit = () => {
             content.value = ''
             btn_text.value = ''
             btn_caption.value = ''
+            btn_extra.value = ''
         }
     })
 }
+
+const extraText = computed({
+    get: () => {
+        let extra = ''
+        switch (props.misc.label) {
+            case 'SMS':
+                extra = 'Message'
+                break
+            case 'Whatsapp':
+                extra = 'Message'
+                break
+            case 'Telegram':
+                extra = 'Message'
+                break
+        }
+        return extra
+    },
+    set: () => {
+
+    }
+})
 
 </script>
 
@@ -66,9 +91,16 @@ const submit = () => {
                     v-model="btn_text"
                     type="text"/>
         <tapy-input :label="$root.translate('Button caption')"
-                    :placeholder="$root.translate('Button text')"
+                    :placeholder="$root.translate('Button caption')"
                     :with-required-mark="true"
                     v-model="btn_caption"
                     type="text"/>
+        <tapy-input
+            v-if="!!extraText"
+            :label="$root.translate(extraText)"
+            :placeholder="$root.translate(extraText)"
+            :with-required-mark="true"
+            v-model="btn_extra"
+            type="text"/>
     </a-modal>
 </template>

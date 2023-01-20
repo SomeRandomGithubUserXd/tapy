@@ -79,7 +79,7 @@ function submit() {
         </template>
         <template #footer>
             <edit-modal-footer @needsClosing="emit('update:modelValue', false)" @onOK="submit"
-                               :element-id="props.elementId" :mode="1" :with-copy-action="true"/>
+                               :element-id="props.elementId" :mode="props.mode" :with-copy-action="true"/>
         </template>
         <div>
             <a-tabs style="padding: 0 26px">

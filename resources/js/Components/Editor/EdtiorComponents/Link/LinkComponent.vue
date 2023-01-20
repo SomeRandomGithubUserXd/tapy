@@ -36,6 +36,8 @@ const registerClick = () => {
         link_name: props.data.text || "Ссылка"
     });
 }
+
+console.log(props.data.custom_elem_style)
 </script>
 
 <template>
@@ -43,10 +45,11 @@ const registerClick = () => {
         <link-modal :theme="theme" v-if="recursive" v-model="showEditModal" :data="data"
                     :element-id="props.elementId"/>
         <div class="Block preview mobile first">
-            <a class="Link" :class="data.position === 'center' ? 'icon-label-center' : 'icon-label-left'"
+            <a class="Link"
+               :class="data.position === 'center' ? 'icon-label-center' : 'icon-label-left'"
                rel="noopener nofollow ugc" :href="data.href" target="_blank"
                @click="registerClick"
-               :style="`pointer-events:${isEditable ? 'none': 'auto'};` + theme.elementStyle">
+               :style="`pointer-events:${isEditable ? 'none': 'auto'};` + (!!props.data.custom_styles ? props.data.custom_elem_style : theme.elementStyle)">
                 <div v-if="!data.hide_icon" class="Link-icon"><i class="Icon icon-link" style="font-size: 22px;"></i>
                 </div>
                 <div class="Link-label">{{ data.text || $root.translate('Link') }}</div>

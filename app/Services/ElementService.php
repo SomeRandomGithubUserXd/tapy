@@ -23,7 +23,10 @@ class ElementService
                 'text' => 'My link',
                 'caption' => '',
                 'position' => 'center',
-                'hide_icon' => false
+                'hide_icon' => false,
+                'style' => '',
+                'custom_styles' => false,
+                'custom_elem_style' => null,
             ],
             'social_buttons' => [
                 'buttons' => [
@@ -94,6 +97,11 @@ class ElementService
             ],
             'video_gallery' => [
                 'faqs' => '',
+            ],
+            'counterparty' => [
+                'organization' => [],
+                'bank' => [],
+                'contacts' => [],
             ],
         ];
     }

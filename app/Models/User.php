@@ -53,6 +53,11 @@ class User extends Authenticatable implements HasMedia
         return $this->hasMany(UserDomain::class);
     }
 
+    public function themes(): HasMany
+    {
+        return $this->hasMany(Theme::class, 'user_id');
+    }
+
     public function getIsProAttribute()
     {
         return $this->subscribed_until && $this->subscribed_until->greaterThanOrEqualTo(Carbon::now());

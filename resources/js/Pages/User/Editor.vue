@@ -3,7 +3,7 @@ import Vue3ColorPicker from "vue3-colorpicker";
 import "vue3-colorpicker/style.css";
 import Authenticated from "@/Layouts/Authenticated.vue";
 import SettingsModal from "@/Components/Editor/SettingsModal.vue";
-import {computed, getCurrentInstance, ref, watch} from "vue";
+import {computed, createVNode, getCurrentInstance, ref, watch} from "vue";
 import SlideUpDown from 'vue3-slide-up-down'
 import {Swiper, SwiperSlide, useSwiper} from 'swiper/vue';
 import 'swiper/css';
@@ -13,7 +13,7 @@ import Profile from "@/Components/Editor/EdtiorComponents/Profile/Profile.vue";
 import LinkComponent from "@/Components/Editor/EdtiorComponents/Link/LinkComponent.vue";
 import HeaderComponent from "@/Components/Editor/EdtiorComponents/Header/HeaderComponent.vue";
 import SocialButtonsComponent from "@/Components/Editor/EdtiorComponents/SocialButtons/SocialButtonsComponent.vue";
-import {message} from "ant-design-vue";
+import {message, Modal} from "ant-design-vue";
 import AddBlockModal from "@/Components/Editor/AddBlockModal.vue";
 import ShareModal from "@/Components/Editor/ShareModal.vue";
 import TextComponent from "@/Components/Editor/EdtiorComponents/Text/TextComponent.vue";
@@ -31,8 +31,13 @@ import VideoComponent from "@/Components/Editor/EdtiorComponents/Video/VideoComp
 import SeparatorComponent from "@/Components/Editor/EdtiorComponents/Separator/SeparatorComponent.vue"
 import ImageGallery from "@/Components/Editor/EdtiorComponents/ImageGallery/ImageGalleryComponent.vue"
 import VideoGallery from "@/Components/Editor/EdtiorComponents/VideoGallery/VideoGalleryComponent.vue"
+import CounterpartyCardComponent from "@/Components/Editor/EdtiorComponents/Text/CounterpartyCardComponent.vue"
 import SingleImageUploader from "@/Components/Images/SingleImageUploader.vue";
 import {usePage} from "@inertiajs/inertia-vue3";
+import collect from "collect.js";
+import ThemeCreatedAlert from "@/Components/Editor/ThemeCreatedAlert.vue";
+import {ExclamationCircleOutlined, CloseOutlined} from "@ant-design/icons-vue";
+import UpgradeToProModal from "@/Components/Misc/UpgradeToProModal.vue";
 
 const components = {
     profile: Profile,
@@ -49,9 +54,12 @@ const components = {
     separator: SeparatorComponent,
     image_gallery: ImageGallery,
     video_gallery: VideoGallery,
+    counterparty: CounterpartyCardComponent,
 }
 
 const pro_components = ['html']
+
+const selectedThemeIsCustom = ref(false)
 
 const self = getCurrentInstance()
 
@@ -84,14 +92,16 @@ let analyticsModal = ref(false)
 
 let themeSwiper = ref(null)
 
-let currentThemeKey = ref(0)
+let currentThemeKey = ref(props.page.theme[0].id)
 
 const themeSwiperReady = (val) => {
-    // console.log(val)
+    selectedThemeIsCustom.value = !!collect(usePage().props.value.themes).where('id', '==', currentThemeKey.value).first().user_id
 };
 
 const onSlideChange = (val) => {
-    currentThemeKey.value = val.activeIndex
+    const id = document.querySelectorAll('[data-theme-id]')[val.activeIndex].getAttribute('data-theme-id')
+    currentThemeKey.value = id
+    selectedThemeIsCustom.value = !!collect(usePage().props.value.themes).where('id', '==', id).first().user_id
 };
 
 let showThemePicker = ref(false)
@@ -102,7 +112,14 @@ function triggerThemePicker() {
 
 const refreshStyles = ref(0)
 
+const showUpgradeModal = ref(false)
+
 const saveTheme = () => {
+    if(selectedThemeIsCustom.value && !usePage().props.value.auth.user.is_pro) {
+        showUpgradeModal.value = true
+        currentThemeKey.value = 1
+        return
+    }
     Inertia.put(route('pages.update.theme', props.page.uuid), {theme_key: currentThemeKey.value}, {
         onSuccess: () => {
             showThemePicker.value = false
@@ -113,14 +130,17 @@ const saveTheme = () => {
         onError: (err) => console.log(err)
     });
 }
-
+const editingTheme = ref(null)
 const themeStyles = computed({
     get() {
+        if (editingTheme.value) {
+            return editingTheme.value
+        }
         if (showThemeConstructor.value) {
             return customTheme.value
         }
         if (showThemePicker.value) {
-            return props.themes[currentThemeKey.value]
+            return collect(props.themes).where('id', '==', currentThemeKey.value).first()
         }
         return props.page.theme[0];
     },
@@ -190,21 +210,39 @@ const customThemeProps = ref({
     background_color: '',
     background_color_gr1: '',
     background_color_gr2: '',
+    wrapper_color_type: '',
+    wrapper_color: '',
+    wrapper_color_gr1: '',
+    wrapper_color_gr2: '',
+    wrapper_radius: 15,
+    text_color: '#000000',
+    link_bg_color: 'rgb(96, 104, 138)',
+    link_color: '#ffffff',
+    link_border_radius: 10,
+    link_opacity: 90
 })
 
 const getStyleObject = (str) => {
     const regex = /([\w-]*)\s*:\s*([^;]*)/g;
     let match, properties = {};
-    while (match = regex.exec(str)) properties[match[1]] = match[2].trim();
+    while (match = regex.exec(str)) properties[match[1].replace('-', '_')] = match[2].trim();
     return properties
 }
 
-const applyOverlayStyle = (style) => {
-    customTheme.value.overlayStyle = Object.entries(style).map(([k, v]) => `${k.replace('_', '-')}:${v}`).join(';')
+const applyOverlayStyle = (style, theme) => {
+    theme.value.overlayStyle = Object.entries(style).map(([k, v]) => `${k.replace('_', '-')}:${v}`).join(';')
 }
 
-const applyContainerStyle = (style) => {
-    customTheme.value.containerStyle = Object.entries(style).map(([k, v]) => `${k.replace('_', '-')}:${v}`).join(';')
+const applyContainerStyle = (style, theme) => {
+    theme.value.containerStyle = Object.entries(style).map(([k, v]) => `${k.replace('_', '-')}:${v}`).join(';')
+}
+
+const applyWrapperStyle = (style, theme) => {
+    theme.value.blockStyle = Object.entries(style).map(([k, v]) => `${k.replace('_', '-')}:${v}`).join(';')
+}
+
+const applyelementStyle = (style, theme) => {
+    theme.value.elementStyle = Object.entries(style).map(([k, v]) => `${k.replace('_', '-')}:${v}`).join(';')
 }
 
 const hexToRgb = hex =>
@@ -214,10 +252,18 @@ const hexToRgb = hex =>
         .map(x => parseInt(x, 16))
 
 const doThemeStuff = (value) => {
-    const overlayStyle = getStyleObject(customTheme.value.overlayStyle)
-    const containerStyle = getStyleObject(customTheme.value.containerStyle)
+    let themeRef = customTheme
+    if(editingTheme.value) {
+        themeRef = editingTheme
+    }
+    const overlayStyle = getStyleObject(themeRef.value.overlayStyle)
+    const containerStyle = getStyleObject(themeRef.value.containerStyle)
+    const wrapperStyle = getStyleObject(themeRef.value.blockStyle)
+    const elementStyle = getStyleObject(themeRef.value.elementStyle)
 
+    overlayStyle.background_image = value.background_image
     overlayStyle.background_size = value.background_type
+
     let color = '';
     if (value.background_color_type === 'plain') {
         containerStyle.background_image = 'url()'
@@ -233,15 +279,46 @@ const doThemeStuff = (value) => {
         containerStyle.background_color = 'rgba(0,0,0,0)'
         const col1 = hexToRgb(value.background_color_gr1 || '#000000')
         const col2 = hexToRgb(value.background_color_gr2 || '#000000')
-        color = `linear-gradient(rgba(${col1[0] || 0},${col1[1] || 0},${col1[2] || 0}, 0.53), rgba(${col2[0] || 0},${col2[1] || 0},${col2[2] || 0}, 0.53));`
+        color = `linear-gradient(rgba(${col1[0] || 0},${col1[1] || 0},${col1[2] || 0}, ${customThemeImage.value ? '0.5' : '1'}), rgba(${col2[0] || 0},${col2[1] || 0},${col2[2] || 0}, ${customThemeImage.value ? '0.5' : '1'}));`
         containerStyle.background_image = color
-    } else if(value.background_color_type === 'no') {
+    } else if (value.background_color_type === 'no') {
         containerStyle.background_color = 'rgba(0,0,0,0)'
         containerStyle.background_image = 'url()'
     }
 
-    applyOverlayStyle(overlayStyle)
-    applyContainerStyle(containerStyle)
+    let wrapper_color = '';
+    if (value.wrapper_color_type === 'plain') {
+        wrapperStyle.background_image = 'url()'
+        wrapper_color = hexToRgb(value.wrapper_color || '#000000')
+        wrapper_color = `rgb(${wrapper_color[0] || 0},${wrapper_color[1] || 0},${wrapper_color[2] || 0})`
+        wrapperStyle.background_color = wrapper_color
+    } else if (value.wrapper_color_type === 'gradient') {
+        wrapperStyle.background_color = 'rgba(0,0,0,0)'
+        const col1 = hexToRgb(value.wrapper_color_gr1 || '#000000')
+        const col2 = hexToRgb(value.wrapper_color_gr2 || '#000000')
+        wrapper_color = `linear-gradient(rgba(${col1[0] || 0},${col1[1] || 0},${col1[2] || 0}, 1), rgba(${col2[0] || 0},${col2[1] || 0},${col2[2] || 0}, 1));`
+        wrapperStyle.background_image = wrapper_color
+    } else if (value.wrapper_color_type === 'no') {
+        wrapperStyle.background_color = 'rgba(0,0,0,0)'
+        wrapperStyle.background_image = 'url()'
+    }
+    wrapperStyle.border_radius = value.wrapper_radius + 'px'
+    wrapperStyle.color = value.text_color + '!important'
+
+    elementStyle.background_color = value.link_bg_color
+    elementStyle.color = value.link_color + '!important'
+    elementStyle.border_radius = value.link_border_radius + 'px'
+    if (value.link_opacity !== 100) {
+        elementStyle.opacity = '0.' + value.link_opacity
+    } else {
+        elementStyle.opacity = 1
+    }
+
+
+    applyOverlayStyle(overlayStyle, themeRef)
+    applyContainerStyle(containerStyle, themeRef)
+    applyWrapperStyle(wrapperStyle, themeRef)
+    applyelementStyle(elementStyle, themeRef)
 }
 
 watch(customThemeProps, (value, previous) => {
@@ -251,43 +328,88 @@ watch(customThemeProps, (value, previous) => {
 const customThemeImage = ref(null)
 
 watch(customThemeImage, (value, previous) => {
-    const overlayStyle = getStyleObject(customTheme.value.overlayStyle)
-    const containerStyle = getStyleObject(customTheme.value.containerStyle)
     if (value) {
         Inertia.post(route('upload-temp-image'), {
             file: value
         }, {
             onSuccess: () => {
-                overlayStyle.background_image = `url(${usePage().props.value.flash})`
-                applyOverlayStyle(overlayStyle)
+                customThemeProps.value.background_image = `url(${usePage().props.value.flash})`
             }
         })
     } else {
-        containerStyle.background_color = ''
-        applyContainerStyle(containerStyle)
-        overlayStyle.background_image = 'url()'
-        applyOverlayStyle(overlayStyle)
+        customThemeProps.value.background_color = ''
+        customThemeProps.value.background_image = 'url()'
     }
-    doThemeStuff(customThemeProps.value)
 }, {deep: true})
+
+const initialSlide = usePage().props.value.current_theme_key
 
 
 const customTheme = ref({
     overlayStyle: 'background-image: url();background-size:cover;',
     containerStyle: 'background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial; background-color: ;',
-    blockStyle: 'background: rgb(255, 255, 255);border-radius: 16px;color: black;',
-    elementStyle: 'background: rgb(24, 26, 34); opacity: 0.9; border: 2px none; border-radius: 10px;color: white !important'
+    blockStyle: 'background-color: rgb(255, 255, 255);border-radius: 15px;color: black;background-image: url();',
+    elementStyle: 'background-color: rgb(24, 26, 34); opacity: 0.9; border: 2px none; border-radius: 10px;color: white !important;',
 })
 
 watch(customTheme, value => {
     // console.log(value)
 }, {deep: true})
 
+const save = () => {
+    if(editingTheme.value) {
+        showThemeConstructor.value = false
+    }
+    Inertia.post(route('add-theme'), {
+        theme: customTheme.value
+    }, {
+        onSuccess: () => {
+            showThemeConstructor.value = false
+            let content = self.parent.ctx.translate('We saved your theme, but you can apply it only in PRO plan. Upgrade now?')
+            let okText = self.parent.ctx.translate('Upgrade plan')
+            let onOk = () => {
+                showUpgradeModal.value = true
+            }
+            if (usePage().props.value.auth.user.is_pro) {
+                content = self.parent.ctx.translate('Apply the new theme?')
+                okText = self.parent.ctx.translate('Yes')
+                onOk = () => {
+                    currentThemeKey.value = usePage().props.value.flash
+                    saveTheme()
+                }
+            }
+            Modal.confirm({
+                title: content,
+                icon: createVNode(ExclamationCircleOutlined),
+                okText,
+                cancelText: self.parent.ctx.translate('Cancel'),
+                onOk: onOk
+            });
+        }
+    })
+}
+
+const destroy = () => {
+
+}
+
+const deleteTheme = () => {
+    Inertia.delete(route('destroy-theme', currentThemeKey.value), {
+        onSuccess: () => {
+            currentThemeKey.value = 1
+        }
+    })
+}
+
+watch(showThemeConstructor, value => {
+    if(value === false) editingTheme.value = null
+})
 </script>
 
 <template>
     <Authenticated>
         <template #header>{{ $root.translate('Editor') }}</template>
+        <upgrade-to-pro-modal v-model="showUpgradeModal"/>
         <settings-modal v-model="settingsModal"
                         :page="$page.props.page"
                         :remove-text="$root.translate('Are you sure?')"
@@ -386,19 +508,119 @@ watch(customTheme, value => {
                             </div>
                         </a-collapse-panel>
                         <a-collapse-panel key="2" :header="$root.translate('Wrapper')">
-                            <p>{{ 2 }}</p>
+                            <div class="d-flex flex-column ant-row ant-form-item" style="row-gap: 0px;margin: 0">
+                                <div class="ant-col ant-form-item-label d-flex"><label for="update-page_backgroundSize"
+                                                                                       class="" title="Background type">{{
+                                        $root.translate('Wrapper color')
+                                    }}</label></div>
+                                <a-radio-group size="small" v-model:value="customThemeProps.wrapper_color_type"
+                                               style="margin-bottom: 20px;">
+                                    <a-radio-button value="no">{{ $root.translate('No color') }}</a-radio-button>
+                                    <a-radio-button value="plain">{{ $root.translate('Color') }}</a-radio-button>
+                                    <a-radio-button value="gradient">{{ $root.translate('Gradient') }}</a-radio-button>
+                                </a-radio-group>
+                                <div v-if="customThemeProps.wrapper_color_type === 'plain'">
+                                    <input type="color" v-model="customThemeProps.wrapper_color">
+                                </div>
+                                <div v-if="customThemeProps.wrapper_color_type === 'gradient'">
+                                    <input type="color" v-model="customThemeProps.wrapper_color_gr1">
+                                    <input type="color" v-model="customThemeProps.wrapper_color_gr2">
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column ant-row ant-form-item" style="row-gap: 0px;margin: 0">
+                                <div class="ant-col ant-form-item-label d-flex"><label for="update-page_backgroundSize"
+                                                                                       class="" title="Background type">{{
+                                        $root.translate('Wrapper border radius')
+                                    }}</label></div>
+                                <a-slider v-model:value="customThemeProps.wrapper_radius"/>
+                            </div>
                         </a-collapse-panel>
                         <a-collapse-panel key="3" :header="$root.translate('Text')">
-                            <p>{{ 3 }}</p>
+                            <div class="d-flex flex-column ant-row ant-form-item" style="row-gap: 0px;margin: 0">
+                                <div class="ant-col ant-form-item-label d-flex"><label for="update-page_backgroundSize"
+                                                                                       class="" title="Background type">{{
+                                        $root.translate('Text color')
+                                    }}</label></div>
+                                <div>
+                                    <input type="color" v-model="customThemeProps.text_color">
+                                </div>
+                            </div>
                         </a-collapse-panel>
                         <a-collapse-panel key="4" :header="$root.translate('Links')">
-                            <p>{{ 4 }}</p>
+                            <div class="d-flex flex-column ant-row ant-form-item" style="row-gap: 0px;margin: 0">
+                                <div class="ant-col ant-form-item-label d-flex"><label for="update-page_backgroundSize"
+                                                                                       class="" title="Background type">{{
+                                        $root.translate('Link background')
+                                    }}</label></div>
+                                <div>
+                                    <input type="color" v-model="customThemeProps.link_bg_color">
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column ant-row ant-form-item" style="row-gap: 0px;margin: 0">
+                                <div class="ant-col ant-form-item-label d-flex"><label for="update-page_backgroundSize"
+                                                                                       class="" title="Background type">{{
+                                        $root.translate('Link color')
+                                    }}</label></div>
+                                <div>
+                                    <input type="color" v-model="customThemeProps.link_color">
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column ant-row ant-form-item" style="row-gap: 0px;margin: 0">
+                                <div class="ant-col ant-form-item-label d-flex"><label for="update-page_backgroundSize"
+                                                                                       class="" title="Background type">{{
+                                        $root.translate('Link border radius')
+                                    }}</label></div>
+                                <a-slider v-model:value="customThemeProps.link_border_radius"/>
+                            </div>
+                            <div class="d-flex flex-column ant-row ant-form-item" style="row-gap: 0px;margin: 0">
+                                <div class="ant-col ant-form-item-label d-flex"><label for="update-page_backgroundSize"
+                                                                                       class="" title="Background type">{{
+                                        $root.translate('Link opacity')
+                                    }}</label></div>
+                                <a-slider v-model:value="customThemeProps.link_opacity"/>
+                            </div>
                         </a-collapse-panel>
                     </a-collapse>
                 </div>
             </div>
             <div style="height: 5%" class="flex items-center justify-between p-3 bg-white">
-                <div style="font-size: 1.125rem">{{ $root.translate('Theme editor') }}</div>
+                <div class="d-flex w-100">
+                    <a-dropdown v-if="true" placement="topLeft" class="me-auto" :trigger="['click']">
+                        <a class="ant-dropdown-link" @click.prevent>
+                            <div class="ant-col">
+<!--                                <button type="button" class="ant-btn ant-dropdown-trigger d-flex align-items-center"-->
+<!--                                        ant-click-animating-without-extra-node="false"><span role="img"-->
+<!--                                                                                             aria-label="more"-->
+<!--                                                                                             class="anticon anticon-more"><svg-->
+<!--                                    viewBox="64 64 896 896" focusable="false" data-icon="more" width="1em" height="1em"-->
+<!--                                    fill="currentColor" aria-hidden="true"><path-->
+<!--                                    d="M456 231a56 56 0 10112 0 56 56 0 10-112 0zm0 280a56 56 0 10112 0 56 56 0 10-112 0zm0 280a56 56 0 10112 0 56 56 0 10-112 0z"></path></svg></span><span>{{-->
+<!--                                        $root.translate('Actions')-->
+<!--                                    }}</span>-->
+<!--                                </button>-->
+                            </div>
+                        </a>
+                        <template #overlay>
+                            <a-menu>
+                                <a-menu-item class="ant-dropdown-menu-item ant-dropdown-menu-item-danger"
+                                             @click="destroy">
+                                    <div class="d-flex align-items-center">
+                                  <span role="img"
+                                        aria-label="delete"
+                                        class="anticon anticon-delete ant-dropdown-menu-item-icon"><svg
+                                      viewBox="64 64 896 896" focusable="false" data-icon="delete" width="1em"
+                                      height="1em" fill="currentColor" aria-hidden="true"><path
+                                      d="M360 184h-8c4.4 0 8-3.6 8-8v8h304v-8c0 4.4 3.6 8 8 8h-8v72h72v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80h72v-72zm504 72H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zM731.3 840H292.7l-24.2-512h487l-24.2 512z"></path></svg></span><span
+                                        class="ant-dropdown-menu-title-content">{{ $root.translate('Delete') }}</span>
+                                    </div>
+                                </a-menu-item>
+                            </a-menu>
+                        </template>
+                    </a-dropdown>
+                    <a-button key="submit" class="ms-auto" type="primary" @click="save">
+                        {{ $root.translate('Save') }}
+                    </a-button>
+                </div>
             </div>
         </div>
         <div class="Content EditorPage-content">
@@ -482,6 +704,7 @@ watch(customTheme, value => {
                                             d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"></path></svg></span>
                                         </button>
                                         <swiper
+                                            :initial-slide="initialSlide"
                                             ref="themeSwiper"
                                             :slides-per-view="slidesPerView"
                                             :spaceBetween="50"
@@ -490,8 +713,9 @@ watch(customTheme, value => {
                                             @swiper="themeSwiperReady"
                                             @slideChange="onSlideChange">
                                             <swiper-slide v-for="theme in $page.props.themes"
+                                                          :data-theme-id="theme.id"
                                                           class="d-flex justify-content-center cursor-drag">
-                                                <theme-block :theme="theme"/>
+                                                <theme-block :is-pro="!!theme.user_id" :theme="theme"/>
                                             </swiper-slide>
                                         </swiper>
                                         <div style="display: flex; justify-content: center; padding-top: 10px;">
@@ -500,12 +724,20 @@ watch(customTheme, value => {
                                                 <div class="ant-space-item">
                                                     <button
                                                         @click="saveTheme"
-                                                        :disabled="currentThemeKey === $page.props?.page?.theme[0]?.key"
+                                                        :disabled="currentThemeKey == $page.props?.page?.theme[0]?.id"
                                                         type="button"
                                                         class="ant-btn ant-btn-primary ant-btn-sm">
                                                         <span>{{
-                                                                currentThemeKey === $page.props?.page?.theme[0]?.key ? $root.translate('Current') : $root.translate('Save')
+                                                                currentThemeKey == $page.props?.page?.theme[0]?.id ? $root.translate('Current') : $root.translate('Save')
                                                             }}</span></button>
+                                                </div>
+                                                <div v-if="selectedThemeIsCustom" class="ant-space-item">
+                                                    <button type="button"
+                                                            v-if="currentThemeKey != $page.props?.page?.theme[0]?.id"
+                                                            @click="deleteTheme"
+                                                            class="ant-btn ant-btn-danger ant-btn-sm ant-btn-icon-only">
+                                                        <close-outlined/>
+                                                     </button>
                                                 </div>
                                             </div>
                                         </div>

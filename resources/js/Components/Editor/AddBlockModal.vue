@@ -1,5 +1,6 @@
 <script setup>
 import {Inertia} from "@inertiajs/inertia";
+import {FileTextOutlined} from "@ant-design/icons-vue";
 import {message} from "ant-design-vue";
 import {getCurrentInstance, reactive, ref, watch} from "vue";
 import ProfileModal from "@/Components/Editor/EdtiorComponents/Profile/ProfileModal.vue";
@@ -19,6 +20,7 @@ import VideoModal from "@/Components/Editor/EdtiorComponents/Video/VideoModal.vu
 import SeparatorModal from "@/Components/Editor/EdtiorComponents/Separator/SeparatorModal.vue";
 import ImageGalleryModal from "@/Components/Editor/EdtiorComponents/ImageGallery/ImageGalleryModal.vue";
 import VideoGalleryModal from "@/Components/Editor/EdtiorComponents/VideoGallery/VideoGalleryModal.vue";
+import CounterpartyCardModal from "@/Components/Editor/EdtiorComponents/Text/CounterpartyCardModal.vue";
 
 
 const props = defineProps({
@@ -144,7 +146,7 @@ watch(socialButtonsData, value => {
             :theme="theme"
             :recursive="false"
             :page-uuid="props.pageUuid"
-            :data='{"href":"","text":"","caption":"","position":"center","hide_icon":false}'
+            :data='{"custom_styles": false,"href":"","text":"","caption":"","position":"center","hide_icon":false,"style": ""}'
             v-model="modals.link"
             :mode="0"
             @dataChanged="emit('update:modelValue', false)"
@@ -193,6 +195,89 @@ watch(socialButtonsData, value => {
             :page-uuid="props.pageUuid"
             :data='{"html":"Hello <b>world</b>"}'
             v-model="modals.html"
+            :mode="0"
+            @dataChanged="emit('update:modelValue', false)"
+        />
+        <counterparty-card-modal
+            :theme="theme"
+            :recursive="false"
+            :page-uuid="props.pageUuid"
+            :data='{
+                "organization":
+                 [
+                     {
+                         "field_name": "Full name",
+                         "value": ""
+                     },
+                     {
+                         "field_name": "Short name",
+                         "value": ""
+                     },
+                     {
+                         "field_name": "Declared address",
+                         "value": ""
+                     },
+                     {
+                         "field_name": "Actual address",
+                         "value": ""
+                     },
+                     {
+                         "field_name": "Post address",
+                         "value": ""
+                     },
+                     {
+                         "field_name": "INN \\ ORGNIP",
+                         "value": ""
+                     },
+                     {
+                         "field_name": "OKPO \\ OKATO \\ OKTMO",
+                         "value": ""
+                     },
+                ],
+                "bank":
+                 [
+                     {
+                         "field_name": "Bank name",
+                         "value": ""
+                     },
+                     {
+                         "field_name": "Correspondent account",
+                         "value": ""
+                     },
+                     {
+                         "field_name": "BIK",
+                         "value": ""
+                     },
+                     {
+                         "field_name": "Checking account",
+                         "value": ""
+                     },
+                     {
+                         "field_name": "INN \\ KPP",
+                         "value": ""
+                     },
+                ],
+                "contacts":
+                 [
+                     {
+                         "field_name": "Director",
+                         "value": ""
+                     },
+                     {
+                         "field_name": "E-Mail",
+                         "value": ""
+                     },
+                     {
+                         "field_name": "Website",
+                         "value": ""
+                     },
+                     {
+                         "field_name": "Phone",
+                         "value": ""
+                     },
+                ],
+            }'
+            v-model="modals.counterparty"
             :mode="0"
             @dataChanged="emit('update:modelValue', false)"
         />
@@ -527,6 +612,24 @@ watch(socialButtonsData, value => {
                         </svg>
                     </div>
                     <div class="BlockSelectorModal-title">{{ $root.translate('Add to contacts') }}</div>
+                </div>
+            </div>
+            <div
+                @click="addElement('counterparty')"
+                class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"
+                style="padding-left: 8px; padding-right: 8px;">
+                <div class="BlockSelectorModal-block">
+                    <div class="BlockSelectorModal-plan"></div>
+                    <div class="BlockSelectorModal-icon">
+                        <svg focusable="false" class="" data-icon="file-text" width="1em" height="1em"
+                             fill="currentColor" aria-hidden="true" viewBox="64 64 896 896"
+                             style="  width: 32px;  height: 32px;">
+                            <path
+                                fill="#8791AB"
+                                d="M854.6 288.6L639.4 73.4c-6-6-14.1-9.4-22.6-9.4H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V311.3c0-8.5-3.4-16.7-9.4-22.7zM790.2 326H602V137.8L790.2 326zm1.8 562H232V136h302v216a42 42 0 0042 42h216v494zM504 618H320c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h184c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8zM312 490v48c0 4.4 3.6 8 8 8h384c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8H320c-4.4 0-8 3.6-8 8z"></path>
+                        </svg>
+                    </div>
+                    <div class="BlockSelectorModal-title">{{ $root.translate('Counterparty card') }}</div>
                 </div>
             </div>
             <div class="ant-col gutter-row ant-col-xs-24 ant-col-sm-12 ant-col-md-8 ant-col-lg-8"

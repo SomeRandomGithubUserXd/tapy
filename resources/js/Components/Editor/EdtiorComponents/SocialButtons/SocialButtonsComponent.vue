@@ -53,7 +53,7 @@ let showEditModal = ref(false)
         <div class="Block mobile last" :class="{preview: props.isEditable}">
             <div class="social-btns" :class="props.data.view">
                 <social-button v-for="btn in props.data.buttons" :alias="btn.alias" :value="btn.value"
-                               :btn-text="btn.btn_text" :btn-caption="btn.btn_caption" :view="props.data.view"/>
+                               :btn-text="btn.btn_text" :btn-caption="btn.btn_caption" :btn-extra="btn.btn_extra" :view="props.data.view"/>
             </div>
         </div>
     </div>

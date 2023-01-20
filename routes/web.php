@@ -29,6 +29,8 @@ Route::get('/{url}', [PageController::class, 'show'])->name('created-landing');
 Route::group(['prefix' => 'app'], function () {
     Route::redirect('/', RouteServiceProvider::HOME);
     Route::group(['middleware' => ['auth', 'verified']], function () {
+        Route::post('/theme/add', [PageController::class, 'addTheme'])->name('add-theme');
+        Route::delete('/theme/{theme}/delete', [PageController::class, 'destroyTheme'])->name('destroy-theme');
         Route::group(['prefix' => 'api', 'as' => 'api.'], function () {
             Route::get('currencies', [CurrencyController::class, 'index'])->name('currencies');
             Route::get('pages', static fn() => auth()->user()->pages)->name('pages');

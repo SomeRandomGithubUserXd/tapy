@@ -221,6 +221,9 @@
         "Add theme": "Добавить тему",
         "Own themes are available only in the PRO plan.": "Собственные темы оформления доступны только на тарифе PRO",
         "Permanent link": "Постоянная ссылка",
-        "Register or log in then try again": "Зарегистрируйтесь или войдите, после попробуйте снова"
+        "Register or log in then try again": "Зарегистрируйтесь или войдите, после попробуйте снова",
+        "Apply the new theme?": "Применить созданную тему?",
+        "We saved your theme, but you can apply it only in PRO plan. Upgrade now?": "Тема сохранена. Ваш план не подходит, чтобы ее применить. Перейти на PRO сейчас?",
+        "Links": "Ссылки"
     }
 ]

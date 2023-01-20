@@ -12,7 +12,7 @@ class PageObserver
     {
         $page->pageTracking()->create();
         $page->pageSeo()->create();
-        $defaultThemeId = Theme::where(['key' => ThemeSeeder::$themes[0]['key']])->valueOrFail('id');
+        $defaultThemeId = 1;
         $page->theme()->attach($defaultThemeId);
         $page->pageElements()->create([
             'component_alias' => 'profile',
