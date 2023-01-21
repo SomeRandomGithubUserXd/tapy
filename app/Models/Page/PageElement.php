@@ -3,6 +3,7 @@
 namespace App\Models\Page;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -21,5 +22,10 @@ class PageElement extends Model implements HasMedia
     public function updateProps(array $props): bool
     {
         return $this->update(['props' => $props]);
+    }
+
+    public function page(): BelongsTo
+    {
+        return $this->belongsTo(Page::class);
     }
 }

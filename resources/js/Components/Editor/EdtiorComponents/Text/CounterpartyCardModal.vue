@@ -1,9 +1,11 @@
 <script setup>
 import {getCurrentInstance, ref} from "vue";
-import {useForm} from "@inertiajs/inertia-vue3";
+import {useForm, usePage} from "@inertiajs/inertia-vue3";
 import TapyInput from "@/Components/Common/TapyInput.vue";
 import {message} from "ant-design-vue";
 import EditModalFooter from "@/Components/Editor/EdtiorComponents/EditModalFooter.vue";
+import SingleImageUploader from "@/Components/Images/SingleImageUploader.vue";
+import {Inertia} from "@inertiajs/inertia";
 
 const self = getCurrentInstance()
 
@@ -66,6 +68,26 @@ function submit() {
 }
 
 const activeKey = ref(1)
+
+let picModel = ref(editableData.value.organization[0].value)
+
+let picSrc = ref(editableData.value.organization[0].value)
+
+function onUploadPic(val) {
+    Inertia.post(route('upload-temp-image'), {
+        file: val
+    }, {
+        onSuccess: () => {
+            editableData.value.organization[0].value = usePage().props.value.flash
+        }
+    })
+}
+
+function removePic() {
+    editableData.value.organization[0].value = null
+    picModel.value = null
+    picSrc.value = null
+}
 </script>
 
 <template>
@@ -77,7 +99,7 @@ const activeKey = ref(1)
         @change="emit('update:modelValue', false)"
         >
         <template #title>
-            {{ $root.translate('Text') }}
+            {{ $root.translate('Counterparty card') }}
         </template>
         <template #footer>
             <edit-modal-footer @needsClosing="emit('update:modelValue', false)" @onOK="submit"
@@ -93,11 +115,23 @@ const activeKey = ref(1)
                     <a-tabs v-model:activeKey="activeKey">
                         <a-tab-pane :key="1" :tab="$root.translate('Organization')">
                             <div v-for="(field, key) in editableData.organization" class="ant-form-item-control-input">
-                                <div class="ant-form-item-control-input-content">
+                                <div v-if="field.field_name !== 'Image'" class="ant-form-item-control-input-content">
                                     <tapy-input
                                         :with-label="true"
                                         :placeholder="$root.translate(field.field_name)"
                                         v-model="editableData.organization[key].value"/>
+                                </div>
+                                <div v-else>
+                                    <single-image-uploader
+                                        :rounded-preview="true"
+                                        @onUpload="onUploadPic"
+                                        @onRemove="removePic"
+                                        v-model="picModel"
+                                        :src="picSrc">
+                                        <template #label>
+                                            <label>{{ $root.translate('Logo') }}</label>
+                                        </template>
+                                    </single-image-uploader>
                                 </div>
                             </div>
                         </a-tab-pane>

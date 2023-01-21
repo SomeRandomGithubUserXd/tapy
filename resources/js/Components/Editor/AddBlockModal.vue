@@ -206,6 +206,10 @@ watch(socialButtonsData, value => {
                 "organization":
                  [
                      {
+                         "field_name": "Image",
+                         "value": ""
+                     },
+                     {
                          "field_name": "Full name",
                          "value": ""
                      },

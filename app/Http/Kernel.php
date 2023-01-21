@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'user.owns_page' => \App\Http\Middleware\UserOwnsPageMiddleware::class,
         'user.owns_element' => \App\Http\Middleware\UserOwnsPageElementMiddleware::class,
+        'user.is_not_blocked' => \App\Http\Middleware\UserIsNotBlockedMiddleware::class,
     ];
 }

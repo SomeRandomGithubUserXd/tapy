@@ -28,7 +28,7 @@ Route::view('/', 'welcome');
 Route::get('/{url}', [PageController::class, 'show'])->name('created-landing');
 Route::group(['prefix' => 'app'], function () {
     Route::redirect('/', RouteServiceProvider::HOME);
-    Route::group(['middleware' => ['auth', 'verified']], function () {
+    Route::group(['middleware' => ['auth', 'verified', 'user.is_not_blocked']], function () {
         Route::post('/theme/add', [PageController::class, 'addTheme'])->name('add-theme');
         Route::delete('/theme/{theme}/delete', [PageController::class, 'destroyTheme'])->name('destroy-theme');
         Route::group(['prefix' => 'api', 'as' => 'api.'], function () {
@@ -78,6 +78,8 @@ Route::group(['prefix' => 'app'], function () {
         Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
             Route::get('/', [AdminController::class, 'index'])->name('index');
             Route::post('/pages/create', [AdminController::class, 'createPage'])->name('create-page');
+            Route::post('/users/block', [AdminController::class, 'blockUsers'])->name('block-users');
+            Route::post('/users/unblock', [AdminController::class, 'unblockUsers'])->name('unblock-users');
         });
     });
     Route::get('/user_products', [ProductController::class, 'getForPage'])->name('products.get_for_page');

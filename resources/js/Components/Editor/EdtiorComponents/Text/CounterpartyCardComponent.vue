@@ -50,6 +50,9 @@ let showEditModal = ref(false)
         <counterparty-card-modal :theme="theme" v-if="recursive" v-model="showEditModal" :data="data"
                                  :element-id="props.elementId"/>
         <div class="Block preview mobile last" :style="elemStyle">
+            <div class="d-flex w-100 my-2 justify-content-center" v-if="!!data.organization[0].value">
+                <img style="width: 80%;border-radius: 10px" alt="logo" :src="data.organization[0].value"/>
+            </div>
             <div v-for="(part, key) in data" class="py-2">
                 <h4 style="text-transform: capitalize" class="text-md-center">{{ $root.translate(key) }}</h4>
                 <table class="table">
@@ -61,8 +64,11 @@ let showEditModal = ref(false)
                     </thead>
                     <tbody>
                     <tr v-for="field in part">
-                        <td class="fw-bold">{{ $root.translate(field.field_name) }}</td>
-                        <td>{{ field.value || '-' }}</td>
+                        <td v-if="field.field_name !== 'Image'" class="fw-bold">{{
+                                $root.translate(field.field_name)
+                            }}
+                        </td>
+                        <td v-if="field.field_name !== 'Image'">{{ field.value || '-' }}</td>
                     </tr>
                     </tbody>
                 </table>

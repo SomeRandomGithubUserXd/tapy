@@ -27,3 +27,6 @@ input[type="color"]::-webkit-color-swatch {
 .ImageInput-preview img{
     object-fit: cover;
 }
+.Image-square {
+    background-size: cover;
+}
