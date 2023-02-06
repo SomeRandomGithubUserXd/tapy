@@ -238,7 +238,7 @@
 }
 
 .Link.only-icon .Link-icon {
-    left: calc(50% - 13px)
+    /*left: calc(50% - 13px)*/
 }
 
 .Link.icon-label-center {

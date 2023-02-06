@@ -144,6 +144,7 @@ const onStuffEdit = (stuff) => {
         btnsModel.value[index].btn_text = stuff.btn_text
         btnsModel.value[index].btn_caption = stuff.btn_caption
         btnsModel.value[index].btn_extra = stuff.btn_extra
+        btnsModel.value[index].btn_sum = stuff.btn_sum
         showSocialButtonEditModal.value = false
     }
 }

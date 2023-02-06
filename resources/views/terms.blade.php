@@ -177,7 +177,7 @@
         <div class="col-sm-6 col-lg-4 col-xl-3 mb-4 mb-sm-0">
             <ul class="nav flex-column">
                 <li class="nav-item mb-2">
-                    <a href="mailto:info@tapy.me" class="nav-link p-0 text-muted d-flex align-items-center gap-2">
+                    <a href="mailto:qcd.met@bk.ru" class="nav-link p-0 text-muted d-flex align-items-center gap-2">
                         Обратная связь
                     </a>
                 </li>

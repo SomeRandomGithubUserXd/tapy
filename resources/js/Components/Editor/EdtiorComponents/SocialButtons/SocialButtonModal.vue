@@ -16,12 +16,14 @@ const content = ref(props.content.value)
 const btn_text = ref(props.content.btn_text)
 const btn_caption = ref(props.content.btn_caption)
 const btn_extra = ref(props.content.btn_extra)
+const btn_sum = ref(props.content.btn_sum)
 
 watch(() => props.content, value => {
     content.value = value.value
     btn_text.value = value.btn_text
     btn_caption.value = value.btn_caption
     btn_extra.value = value.btn_extra
+    btn_sum.value = value.btn_sum
 }, {deep: true})
 
 const submit = () => {
@@ -32,6 +34,7 @@ const submit = () => {
             btn_text: btn_text.value,
             btn_caption: btn_caption.value,
             btn_extra: btn_extra.value,
+            btn_sum: btn_sum.value,
         }
         emit('update:content', btn)
         emit('editingStuff', btn)
@@ -43,6 +46,7 @@ const submit = () => {
             btn_text.value = ''
             btn_caption.value = ''
             btn_extra.value = ''
+            btn_sum.value = ''
         }
     })
 }
@@ -87,20 +91,27 @@ const extraText = computed({
                     type="text"/>
         <tapy-input :label="$root.translate('Button text')"
                     :placeholder="$root.translate('Button text')"
-                    :with-required-mark="true"
+                    :with-required-mark="false"
                     v-model="btn_text"
                     type="text"/>
         <tapy-input :label="$root.translate('Button caption')"
                     :placeholder="$root.translate('Button caption')"
-                    :with-required-mark="true"
+                    :with-required-mark="false"
                     v-model="btn_caption"
                     type="text"/>
         <tapy-input
             v-if="!!extraText"
             :label="$root.translate(extraText)"
             :placeholder="$root.translate(extraText)"
-            :with-required-mark="true"
+            :with-required-mark="false"
             v-model="btn_extra"
+            type="text"/>
+        <tapy-input
+            v-if="props.misc.label === 'SBER'"
+            :label="$root.translate('Sum')"
+            :placeholder="$root.translate('Sum')"
+            :with-required-mark="false"
+            v-model="btn_sum"
             type="text"/>
     </a-modal>
 </template>

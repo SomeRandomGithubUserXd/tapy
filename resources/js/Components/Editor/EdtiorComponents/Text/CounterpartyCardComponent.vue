@@ -42,6 +42,8 @@ const elemStyle = computed({
     }
 })
 
+console.log(elemStyle.value)
+
 let showEditModal = ref(false)
 </script>
 
@@ -53,9 +55,9 @@ let showEditModal = ref(false)
             <div class="d-flex w-100 my-2 justify-content-center" v-if="!!data.organization[0].value">
                 <img style="width: 80%;border-radius: 10px" alt="logo" :src="data.organization[0].value"/>
             </div>
-            <div v-for="(part, key) in data" class="py-2">
-                <h4 style="text-transform: capitalize" class="text-md-center">{{ $root.translate(key) }}</h4>
-                <table class="table">
+            <div :style="elemStyle" v-for="(part, key) in data" class="py-2">
+                <h4 style="text-transform: capitalize;color: inherit !important;" class="text-md-center">{{ $root.translate(key) }}</h4>
+                <table :style="elemStyle" class="table">
                     <thead class="thead-light">
                     <tr>
                         <th></th>
@@ -68,7 +70,7 @@ let showEditModal = ref(false)
                                 $root.translate(field.field_name)
                             }}
                         </td>
-                        <td v-if="field.field_name !== 'Image'">{{ field.value || '-' }}</td>
+                        <td class="fw-bold" v-if="field.field_name !== 'Image'">{{ field.value || '-' }}</td>
                     </tr>
                     </tbody>
                 </table>
