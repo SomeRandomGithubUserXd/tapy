@@ -56,7 +56,8 @@ let showEditModal = ref(false)
                 <img style="width: 80%;border-radius: 10px" alt="logo" :src="data.organization[0].value"/>
             </div>
             <div :style="elemStyle" v-for="(part, key) in data" class="py-2">
-                <h4 style="text-transform: capitalize;color: inherit !important;" class="text-md-center">{{ $root.translate(key) }}</h4>
+                <h4 style="text-transform: capitalize;color: inherit !important;" class="text-md-center">
+                    {{ $root.translate(key) }}</h4>
                 <table :style="elemStyle" class="table">
                     <thead class="thead-light">
                     <tr>
@@ -65,8 +66,13 @@ let showEditModal = ref(false)
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="field in part">
-                        <td class="fw-bold" v-if="field.field_name !== 'Image'">{{ field.value || '-' }}</td>
+                    <tr v-if="field.field_name !== 'Image'" v-for="field in part" style="display: flex;flex-direction: row-reverse">
+                        <td>{{ field.value || '-' }}
+                        </td>
+                        <td style=" width: 100%;margin-right: auto;" v-if="field.field_name !== 'Image'" class="fw-bold">{{
+                                $root.translate(field.field_name)
+                            }}
+                        </td>
                     </tr>
                     </tbody>
                 </table>
