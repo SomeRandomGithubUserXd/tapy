@@ -66,10 +66,6 @@ let showEditModal = ref(false)
                     </thead>
                     <tbody>
                     <tr v-for="field in part">
-                        <td v-if="field.field_name !== 'Image'" class="fw-bold">{{
-                                $root.translate(field.field_name)
-                            }}
-                        </td>
                         <td class="fw-bold" v-if="field.field_name !== 'Image'">{{ field.value || '-' }}</td>
                     </tr>
                     </tbody>
