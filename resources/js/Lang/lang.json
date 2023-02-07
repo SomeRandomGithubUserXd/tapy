@@ -249,6 +249,11 @@
         "Checking account": "Расчетный счет",
         "INN \\ KPP": "ИНН \\ КПП",
         "Director": "Руководитель",
-        "Phone": "Телефон"
+        "Phone": "Телефон",
+        "Phone number": "Номер телефона",
+        "Sum": "Сумма",
+        "Message": "Сообщение",
+        "Content": "Содержимое",
+        "Sth important": "Что-то важное"
     }
 ]

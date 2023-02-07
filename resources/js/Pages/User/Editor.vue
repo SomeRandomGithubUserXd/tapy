@@ -64,9 +64,10 @@ const selectedThemeIsCustom = ref(false)
 const self = getCurrentInstance()
 
 let slidesPerView = 8
-
+let spaceBetween = 50
 if (!window.matchMedia("(min-width: 768px)").matches) {
-    slidesPerView = 2
+    slidesPerView = 3
+    spaceBetween = 30
 }
 
 const showLinkModal = ref(false)
@@ -438,8 +439,8 @@ watch(showThemeConstructor, value => {
         <div
             :class="showThemeConstructor ? 'animate__zoomIn' : 'animate__zoomOut'"
             :hidden="!showThemeConstructor"
-            class="d-flex flex-column"
-            style="position:fixed;right: 0;top: 0;width: 25vw;height: 100vh;background: white;box-shadow: 0 0 10px rgba(0,0,0,0.5);z-index: 9999">
+            class="d-flex flex-column theme-editor-responsive"
+            style="position:fixed;right: 0;top: 0;height: 100vh;background: white;box-shadow: 0 0 10px rgba(0,0,0,0.5);z-index: 9999">
             <div style="height: 5%" class="flex items-center justify-between p-3 bg-white align-items-center">
                 <div style="font-size: 1.125rem">{{ $root.translate('Theme editor') }}</div>
                 <div style="margin-left: auto" class="ml-auto flex gap-x-1">
@@ -463,7 +464,7 @@ watch(showThemeConstructor, value => {
                     </div>
                 </div>
                 <div class="d-flex flex-column">
-                    <a-collapse>
+                    <a-collapse :accordion="true">
                         <a-collapse-panel key="1" :header="$root.translate('Background')">
                             <single-image-uploader
                                 :rounded-preview="true"
@@ -707,7 +708,7 @@ watch(showThemeConstructor, value => {
                                             :initial-slide="initialSlide"
                                             ref="themeSwiper"
                                             :slides-per-view="slidesPerView"
-                                            :spaceBetween="50"
+                                            :spaceBetween="spaceBetween"
                                             :centeredSlides="true"
                                             :slide-to-clicked-slide="true"
                                             @swiper="themeSwiperReady"

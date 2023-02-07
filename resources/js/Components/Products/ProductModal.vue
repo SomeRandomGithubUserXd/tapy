@@ -5,7 +5,7 @@ import TapyInput from "@/Components/Common/TapyInput.vue";
 import TapySelect from "@/Components/Common/TapySelect.vue";
 import {QuestionCircleOutlined, PlusOutlined} from "@ant-design/icons-vue";
 import {useForm} from "@inertiajs/inertia-vue3";
-import {computed, createVNode, onMounted, ref, watch} from "vue";
+import {computed, createVNode, getCurrentInstance, onMounted, ref, watch} from "vue";
 import axios from "axios";
 import {Inertia} from "@inertiajs/inertia";
 import {Modal} from "ant-design-vue";
@@ -27,6 +27,9 @@ const props = defineProps({
     cancelText: String,
 })
 
+const self = getCurrentInstance()
+
+
 let form = ref(useForm({
     id: props.product?.id || null,
     photos: props.product?.photos || [],
@@ -34,9 +37,9 @@ let form = ref(useForm({
     description: props.product?.description || '',
     price: props.product?.price || '',
     old_price: props.product?.old_price || '',
-    currency: props.product?.currency || 'USD',
+    currency: props.product?.currency || 'RUB',
     action_btn: props.product?.action_btn || false,
-    btn_label: props.product?.btn_label || 'Buy',
+    btn_label: props.product?.btn_label || self.parent.ctx.translate('Buy'),
     btn_link: props.product?.btn_link || ''
 }))
 
@@ -50,9 +53,9 @@ watch(() => props.product, (product) => {
         description: product?.description || '',
         price: product?.price || '',
         old_price: product?.old_price || '',
-        currency: product?.currency || 'USD',
+        currency: product?.currency || 'RUB',
         action_btn: product?.action_btn || false,
-        btn_label: product?.btn_label || 'Buy',
+        btn_label: product?.btn_label || self.parent.ctx.translate('Buy'),
         btn_link: product?.btn_link || ''
     })
     action_btn.value = Boolean(product?.action_btn)

@@ -80,6 +80,8 @@ Route::group(['prefix' => 'app'], function () {
             Route::post('/pages/create', [AdminController::class, 'createPage'])->name('create-page');
             Route::post('/users/block', [AdminController::class, 'blockUsers'])->name('block-users');
             Route::post('/users/unblock', [AdminController::class, 'unblockUsers'])->name('unblock-users');
+            Route::post('/{user}/update-pages-limit', [AdminController::class, 'updatePagesLimit'])->name('update-pages-limit');
+            Route::post('/{user}/give-pro', [AdminController::class, 'givePro'])->name('give-pro');
         });
     });
     Route::get('/user_products', [ProductController::class, 'getForPage'])->name('products.get_for_page');

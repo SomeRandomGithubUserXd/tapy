@@ -17,16 +17,21 @@ class User extends Authenticatable implements HasMedia
 {
     use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia;
 
+    public const PRO_PAGES_LIMIT = 10;
+
+    public const NON_PRO_PAGES_LIMIT = 1;
+
     public static string $tempImagesCollection = 'TEMP_IMAGES_COLLECTION';
 
-    protected $appends = ['is_pro'];
+    protected $appends = ['is_pro', 'pages_limit'];
 
     protected $fillable = [
         'email',
         'password',
         'subscribed_until',
         'is_admin',
-        'is_blocked'
+        'is_blocked',
+        'pages_limit'
     ];
 
     protected $hidden = [
@@ -68,13 +73,21 @@ class User extends Authenticatable implements HasMedia
     {
         $can = true;
         $pagesCount = $this->pages()->count();
-        if ($this->is_pro) {
-            if ($pagesCount >= 10) {
-                $can = false;
-            }
-        } elseif ($pagesCount >= 1) {
+        if ($pagesCount >= $this->pages_limit) {
             $can = false;
         }
         return $can;
+    }
+
+    public function getPagesLimitAttribute($value): int
+    {
+        if (!$value) {
+            if ($this->is_pro) {
+                return self::PRO_PAGES_LIMIT;
+            } else {
+                return self::NON_PRO_PAGES_LIMIT;
+            }
+        }
+        return $value;
     }
 }

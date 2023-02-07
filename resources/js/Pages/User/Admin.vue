@@ -15,22 +15,33 @@ import {computed, defineComponent, reactive, toRefs} from 'vue';
 const columns = [{
     title: 'ID',
     dataIndex: 'key',
-},{
+}, {
     title: 'Заблокирован',
     dataIndex: 'is_blocked',
 }, {
     title: 'E-Mail',
     dataIndex: 'email',
 }, {
-    title: 'ПРО',
+    title: 'ПРО истек/истекает',
     dataIndex: 'is_pro',
 }, {
     title: 'Админ',
     dataIndex: 'is_admin',
 }, {
+    title: 'Страницы',
+    dataIndex: 'page_links',
+}, {
+    title: 'Количество страниц',
+    dataIndex: 'pages_amount',
+    key: 'pages_amount',
+},  {
+    title: 'Продлить про (от текущей даты в месяцах)',
+    dataIndex: 'give_pro',
+    key: 'give_pro',
+}, {
     title: 'Обновлял настройки',
     dataIndex: 'updated_at',
-},{
+}, {
     title: 'Обновлял страницы',
     dataIndex: 'page_last_updated_at',
 },
@@ -62,6 +73,35 @@ const props = defineProps({
 onMounted(() => {
     // console.log(props.users)
 })
+
+const updateUserPagesLimit = (userId, limit) => {
+    Inertia.post(route('admin.update-pages-limit', userId), {
+            limit
+        },
+        {
+            onSuccess: () => {
+
+            },
+            onError: (err) => {
+                console.log(err)
+            }
+        })
+}
+
+
+const givePro = (userId, period) => {
+    Inertia.post(route('admin.give-pro', userId), {
+            period
+        },
+        {
+            onSuccess: () => {
+
+            },
+            onError: (err) => {
+                console.log(err)
+            }
+        })
+}
 
 const createPage = () => {
     Inertia.post(route('admin.create-page'), {}, {
@@ -117,7 +157,7 @@ const unblockUsers = () => {
                     {{ $root.translate('Users') }}
                 </span></template>
                         <div class="d-flex py-1">
-                            <h2 class="fw-bold text-xl-start">Всего: {{props.users_total}}</h2>
+                            <h2 class="fw-bold text-xl-start">Всего: {{ props.users_total }}</h2>
                         </div>
                         <div class="d-flex py-3">
                             <button @click="blockUsers" type="button" class="me-2 ant-btn ant-btn-danger"><span>{{
@@ -128,10 +168,89 @@ const unblockUsers = () => {
                                 }}</span></button>
                         </div>
                         <a-table
+                            style="overflow: scroll"
                             :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
                             :columns="columns"
-                            :data-source="props.users.data"
-                        />
+                            :data-source="props.users.data">
+                            <template #bodyCell="{ column, record }">
+                                <template v-if="column.key === 'pages_amount'">
+                                    <ul class="d-flex">
+                                        <li title="1" tabindex="0"
+                                            @click="updateUserPagesLimit(record.key, 1)"
+                                            :class="record.pages_limit === 1 ? 'ant-pagination-item-active' : ''"
+                                            class="ant-pagination-item ant-pagination-item-1">
+                                            <a rel="nofollow">
+                                                1
+                                            </a>
+                                        </li>
+                                        <li title="1" tabindex="0"
+                                            @click="updateUserPagesLimit(record.key, 10)"
+                                            :class="record.pages_limit === 10 ? 'ant-pagination-item-active' : ''"
+                                            class="ant-pagination-item ant-pagination-item-1 ml-1">
+                                            <a rel="nofollow">
+                                                10
+                                            </a>
+                                        </li>
+                                        <li title="1" tabindex="0"
+                                            @click="updateUserPagesLimit(record.key, 20)"
+                                            :class="record.pages_limit === 20 ? 'ant-pagination-item-active' : ''"
+                                            class="ant-pagination-item ant-pagination-item-1 ml-1">
+                                            <a rel="nofollow">
+                                                20
+                                            </a>
+                                        </li>
+                                        <li title="1" tabindex="0"
+                                            @click="updateUserPagesLimit(record.key, 50)"
+                                            :class="record.pages_limit === 50 ? 'ant-pagination-item-active' : ''"
+                                            class="ant-pagination-item ant-pagination-item-1 ml-1">
+                                            <a rel="nofollow">
+                                                50
+                                            </a>
+                                        </li>
+                                        <li title="1" tabindex="0"
+                                            @click="updateUserPagesLimit(record.key, 100)"
+                                            :class="record.pages_limit === 100 ? 'ant-pagination-item-active' : ''"
+                                            class="ant-pagination-item ant-pagination-item-1 ml-1">
+                                            <a rel="nofollow">
+                                                100
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </template>
+                                <template v-if="column.key === 'give_pro'">
+                                    <ul class="d-flex">
+                                        <li title="1" tabindex="0"
+                                            @click="givePro(record.key, 1)"
+                                            class="ant-pagination-item ant-pagination-item-1">
+                                            <a rel="nofollow">
+                                                1
+                                            </a>
+                                        </li>
+                                        <li title="1" tabindex="0"
+                                            @click="givePro(record.key, 3)"
+                                            class="ant-pagination-item ant-pagination-item-1 ml-1">
+                                            <a rel="nofollow">
+                                                3
+                                            </a>
+                                        </li>
+                                        <li title="1" tabindex="0"
+                                            @click="givePro(record.key, 6)"
+                                            class="ant-pagination-item ant-pagination-item-1 ml-1">
+                                            <a rel="nofollow">
+                                                6
+                                            </a>
+                                        </li>
+                                        <li title="1" tabindex="0"
+                                            @click="givePro(record.key, 12)"
+                                            class="ant-pagination-item ant-pagination-item-1 ml-1">
+                                            <a rel="nofollow">
+                                                12
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </template>
+                            </template>
+                        </a-table>
                     </a-tab-pane>
                 </a-tabs>
             </div>

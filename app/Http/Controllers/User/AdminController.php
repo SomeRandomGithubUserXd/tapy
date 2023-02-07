@@ -40,4 +40,16 @@ class AdminController extends Controller
         User::whereIn('id', $userIds)->update(['is_blocked' => false]);
         return redirect()->back();
     }
+
+    public function updatePagesLimit(User $user, Request $request)
+    {
+        $user->update(['pages_limit' => $request->limit]);
+        return redirect()->back();
+    }
+
+    public function givePro(User $user, Request $request)
+    {
+        $user->update(['subscribed_until' => now()->addMonths($request->period)]);
+        return redirect()->back();
+    }
 }

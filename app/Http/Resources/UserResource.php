@@ -23,12 +23,18 @@ class UserResource extends JsonResource
         } catch (\Exception) {
             $pageLastUpdatedAt = 'Никогда';
         }
+        $pageLinks = [];
+        foreach ($this->pages as $page) {
+            $pageLinks[] = route('created-landing', $page);
+        }
         return [
             'key' => $this->id,
             'email' => $this->email,
-            'is_pro' => $this->is_pro ? 'Да': 'Нет',
+            'is_pro' => $this->subscribed_until?->diffForHumans(),
             'is_admin' => $this->is_admin ? 'Да': 'Нет',
             'is_blocked' => $this->is_blocked ? 'Да': 'Нет',
+            'page_links' => implode(', ', $pageLinks),
+            'pages_limit' => $this->pages_limit,
             'updated_at' => $this->updated_at->diffForHumans(),
             'page_last_updated_at' => $pageLastUpdatedAt
         ];
