@@ -172,6 +172,9 @@ const showUpgradeModal = ref(false)
                 </div>
                 <div class="AppLayout-header-content">
                     <div class="ant-space ant-space-horizontal ant-space-align-center" style="gap: 8px;">
+                        <div style="margin-right: 15px;color: green">
+                            0 ₽
+                        </div>
                         <div v-if="$page.props.auth.user.is_pro" class="ant-space-item" style="">
                             <div><span class="ant-tag ant-tag-has-color" style="background-color: black;">PRO</span>
                             </div>
