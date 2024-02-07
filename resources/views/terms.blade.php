@@ -4,20 +4,20 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Tapy.me: сервис мультиссылок и микролендингов</title>
+    <title>qcd.ru: сервис мультиссылок и микролендингов</title>
     <meta name="description"
           content="Конструктор мультиссылок для инстаграм и других социальных сетей. Не требуются навыки программирования.">
     <meta name="keywords" content="мультиссылка для инстаграм,мультиссылка для tiktok, создать мобильный лендинг">
 
     <link rel="apple-touch-icon" sizes="180x180" href="{{asset('Images/apple-touch-icon.png')}}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{asset('Images/favicon-32x32.png')}}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('Images/favicon-16x16.png')}}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{asset('Images/logo_small.svg')}}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('Images/logo_small.svg')}}">
     <link rel="mask-icon" href="{{asset('fonts/safari-pinned-tab.svg')}}" color="#d55bb6">
     <meta name="msapplication-TileColor" content="#315562">
     <meta name="theme-color" content="#ffffff">
     <link rel="shortcut icon" href="{{asset('favicon.ico')}}">
 
-    <meta property="og:title" content="Tapy.me: сервис мультиссылок и микролендингов">
+    <meta property="og:title" content="qcd-service.com: сервис мультиссылок и микролендингов">
     <meta property="og:description"
           content="Конструктор мультиссылок для инстаграм и других социальных сетей. Не требуются навыки программирования.">
     <meta property="og:type" content="website">
@@ -63,7 +63,7 @@
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                     <li class="nav-item me-4">
-                        <a class="nav-link" href="https://tapy.me/page/blog?lang=ru">Блог</a>
+                        <a class="nav-link" href="https://qcd-service.com/page/blog?lang=ru">Блог</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('login')}}">Войти</a>
