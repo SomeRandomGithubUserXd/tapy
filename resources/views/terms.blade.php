@@ -9,7 +9,7 @@
           content="Конструктор мультиссылок для инстаграм и других социальных сетей. Не требуются навыки программирования.">
     <meta name="keywords" content="мультиссылка для инстаграм,мультиссылка для tiktok, создать мобильный лендинг">
 
-    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('Images/apple-touch-icon.png')}}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('Images/logo-white.svg')}}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{asset('Images/logo_small.svg')}}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{asset('Images/logo_small.svg')}}">
     <link rel="mask-icon" href="{{asset('fonts/safari-pinned-tab.svg')}}" color="#d55bb6">
@@ -22,7 +22,7 @@
           content="Конструктор мультиссылок для инстаграм и других социальных сетей. Не требуются навыки программирования.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{config('app.url')}}">
-    <meta property="og:image" content="{{asset('Images/apple-touch-icon.png')}}">
+    <meta property="og:image" content="{{asset('Images/logo-white.svgo')}}">
 
     <link rel="stylesheet" href="{{asset('land-assets/styles.css')}}">
     {{--    <script type="text/javascript" async="" src="https://vk.com/js/api/openapi.js?169"></script>--}}
