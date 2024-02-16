@@ -25,9 +25,40 @@
     <meta property="og:image" content="{{asset('Images/logo-white.svg')}}">
 
     <link rel="stylesheet" href="{{asset('land-assets/styles.css')}}">
+    <script>
+        window.addEventListener("load", (event) => {
+            document.getElementById('modalTrigger').onclick = () => {
+                document.getElementById('modal').style.display = 'flex'
+            }
+            document.getElementById('modal').onclick = (e) => {
+                document.getElementById('modal').style.display = 'none'
+
+            }
+        });
+    </script>
     {{--    <script type="text/javascript" async="" src="https://vk.com/js/api/openapi.js?169"></script>--}}
 </head>
 <body>
+<div style="width: 100vw;height: 100vh;background: rgba(0,0,0,0.6);position: fixed;z-index: 99999;display: none" id="modal">
+    <div class="relative z-40" id="headlessui-dialog-:r4:" role="dialog" aria-modal="true"
+         data-headlessui-state="open">
+        <div class="fixed inset-0 bg-black/50 opacity-100"></div>
+        <div class="fixed inset-0 overflow-y-auto" style="margin-top: 150px;border-radius: 10px">
+            <div class="mx-5 mt-24 flex justify-center" style="border-radius: 10px">
+                <div
+                    style="border-radius: 10px;padding: 15px;text-decoration: none;font-weight: bold;font-size: 20px"
+                    class="d-flex flex-column w-full transform flex-col gap-2 overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all opacity-100 scale-100"
+                    id="headlessui-dialog-panel-:r5:" data-headlessui-state="open"><a
+                        class="group relative flex font-bold text-primary transition-all hover:text-black hover:opacity-80 rounded-xl p-2 text-xl"
+                        href="/" tabindex="0"><span>Цены</span></a><a
+                        class="group relative flex font-bold text-primary transition-all hover:text-black hover:opacity-80 p-2 text-xl"
+                        href="{{route('login')}}"><span>Войти</span></a><a
+                        class="group relative flex font-bold text-primary transition-all hover:text-black hover:opacity-80 p-2 text-xl"
+                        href="{{route('login')}}"><span>Создать аккаунт</span></a></div>
+            </div>
+        </div>
+    </div>
+</div>
 <nav class="navbar navbar-expand-md navbar-light">
     <div class="container">
         <a class="navbar-brand d-flex" href="/">
@@ -39,7 +70,7 @@
                     <a class="nav-link p-2" href="{{route('login')}}">Войти</a>
                 </li>
                 <li class="nav-item" style="margin-right: -1.5rem">
-                    <button class="btn link-secondary shadow-none" type="button" data-bs-toggle="offcanvas"
+                    <button id="modalTrigger" class="btn link-secondary shadow-none" type="button" data-bs-toggle="offcanvas"
                             data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-expanded="false"
                             aria-label="Toggle navigation">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -249,7 +280,8 @@
             </div>
             <div class="col">
                 <p class="h4">3. Поделитесь ссылкой</p>
-                <p class="">Разместите ссылку на qcd-service страницу в профилях социальных сетей, используйте в сторис или где
+                <p class="">Разместите ссылку на qcd-service страницу в профилях социальных сетей, используйте в сторис
+                    или где
                     посчитаете нужным, чтобы соединить вашу аудиторию с вашим контентом.</p>
             </div>
         </div>

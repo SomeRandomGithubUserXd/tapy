@@ -11,7 +11,6 @@ class UserController extends Controller
 {
     public function sendFeedback()
     {
-
     }
 
     public function uploadTempImage(Request $request)

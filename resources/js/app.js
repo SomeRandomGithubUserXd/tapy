@@ -12,6 +12,7 @@ import {default as lang} from "@/Lang/lang.json";
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 const localeMixin = {
     created() {
+        const regexp = /^\d+/g;
         const browserLang = window.navigator.language.split('-')[0]
         if (localStorage.getItem('lang')) {
             this.websiteLocale = localStorage.getItem('lang')
@@ -19,6 +20,7 @@ const localeMixin = {
             localStorage.setItem('lang', browserLang)
             this.websiteLocale = browserLang
         }
+
     },
     data() {
         return {

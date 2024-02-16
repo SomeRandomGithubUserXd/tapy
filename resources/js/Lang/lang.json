@@ -254,6 +254,17 @@
         "Sum": "Сумма",
         "Message": "Сообщение",
         "Content": "Содержимое",
-        "Sth important": "Что-то важное"
+        "Sth important": "Что-то важное",
+        "Custom styles": "Свой стиль",
+        "Background color": "Цвет фона",
+        "Color": "Цвет",
+        "Border radius": "Закругление рамок",
+        "Opacity": "Прозрачность",
+        "Background": "Фон",
+        "Background image": "Фоновое изображение",
+        "No color": "Без цвета",
+        "Gradient": "Градиент",
+        "Wrapper": "Обертка",
+        "Wrapper border radius": "Скругленные края"
     }
 ]

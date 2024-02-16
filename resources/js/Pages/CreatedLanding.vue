@@ -54,6 +54,25 @@ const allowedElements = (elements, isPro) => {
 const prettyUrl = import.meta.env.VITE_PRETTY_URL
 const appUrl = import.meta.env.VITE_APP_URL
 
+
+const test = () => {
+
+    let i = 1
+
+    let interval = setInterval(doStuff, 500);
+
+    function doStuff(increase = true) {
+        console.log(i)
+        if(i === 0) clearInterval(interval)
+        if (increase) i++
+        else i--
+        if (i >= 10) {
+            clearInterval(interval)
+            interval = setInterval(doStuff, 500, false);
+        }
+    }
+}
+
 const props = defineProps({
     qrCode: String
 })
@@ -78,7 +97,9 @@ const showQRCode = ref(false)
         <div style="min-height: 100vh;" class="BlocksWrapper preview mobile py-5"
              :style="$page.props.page.theme[0].containerStyle">
             <div class="BlocksWrapper-inner relative" :style="$page.props.page.theme[0].blockStyle">
-                <div @click="showQRCode = true" class="bg-white absolute cursor-pointer d-flex justify-content-center align-items-center" style="right: 25px;z-index:9;cursor: pointer;width:35px;height:35px;border-radius:50px;box-shadow: 0 0 10px rgba(0,0,0,0.5)">
+                <div @click="showQRCode = true"
+                     class="bg-white absolute cursor-pointer d-flex justify-content-center align-items-center"
+                     style="right: 25px;z-index:9;cursor: pointer;width:35px;height:35px;border-radius:50px;box-shadow: 0 0 10px rgba(0,0,0,0.5)">
                     <qrcode-outlined @click="showQRCode = true" style="color: black !important"/>
                 </div>
                 <component
