@@ -3,3 +3,8 @@
 @import "Tapy/909.28bb0b0b.chunk.css";
 @import "animate.css/animate.min.css";
 @import "Tapy/fontello.css";
+
+#qrcode svg{
+    width: 600px;
+    height: 600px;
+}

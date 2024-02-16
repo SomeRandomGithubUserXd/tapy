@@ -108,7 +108,7 @@ const downloadQrCode = () => {
             <a-collapse-panel key="2" :header="$root.translate('QR code')">
                 <div class="ant-space ant-space-vertical ant-space-align-center" style="width: 100%; gap: 8px;">
                     <div class="ant-space-item" style="">
-                        <div id="qrcode" v-html="qrCode"></div>
+                        <div v-html="qrCode"></div>
                     </div>
                     <div class="ant-space-item">
                         <button type="button" @click="downloadQrCode" class="ant-btn"><span role="img" aria-label="download"
