@@ -42,6 +42,7 @@ const kostil = ref(null)
 
 <template>
     <a-modal
+        :cancel-text="$root.translate('Cancel')"
         class="animate__animated"
         :class="modelValue ? 'animate__zoomIn' : 'animate__zoomOut'"
         :visible="modelValue"
@@ -104,7 +105,7 @@ const kostil = ref(null)
 '\n'+
 'Method 1: In your domain\'s DNS settings, add a CNAME record:\n'+
 '- name: @ (or subdomain name if you want to connect a subdomain)\n'+
-'- alias: domain.tapy.me. (dot at the end is required)\n'+
+'- alias: domain.qcd-service.me. (dot at the end is required)\n'+
 '\n'+
 'Method 2: In your domain\'s DNS settings, add an A record:\n'+
 '- name: @ (or subdomain name if you want to connect a subdomain)\n'+

@@ -108,6 +108,7 @@ let drag = ref(false)
 
 <template>
     <a-modal
+        :cancel-text="$root.translate('Cancel')"
         class="animate__animated np-modal"
         :class="modelValue ? 'animate__zoomIn' : 'animate__zoomOut'"
         :visible="modelValue"

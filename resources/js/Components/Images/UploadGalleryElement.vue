@@ -43,6 +43,7 @@ const emit = defineEmits(['remove'])
             </div>
         </div>
         <a-modal
+        :cancel-text="$root.translate('Cancel')"
             class="animate__animated"
             :class="showPreview ? 'animate__zoomIn' : 'animate__zoomOut'"
             v-model:visible="showPreview"

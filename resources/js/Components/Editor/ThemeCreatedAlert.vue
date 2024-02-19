@@ -14,12 +14,12 @@ const emit = defineEmits(['update:modelValue', 'showSettings'])
 
 <template>
     <a-modal
+        :cancel-text="$root.translate('Cancel')"
         class="animate__animated np-modal"
         :footer="false"
         :class="modelValue ? 'animate__zoomIn' : 'animate__zoomOut'"
         :visible="modelValue"
         :ok-text="$root.translate('Upgrade to PRO')"
-        :cancel-text="$root.translate('Cancel')"
         @change="emit('update:modelValue', false)"
     >
         <template #title>

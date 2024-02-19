@@ -47,6 +47,7 @@ function submit() {
 
 <template>
     <a-modal
+        :cancel-text="$root.translate('Cancel')"
         class="animate__animated"
         width="800px"
         :class="modelValue ? 'animate__zoomIn' : 'animate__zoomOut'"

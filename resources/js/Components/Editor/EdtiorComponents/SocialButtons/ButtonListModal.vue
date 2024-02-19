@@ -41,6 +41,7 @@ watch(newBtn, (val) => {
 
 <template>
     <a-modal
+        :cancel-text="$root.translate('Cancel')"
         class="animate__animated"
         :class="modelValue ? 'animate__zoomIn' : 'animate__zoomOut'"
         :visible="modelValue"

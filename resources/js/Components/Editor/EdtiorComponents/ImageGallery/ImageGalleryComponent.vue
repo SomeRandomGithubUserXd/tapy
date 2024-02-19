@@ -56,6 +56,7 @@ const setImageModal = (src) => {
 <template>
     <div :class="!props.isEditable ? '' : 'EditorBlockListItem-block'" @click="tryEditModal">
         <a-modal
+        :cancel-text="$root.translate('Cancel')"
             class="animate__animated np-modal"
             :class="showImage ? 'animate__zoomIn' : 'animate__zoomOut'"
             v-model:visible="showImage"

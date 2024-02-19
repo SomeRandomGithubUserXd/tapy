@@ -72,6 +72,7 @@ const showUpgradeModal = ref(false)
 
 <template>
     <a-modal
+        :cancel-text="$root.translate('Cancel')"
         class="animate__animated np-modal"
         :class="modelValue ? 'animate__zoomIn' : 'animate__zoomOut'"
         :visible="modelValue"
@@ -141,7 +142,7 @@ const showUpgradeModal = ref(false)
                         <div class="ant-alert-content">
                             <div class="ant-alert-message">
                                 {{
-                                    $root.translate('Please note that the JS code will be ignored in the editor, but it will work on your Tapy page.')
+                                    $root.translate('Please note that the JS code will be ignored in the editor, but it will work on your page.')
                                 }}
                             </div>
                         </div>

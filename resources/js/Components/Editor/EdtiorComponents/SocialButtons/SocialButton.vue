@@ -43,6 +43,9 @@ const viewTypesWithLabel = ['list', 'list:c']
 const btnLabel = computed({
     get() {
         let label = ''
+        console.log(props?.btnText)
+        console.log(socialComponent.value?.rlabel)
+        console.log( socialComponent.value.label)
         if (viewTypesWithLabel.includes(props.view)) {
             label = props?.btnText || socialComponent.value?.rlabel || socialComponent.value.label
         } else {
@@ -226,6 +229,7 @@ const href = computed({
 </g>
 </svg>
                 </div>
+                <div class="Link-label" v-html="btnLabel"></div>
                 <div v-if="btnCaption && viewTypesWithLabel.includes(props.view)" class="Link-caption">
                     {{ btnCaption }}
                 </div>

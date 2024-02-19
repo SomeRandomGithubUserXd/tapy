@@ -65,6 +65,7 @@ const downloadQrCode = () => {
 
 <template>
     <a-modal
+        :cancel-text="$root.translate('Cancel')"
         class="animate__animated np-modal"
         :footer="false"
         :class="modelValue ? 'animate__zoomIn' : 'animate__zoomOut'"

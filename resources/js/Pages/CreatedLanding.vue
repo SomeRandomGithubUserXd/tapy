@@ -83,6 +83,7 @@ const showQRCode = ref(false)
 <template>
     <div class="w-100" :style="$page.props.page.theme[0].overlayStyle">
         <a-modal
+        :cancel-text="$root.translate('Cancel')"
             class="animate__animated"
             footer=""
             :class="showQRCode ? 'animate__zoomIn' : 'animate__zoomOut'"

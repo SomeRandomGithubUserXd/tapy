@@ -148,10 +148,10 @@ function setFavicon() {
             </div>
         </div>
         <a-modal
+        :cancel-text="$root.translate('Cancel')"
             class="animate__animated tabs-modal"
             :class="showFaviconModal ? 'animate__zoomIn' : 'animate__zoomOut'"
             :ok-text="$root.translate('OK')"
-            :cancel-text="$root.translate('Cancel')"
             v-model:visible="showFaviconModal"
             @ok="setFavicon"
             >
