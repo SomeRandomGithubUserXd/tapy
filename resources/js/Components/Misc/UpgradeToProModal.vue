@@ -16,6 +16,18 @@ const setRadio = (value) => {
 }
 </script>
 
+<style scoped>
+.upgrade-modal {
+    width: 50%;
+}
+
+@media screen and (max-width: 768px) {
+    .upgrade-modal {
+        width: 100%;
+    }
+}
+</style>
+
 <template>
     <a-modal
         :cancel-text="$root.translate('Cancel')"
@@ -63,7 +75,7 @@ const setRadio = (value) => {
             </div>
         </div>
         <div class="d-flex justify-content-center">
-            <div class="w-50 md:w-100 mt-4">
+            <div class="upgrade-modal mt-4">
                 <one-month v-if="selectedTab === 'months_1'"/>
                 <twelve-month v-else/>
             </div>
